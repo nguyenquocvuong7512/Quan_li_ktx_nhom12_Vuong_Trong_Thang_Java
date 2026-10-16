@@ -45,4 +45,14 @@ public class WebViewController {
     public String hopDong() {
         return "forward:/hop-dong.html";
     }
+
+    @GetMapping("/dang-ky-phong")
+    public String dangKyPhong() {
+        return "forward:/dang-ky-phong.html";
+    }
+
+    @GetMapping("/sinh-vien-phong")
+    public String sinhVienPhong() {
+        return "forward:/sinh-vien-phong.html";
+    }
 }

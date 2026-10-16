@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Đăng Ký Phòng - Ký Túc Xá</title>
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+    <!-- ===================== SIDEBAR ===================== -->
+    <aside id="sidebar">
+        <div class="sidebar-header">
+            <a href="/index.html" class="brand-title">
+                <div class="brand-icon">
+                    <i class="bi bi-buildings"></i>
+                </div>
+                <div>
+                    <div class="fw-bold fs-6">KTX DORMITORY</div>
+                    <div class="text-secondary" style="font-size: 0.68rem; font-weight: normal;">Hệ Thống Quản Lý KTX</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-section-title">TỔNG QUAN</div>
+            <a href="/index.html" class="sidebar-link" data-menu="dashboard">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Bảng điều khiển</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 1: SINH VIÊN & TÀI KHOẢN</div>
+            <a href="/sinh-vien.html" class="sidebar-link" data-menu="sinh-vien">
+                <i class="bi bi-person-lines-fill"></i>
+                <span>Quản lý sinh viên</span>
+            </a>
+            <a href="/tai-khoan.html" class="sidebar-link" data-menu="tai-khoan">
+                <i class="bi bi-person-badge-fill"></i>
+                <span>Quản lý tài khoản</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 2: CƠ SỞ VẬT CHẤT</div>
+            <a href="/toa-nha.html" class="sidebar-link" data-menu="toa-nha">
+                <i class="bi bi-building"></i>
+                <span>Quản lý tòa nhà</span>
+            </a>
+            <a href="/phong.html" class="sidebar-link" data-menu="phong">
+                <i class="bi bi-door-open-fill"></i>
+                <span>Quản lý phòng</span>
+            </a>
+            <a href="/loai-phong.html" class="sidebar-link" data-menu="loai-phong">
+                <i class="bi bi-tags-fill"></i>
+                <span>Quản lý loại phòng</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 3: HỢP ĐỒNG & ĐĂNG KÝ</div>
+            <a href="/dang-ky-phong.html" class="sidebar-link active" data-menu="dang-ky-phong">
+                <i class="bi bi-clipboard2-check-fill"></i>
+                <span>Quản lý đăng ký phòng</span>
+            </a>
+            <a href="/hop-dong.html" class="sidebar-link" data-menu="hop-dong">
+                <i class="bi bi-file-earmark-text-fill"></i>
+                <span>Quản lý hợp đồng</span>
+            </a>
+            <a href="/sinh-vien-phong.html" class="sidebar-link" data-menu="sinh-vien-phong">
+                <i class="bi bi-people-fill"></i>
+                <span>Quan hệ sinh viên - phòng</span>
+            </a>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="btn btn-outline-light btn-sm w-100 d-flex align-items-center justify-content-center gap-2" onclick="App.auth.logout()">
+                <i class="bi bi-box-arrow-left"></i>
+                <span>Đăng xuất</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ===================== TOPBAR ===================== -->
+    <header id="topbar">
+        <div class="topbar-left">
+            <button class="btn btn-sm btn-light border d-lg-none" id="sidebar-toggle" title="Menu">
+                <i class="bi bi-list fs-5"></i>
+            </button>
+            <div>
+                <h6 class="mb-0 fw-bold text-dark">Quản Lý Đăng Ký Phòng Ở KTX</h6>
+                <small class="text-muted" style="font-size: 0.75rem;">Hệ thống &rsaquo; Tiếp nhận & Xét duyệt hồ sơ lưu trú</small>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <div class="user-badge dropdown">
+                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle gap-2 text-dark" data-bs-toggle="dropdown">
+                    <div class="user-avatar" id="topbar-user-avatar">A</div>
+                    <div class="d-none d-md-block text-start">
+                        <div class="fw-semibold text-dark small" id="topbar-user-name">Quản trị viên</div>
+                        <div class="text-muted" style="font-size: 0.72rem;" id="topbar-user-role">ADMIN</div>
+                    </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                    <li><a class="dropdown-item small" href="/tai-khoan.html"><i class="bi bi-person me-2"></i>Tài khoản</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item small text-danger" href="javascript:void(0)" onclick="App.auth.logout()"><i class="bi bi-box-arrow-right me-2"></i>Đăng xuất</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===================== MAIN CONTENT WRAPPER ===================== -->
+    <div id="main-wrapper">
+        <main class="content-container">
+
+            <!-- Title & Actions -->
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                <div>
+                    <h4 class="fw-bold mb-1 text-dark">Tiếp Nhận & Duyệt Đăng Ký Phòng</h4>
+                    <p class="text-muted small mb-0">Xử lý hồ sơ đăng ký lưu trú ký túc xá, tự động phân phòng và cập nhật sĩ số phòng.</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-secondary btn-sm" onclick="loadRegistrations()">
+                        <i class="bi bi-arrow-clockwise me-1"></i> Tải lại
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="openAddRegistrationModal()">
+                        <i class="bi bi-plus-circle me-1"></i> Đăng Ký Phòng Mới
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="row g-3 mb-4">
+                <div class="col-sm-6 col-xl-3">
+                    <div class="stat-card">
+                        <div>
+                            <div class="stat-number text-warning" id="count-pending">0</div>
+                            <div class="stat-label">Hồ sơ chờ duyệt</div>
+                        </div>
+                        <div class="stat-icon warning">
+                            <i class="bi bi-hourglass-split"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-xl-3">
+                    <div class="stat-card">
+                        <div>
+                            <div class="stat-number text-success" id="count-approved">0</div>
+                            <div class="stat-label">Đã duyệt (Hiệu lực)</div>
+                        </div>
+                        <div class="stat-icon success">
+                            <i class="bi bi-check2-circle"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-xl-3">
+                    <div class="stat-card">
+                        <div>
+                            <div class="stat-number text-danger" id="count-rejected">0</div>
+                            <div class="stat-label">Đã từ chối</div>
+                        </div>
+                        <div class="stat-icon danger">
+                            <i class="bi bi-x-circle"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-xl-3">
+                    <div class="stat-card">
+                        <div>
+                            <div class="stat-number text-primary" id="count-total">0</div>
+                            <div class="stat-label">Tổng số đăng ký</div>
+                        </div>
+                        <div class="stat-icon primary">
+                            <i class="bi bi-journal-text"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter & Search Card -->
+            <div class="ktx-card mb-4 p-3">
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                            <input type="text" id="reg-search" class="form-control border-start-0" 
+                                   placeholder="Tìm kiếm theo Mã SV hoặc Mã phòng..." oninput="filterRegistrations()">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="reg-filter-status" class="form-select" onchange="filterRegistrations()">
+                            <option value="">-- Tất cả trạng thái --</option>
+                            <option value="cho_duyet" selected>Chờ duyệt hồ sơ</option>
+                            <option value="dang_hieu_luc">Đã duyệt (Đang hiệu lực)</option>
+                            <option value="da_tu_choi">Đã từ chối</option>
+                            <option value="da_ket_thuc">Đã kết thúc</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 text-md-end text-muted small">
+                        Hiển thị: <strong id="filter-count" class="text-primary">0</strong> hồ sơ
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Card -->
+            <div class="ktx-card">
+                <div class="table-responsive">
+                    <table class="table ktx-table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Mã Đơn</th>
+                                <th>Sinh Viên Đăng Ký</th>
+                                <th>Phòng Nguyện Vọng</th>
+                                <th>Thời Gian Lưu Trú</th>
+                                <th>Mức Giá KTX</th>
+                                <th>Trạng Thái</th>
+                                <th class="text-end">Xét Duyệt & Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reg-tbody">
+                            <tr>
+                                <td colspan="7" class="text-center py-4 text-muted">
+                                    <div class="spinner-border spinner-border-sm text-primary me-2"></div>
+                                    Đang tải dữ liệu hồ sơ đăng ký phòng...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ===================== MODAL ĐĂNG KÝ PHÒNG MỚI ===================== -->
+    <div class="modal fade" id="reg-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-6 fw-bold" id="reg-modal-title">
+                        <i class="bi bi-clipboard2-plus me-2 text-primary"></i>Nộp Đơn Đăng Ký Phòng KTX
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="reg-form" novalidate>
+                    <div class="modal-body p-4">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label for="regSinhVien" class="form-label">Sinh Viên <span class="text-danger">*</span></label>
+                                <select class="form-select" id="regSinhVien" required>
+                                    <option value="">-- Chọn sinh viên đăng ký --</option>
+                                </select>
+                                <div class="invalid-feedback">Vui lòng chọn sinh viên.</div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="regPhong" class="form-label">Phòng Ký Túc Xá <span class="text-danger">*</span></label>
+                                <select class="form-select" id="regPhong" required onchange="handleRoomSelected()">
+                                    <option value="">-- Chọn phòng còn chỗ --</option>
+                                </select>
+                                <div class="invalid-feedback">Vui lòng chọn phòng.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="regNgayBatDau" class="form-label">Ngày Dự Kiến Vào Ở <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="regNgayBatDau" required>
+                                <div class="invalid-feedback">Vui lòng chọn ngày bắt đầu.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="regNgayKetThuc" class="form-label">Ngày Kết Thúc Dự Kiến <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="regNgayKetThuc" required>
+                                <div class="invalid-feedback">Ngày kết thúc phải sau ngày bắt đầu.</div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="regTienPhong" class="form-label">Tiền Phòng (VNĐ / Tháng)</label>
+                                <input type="number" class="form-control" id="regTienPhong" required min="0" value="1200000">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-light border" data-bs-dismiss="modal">Hủy bỏ</button>
+                        <button type="submit" class="btn btn-sm btn-primary" id="save-reg-btn">
+                            <i class="bi bi-send me-1"></i> Gửi Đơn Đăng Ký
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/app.js"></script>
+    <script>
+        let allRegistrations = [];
+        let allStudents = [];
+        let allRooms = [];
+        let regModalInstance = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            App.initLayout('dang-ky-phong');
+            regModalInstance = new bootstrap.Modal(document.getElementById('reg-modal'));
+            loadDependencies();
+        });
+
+        async function loadDependencies() {
+            // Load students
+            const sRes = await App.api('/api/sinhvien');
+            if (sRes.success && Array.isArray(sRes.data)) {
+                allStudents = sRes.data;
+                const sSelect = document.getElementById('regSinhVien');
+                sSelect.innerHTML = '<option value="">-- Chọn sinh viên đăng ký --</option>' +
+                    allStudents.map(s => {
+                        const u = s.nguoiDung || {};
+                        return `<option value="${s.id}">${s.maSinhVien} - ${u.hoTen || 'Sinh viên'}</option>`;
+                    }).join('');
+            }
+
+            // Load rooms
+            const rRes = await App.api('/api/phong');
+            if (rRes.success && Array.isArray(rRes.data)) {
+                allRooms = rRes.data;
+                const pSelect = document.getElementById('regPhong');
+                pSelect.innerHTML = '<option value="">-- Chọn phòng ký túc xá --</option>' +
+                    allRooms.map(r => `<option value="${r.id}" data-price="${r.giaPhong}">${r.maPhong} (${r.loaiPhong || 'Chuẩn'} - Còn: ${r.sucChua - (r.soNguoiHienTai || 0)} chỗ - ${App.formatMoney(r.giaPhong)})</option>`).join('');
+            }
+
+            loadRegistrations();
+        }
+
+        function handleRoomSelected() {
+            const select = document.getElementById('regPhong');
+            const selectedOpt = select.options[select.selectedIndex];
+            if (selectedOpt && selectedOpt.dataset.price) {
+                document.getElementById('regTienPhong').value = selectedOpt.dataset.price;
+            }
+        }
+
+        async function loadRegistrations() {
+            const tbody = document.getElementById('reg-tbody');
+            tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Đang tải danh sách hồ sơ...</td></tr>`;
+
+            const res = await App.api('/api/hop-dong');
+            if (res.success && Array.isArray(res.data)) {
+                allRegistrations = res.data;
+                updateStats(allRegistrations);
+                filterRegistrations();
+            } else {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-danger"><i class="bi bi-exclamation-triangle me-1"></i> ${res.error || 'Lỗi khi tải hồ sơ đăng ký'}</td></tr>`;
+            }
+        }
+
+        function updateStats(list) {
+            const pending = list.filter(r => r.trangThai === 'cho_duyet').length;
+            const approved = list.filter(r => r.trangThai === 'dang_hieu_luc').length;
+            const rejected = list.filter(r => r.trangThai === 'da_tu_choi').length;
+
+            document.getElementById('count-pending').textContent = pending;
+            document.getElementById('count-approved').textContent = approved;
+            document.getElementById('count-rejected').textContent = rejected;
+            document.getElementById('count-total').textContent = list.length;
+        }
+
+        function filterRegistrations() {
+            const query = document.getElementById('reg-search').value.toLowerCase().trim();
+            const status = document.getElementById('reg-filter-status').value;
+
+            const filtered = allRegistrations.filter(r => {
+                const s = r.sinhVien || {};
+                const p = r.phong || {};
+                const matchesQuery = !query ||
+                    (s.maSinhVien && s.maSinhVien.toLowerCase().includes(query)) ||
+                    (p.maPhong && p.maPhong.toLowerCase().includes(query));
+
+                const matchesStatus = !status || r.trangThai === status;
+                return matchesQuery && matchesStatus;
+            });
+
+            renderTable(filtered);
+        }
+
+        function renderTable(list) {
+            const tbody = document.getElementById('reg-tbody');
+            document.getElementById('filter-count').textContent = list.length;
+
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted">Không có hồ sơ nào phù hợp bộ lọc.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = list.map(r => {
+                const s = r.sinhVien || {};
+                const u = s.nguoiDung || {};
+                const p = r.phong || {};
+
+                let badge = '';
+                let actions = '';
+
+                if (r.trangThai === 'cho_duyet') {
+                    badge = `<span class="status-badge badge-cho-duyet"><i class="bi bi-clock-history"></i> Chờ duyệt</span>`;
+                    actions = `
+                        <button class="btn btn-sm btn-success me-1" onclick="approveRegistration(${r.id})" title="Duyệt hồ sơ">
+                            <i class="bi bi-check-lg me-1"></i> Duyệt
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="rejectRegistration(${r.id})" title="Từ chối">
+                            <i class="bi bi-x-lg me-1"></i> Từ chối
+                        </button>
+                    `;
+                } else if (r.trangThai === 'dang_hieu_luc') {
+                    badge = `<span class="status-badge badge-con-cho"><i class="bi bi-check-circle-fill"></i> Đã duyệt</span>`;
+                    actions = `
+                        <a href="/hop-dong.html" class="btn btn-sm btn-light border text-primary">
+                            <i class="bi bi-file-earmark-text me-1"></i> Xem HĐ
+                        </a>
+                    `;
+                } else if (r.trangThai === 'da_tu_choi') {
+                    badge = `<span class="status-badge badge-da-day"><i class="bi bi-slash-circle"></i> Đã từ chối</span>`;
+                    actions = `
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteRegistration(${r.id})" title="Xóa">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    `;
+                } else {
+                    badge = `<span class="badge bg-secondary">${r.trangThai}</span>`;
+                    actions = `
+                        <a href="/hop-dong.html" class="btn btn-sm btn-light border">Chi tiết</a>
+                    `;
+                }
+
+                return `
+                    <tr>
+                        <td><strong>#ĐK${r.id}</strong></td>
+                        <td>
+                            <strong class="text-primary">${s.maSinhVien || '-'}</strong>
+                            <div class="small fw-semibold text-dark">${u.hoTen || 'Sinh viên'}</div>
+                            <div class="small text-muted">${s.lop || ''} ${u.soDienThoai ? `&bull; ${u.soDienThoai}` : ''}</div>
+                        </td>
+                        <td>
+                            <span class="badge bg-primary text-white"><i class="bi bi-door-closed me-1"></i>${p.maPhong || '-'}</span>
+                            <div class="small text-muted mt-1">${p.loaiPhong || 'Chuẩn'}</div>
+                        </td>
+                        <td>
+                            <small class="text-muted">Từ:</small> ${App.formatDate(r.ngayBatDau)}<br>
+                            <small class="text-muted">Đến:</small> ${App.formatDate(r.ngayKetThuc)}
+                        </td>
+                        <td class="fw-semibold text-success">${App.formatMoney(r.tienPhong)}</td>
+                        <td>${badge}</td>
+                        <td class="text-end">${actions}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Approve registration
+        async function approveRegistration(id) {
+            const confirmed = await App.confirm({
+                title: 'Duyệt hồ sơ đăng ký',
+                message: 'Bạn có chắc chắn muốn duyệt đơn đăng ký này? Sau khi duyệt, hợp đồng sẽ có hiệu lực và tự động tăng số lượng sinh viên trong phòng.',
+                confirmText: 'Duyệt đăng ký',
+                btnClass: 'btn-success'
+            });
+
+            if (!confirmed) return;
+
+            const res = await App.api(`/api/hop-dong/${id}/duyet`, { method: 'POST' });
+            if (res.success) {
+                App.toast('Duyệt hồ sơ đăng ký phòng thành công!', 'success');
+                loadRegistrations();
+            } else {
+                App.toast('Không thể duyệt đăng ký: ' + res.error, 'danger');
+            }
+        }
+
+        // Reject registration
+        async function rejectRegistration(id) {
+            const confirmed = await App.confirm({
+                title: 'Từ chối đơn đăng ký',
+                message: 'Bạn có chắc chắn muốn từ chối đơn đăng ký phòng này?',
+                confirmText: 'Từ chối đơn',
+                btnClass: 'btn-danger'
+            });
+
+            if (!confirmed) return;
+
+            const res = await App.api(`/api/hop-dong/${id}/tu-choi`, { method: 'POST' });
+            if (res.success) {
+                App.toast('Đã từ chối đơn đăng ký!', 'warning');
+                loadRegistrations();
+            } else {
+                App.toast('Lỗi khi từ chối đơn: ' + res.error, 'danger');
+            }
+        }
+
+        // Delete registration
+        async function deleteRegistration(id) {
+            const confirmed = await App.confirm({
+                title: 'Xóa đơn đăng ký',
+                message: 'Xác nhận xóa bản ghi đơn đăng ký này khỏi hệ thống?',
+                confirmText: 'Xóa đơn',
+                btnClass: 'btn-danger'
+            });
+
+            if (!confirmed) return;
+
+            const res = await App.api(`/api/hop-dong/${id}`, { method: 'DELETE' });
+            if (res.success) {
+                App.toast('Đã xóa đơn đăng ký thành công!', 'success');
+                loadRegistrations();
+            } else {
+                App.toast('Không thể xóa đơn: ' + res.error, 'danger');
+            }
+        }
+
+        // Open Add Modal
+        function openAddRegistrationModal() {
+            document.getElementById('reg-form').reset();
+            document.getElementById('reg-form').classList.remove('was-validated');
+
+            const today = new Date().toISOString().split('T')[0];
+            const nextYear = new Date();
+            nextYear.setFullYear(nextYear.getFullYear() + 1);
+            const end = nextYear.toISOString().split('T')[0];
+
+            document.getElementById('regNgayBatDau').value = today;
+            document.getElementById('regNgayKetThuc').value = end;
+
+            regModalInstance.show();
+        }
+
+        // Submit Add Form
+        document.getElementById('reg-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+
+            if (!form.checkValidity()) {
+                e.stopPropagation();
+                form.classList.add('was-validated');
+                return;
+            }
+
+            const sinhVienId = document.getElementById('regSinhVien').value;
+            const phongId = document.getElementById('regPhong').value;
+            const ngayBatDau = document.getElementById('regNgayBatDau').value;
+            const ngayKetThuc = document.getElementById('regNgayKetThuc').value;
+            const tienPhong = parseFloat(document.getElementById('regTienPhong').value);
+
+            if (new Date(ngayKetThuc) < new Date(ngayBatDau)) {
+                App.toast('Ngày kết thúc phải sau ngày bắt đầu!', 'warning');
+                return;
+            }
+
+            const saveBtn = document.getElementById('save-reg-btn');
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Đang gửi...';
+
+            const payload = {
+                sinhVien: { id: parseInt(sinhVienId) },
+                phong: { id: parseInt(phongId) },
+                ngayBatDau,
+                ngayKetThuc,
+                tienPhong,
+                trangThai: 'cho_duyet'
+            };
+
+            const res = await App.api('/api/hop-dong', {
+                method: 'POST',
+                body: payload
+            });
+
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = '<i class="bi bi-send me-1"></i> Gửi Đơn Đăng Ký';
+
+            if (res.success) {
+                App.toast('Nộp đơn đăng ký phòng thành công! Hồ sơ đang ở trạng thái Chờ duyệt.', 'success');
+                regModalInstance.hide();
+                loadRegistrations();
+            } else {
+                App.toast('Lỗi khi nộp đơn: ' + res.error, 'danger');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -61,6 +61,8 @@ class NguyenQuocVuongChuong4ApplicationTests {
 	private DashboardController dashboardController;
 	@Autowired
 	private LoaiPhongController loaiPhongController;
+	@Autowired
+	private com.example.NguyenQuocVuong_chuong4.controller.SinhVienPhongController sinhVienPhongController;
 
 	@Test
 	void contextLoads() {
@@ -156,5 +158,91 @@ class NguyenQuocVuongChuong4ApplicationTests {
 		assertNotNull(loaiPhongList);
 		assertFalse(loaiPhongList.isEmpty());
 	}
+
+	@Test
+	void testPerson3ContractLifecycleAndRoomAllocation() {
+		// 1. Setup Student
+		NguoiDung user = new NguoiDung();
+		user.setMaNguoiDung("P3-ND");
+		user.setHoTen("Sinh vien nguoi 3");
+		user.setEmail("p3@example.com");
+		user.setMatKhau("password123");
+		user.setTrangThai("hoat_dong");
+		user = nguoiDungService.save(user);
+
+		SinhVien student = new SinhVien();
+		student.setNguoiDung(user);
+		student.setMaSinhVien("P3-SV");
+		student = sinhVienRepository.save(student);
+
+		// 2. Setup Building, Tang, 2 Rooms
+		Khu khu = new Khu();
+		khu.setMaKhu("P3-KHU");
+		khu.setTenKhu("Khu P3");
+		khu = khuRepository.save(khu);
+
+		ToaNha toa = new ToaNha();
+		toa.setKhu(khu);
+		toa.setMaToa("P3-TOA");
+		toa.setTenToa("Toa P3");
+		toa.setSoTang(1);
+		toa = toaNhaRepository.save(toa);
+
+		Tang tang = new Tang();
+		tang.setToaNha(toa);
+		tang.setSoTang(1);
+		tang = tangRepository.save(tang);
+
+		Phong roomA = new Phong();
+		roomA.setTang(tang);
+		roomA.setMaPhong("P3-101");
+		roomA.setSucChua(2);
+		roomA.setSoNguoiHienTai(0);
+		roomA.setLoaiPhong("2 nguoi");
+		roomA.setGiaPhong(new BigDecimal("1000000.00"));
+		roomA = phongService.save(roomA);
+
+		Phong roomB = new Phong();
+		roomB.setTang(tang);
+		roomB.setMaPhong("P3-102");
+		roomB.setSucChua(2);
+		roomB.setSoNguoiHienTai(0);
+		roomB.setLoaiPhong("2 nguoi");
+		roomB.setGiaPhong(new BigDecimal("1200000.00"));
+		roomB = phongService.save(roomB);
+
+		// 3. Register Room A (Status: cho_duyet)
+		HopDong contract = new HopDong();
+		contract.setSinhVien(student);
+		contract.setPhong(roomA);
+		contract.setNgayBatDau(LocalDate.now());
+		contract.setNgayKetThuc(LocalDate.now().plusMonths(6));
+		contract.setTienPhong(roomA.getGiaPhong());
+		contract.setTrangThai("cho_duyet");
+		contract = hopDongService.save(contract);
+		assertEquals("cho_duyet", contract.getTrangThai());
+		assertEquals(0, phongRepository.findById(roomA.getId()).orElseThrow().getSoNguoiHienTai());
+
+		// 4. Approve Contract -> Room A soNguoiHienTai = 1
+		contract = hopDongService.duyetHopDong(contract.getId());
+		assertEquals("dang_hieu_luc", contract.getTrangThai());
+		assertEquals(1, phongRepository.findById(roomA.getId()).orElseThrow().getSoNguoiHienTai());
+
+		// 5. Transfer to Room B -> Room A = 0, Room B = 1
+		contract = hopDongService.chuyenPhong(contract.getId(), roomB.getId());
+		assertEquals(0, phongRepository.findById(roomA.getId()).orElseThrow().getSoNguoiHienTai());
+		assertEquals(1, phongRepository.findById(roomB.getId()).orElseThrow().getSoNguoiHienTai());
+
+		// 6. Check allocations endpoint
+		var allocations = sinhVienPhongController.getStudentsByRoom(roomB.getId());
+		assertFalse(allocations.isEmpty());
+		assertEquals("P3-SV", allocations.get(0).maSinhVien());
+
+		// 7. Terminate contract -> Room B = 0
+		contract = hopDongService.thanhLyHopDong(contract.getId());
+		assertEquals("da_ket_thuc", contract.getTrangThai());
+		assertEquals(0, phongRepository.findById(roomB.getId()).orElseThrow().getSoNguoiHienTai());
+	}
 }
+
 

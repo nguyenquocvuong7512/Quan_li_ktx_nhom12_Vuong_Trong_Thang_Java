@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Lý Hợp Đồng & Đăng Ký Phòng - Ký Túc Xá</title>
+    <title>Quản Lý Hợp Đồng Ký Túc Xá</title>
     <!-- Bootstrap 5 CSS & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
@@ -58,9 +58,17 @@
             </a>
 
             <div class="nav-section-title">NGƯỜI 3: HỢP ĐỒNG & ĐĂNG KÝ</div>
+            <a href="/dang-ky-phong.html" class="sidebar-link" data-menu="dang-ky-phong">
+                <i class="bi bi-clipboard2-check-fill"></i>
+                <span>Quản lý đăng ký phòng</span>
+            </a>
             <a href="/hop-dong.html" class="sidebar-link active" data-menu="hop-dong">
                 <i class="bi bi-file-earmark-text-fill"></i>
                 <span>Quản lý hợp đồng</span>
+            </a>
+            <a href="/sinh-vien-phong.html" class="sidebar-link" data-menu="sinh-vien-phong">
+                <i class="bi bi-people-fill"></i>
+                <span>Quan hệ sinh viên - phòng</span>
             </a>
         </div>
 
@@ -79,8 +87,8 @@
                 <i class="bi bi-list fs-5"></i>
             </button>
             <div>
-                <h6 class="mb-0 fw-bold text-dark">Quản Lý Hợp Đồng Thuê KTX</h6>
-                <small class="text-muted" style="font-size: 0.75rem;">Hệ thống &rsaquo; Đăng ký phòng & Hợp đồng lưu trú (Người 3)</small>
+                <h6 class="mb-0 fw-bold text-dark">Quản Lý Hợp Đồng KTX</h6>
+                <small class="text-muted" style="font-size: 0.75rem;">Hệ thống &rsaquo; Hợp đồng lưu trú & Quản lý thu phí</small>
             </div>
         </div>
 
@@ -109,15 +117,15 @@
             <!-- Title & Actions -->
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
                 <div>
-                    <h4 class="fw-bold mb-1 text-dark">Danh Sách Hợp Đồng Thuê Phòng</h4>
-                    <p class="text-muted small mb-0">Theo dõi hợp đồng lưu trú, ngày bắt đầu, ngày kết thúc và tiền phòng theo quy định.</p>
+                    <h4 class="fw-bold mb-1 text-dark">Danh Sách Hợp Đồng Lưu Trú KTX</h4>
+                    <p class="text-muted small mb-0">Quản lý hiệu lực hợp đồng, gia hạn lưu trú, thanh lý trả phòng và in văn bản hợp đồng.</p>
                 </div>
                 <div class="d-flex gap-2">
                     <button class="btn btn-outline-secondary btn-sm" onclick="loadContracts()">
                         <i class="bi bi-arrow-clockwise me-1"></i> Tải lại
                     </button>
                     <button class="btn btn-primary btn-sm" onclick="openAddContractModal()">
-                        <i class="bi bi-file-earmark-plus me-1"></i> Đăng Ký Hợp Đồng Mới
+                        <i class="bi bi-file-earmark-plus me-1"></i> Tạo Hợp Đồng Mới
                     </button>
                 </div>
             </div>
@@ -125,19 +133,20 @@
             <!-- Search & Filter Card -->
             <div class="ktx-card mb-4 p-3">
                 <div class="row g-2 align-items-center">
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <div class="input-group">
                             <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
                             <input type="text" id="contract-search" class="form-control border-start-0" 
-                                   placeholder="Tìm theo Mã SV hoặc Mã phòng..." oninput="filterContracts()">
+                                   placeholder="Tìm theo Mã SV, Mã phòng hoặc Mã HĐ..." oninput="filterContracts()">
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <select id="filter-status" class="form-select" onchange="filterContracts()">
                             <option value="">-- Tất cả trạng thái --</option>
                             <option value="dang_hieu_luc">Đang hiệu lực</option>
                             <option value="cho_duyet">Chờ duyệt</option>
-                            <option value="da_ket_thuc">Đã kết thúc</option>
+                            <option value="da_ket_thuc">Đã kết thúc / Đã thanh lý</option>
+                            <option value="da_tu_choi">Đã từ chối</option>
                         </select>
                     </div>
                     <div class="col-md-3 text-md-end text-muted small">
@@ -157,9 +166,9 @@
                                 <th>Phòng Ở</th>
                                 <th>Ngày Bắt Đầu</th>
                                 <th>Ngày Kết Thúc</th>
-                                <th>Tiền Phòng</th>
+                                <th>Tiền Phòng / Tháng</th>
                                 <th>Trạng Thái</th>
-                                <th class="text-end">Thao Tác</th>
+                                <th class="text-end">Nghiệp Vụ Hợp Đồng</th>
                             </tr>
                         </thead>
                         <tbody id="contract-tbody">
@@ -183,13 +192,11 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title fs-6 fw-bold" id="contract-modal-title">
-                        <i class="bi bi-file-earmark-plus me-2 text-primary"></i>Tạo Hợp Đồng Thuê KTX
+                        <i class="bi bi-file-earmark-plus me-2 text-primary"></i>Tạo Hợp Đồng Thuê Mới
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form id="contract-form" novalidate>
-                    <input type="hidden" id="form-contract-id">
-
                     <div class="modal-body p-4">
                         <div class="row g-3">
                             <div class="col-12">
@@ -226,11 +233,10 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label for="trangThai" class="form-label">Trạng Thái HĐ</label>
+                                <label for="trangThai" class="form-label">Trạng Thái Khởi Tạo</label>
                                 <select class="form-select" id="trangThai">
-                                    <option value="dang_hieu_luc">Đang hiệu lực</option>
+                                    <option value="dang_hieu_luc">Đang hiệu lực (Duyệt ngay)</option>
                                     <option value="cho_duyet">Chờ duyệt</option>
-                                    <option value="da_ket_thuc">Đã kết thúc</option>
                                 </select>
                             </div>
                         </div>
@@ -247,6 +253,62 @@
         </div>
     </div>
 
+    <!-- ===================== MODAL GIA HẠN HỢP ĐỒNG ===================== -->
+    <div class="modal fade" id="extend-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-6 fw-bold">
+                        <i class="bi bi-calendar-plus me-2 text-primary"></i>Gia Hạn Hợp Đồng Lưu Trú
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="extend-form">
+                    <input type="hidden" id="extend-contract-id">
+                    <div class="modal-body p-4">
+                        <div class="p-3 bg-light rounded border mb-3 small">
+                            Hợp đồng: <strong id="extend-contract-label">#HĐ</strong><br>
+                            Ngày kết thúc hiện tại: <span id="extend-current-end" class="text-danger fw-bold">-</span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="extend-new-date" class="form-label">Ngày Kết Thúc Mới <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="extend-new-date" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-light border" data-bs-dismiss="modal">Hủy bỏ</button>
+                        <button type="submit" class="btn btn-sm btn-primary" id="extend-btn">
+                            <i class="bi bi-check2-circle me-1"></i> Xác Nhận Gia Hạn
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== MODAL XEM & IN VĂN BẢN HỢP ĐỒNG ===================== -->
+    <div class="modal fade" id="print-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-6 fw-bold">
+                        <i class="bi bi-printer me-2 text-primary"></i>Văn Bản Hợp Đồng Thuê Ký Túc Xá
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4" id="print-contract-content">
+                    <!-- Dynamic Printable Contract -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-sm btn-primary" onclick="window.print()">
+                        <i class="bi bi-printer me-1"></i> In Hợp Đồng
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/app.js"></script>
@@ -255,10 +317,14 @@
         let allStudents = [];
         let allRooms = [];
         let contractModalInstance = null;
+        let extendModalInstance = null;
+        let printModalInstance = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             App.initLayout('hop-dong');
             contractModalInstance = new bootstrap.Modal(document.getElementById('contract-modal'));
+            extendModalInstance = new bootstrap.Modal(document.getElementById('extend-modal'));
+            printModalInstance = new bootstrap.Modal(document.getElementById('print-modal'));
             loadDependencies();
         });
 
@@ -323,12 +389,35 @@
                 const p = c.phong || {};
 
                 let badge = '';
+                let actionButtons = '';
+
                 if (c.trangThai === 'dang_hieu_luc') {
                     badge = `<span class="status-badge badge-con-cho"><i class="bi bi-check-circle-fill"></i> Đang hiệu lực</span>`;
+                    actionButtons = `
+                        <button class="btn btn-outline-info" onclick="viewPrintContract(${c.id})" title="Xem văn bản hợp đồng">
+                            <i class="bi bi-file-earmark-text"></i>
+                        </button>
+                        <button class="btn btn-outline-primary" onclick="openExtendModal(${c.id}, '${c.ngayKetThuc}')" title="Gia hạn hợp đồng">
+                            <i class="bi bi-calendar-plus"></i>
+                        </button>
+                        <button class="btn btn-outline-warning" onclick="thanhLyContract(${c.id})" title="Thanh lý / Trả phòng">
+                            <i class="bi bi-box-arrow-right"></i>
+                        </button>
+                    `;
                 } else if (c.trangThai === 'cho_duyet') {
                     badge = `<span class="status-badge badge-cho-duyet"><i class="bi bi-clock-fill"></i> Chờ duyệt</span>`;
+                    actionButtons = `
+                        <button class="btn btn-outline-success" onclick="approveContract(${c.id})" title="Duyệt hợp đồng">
+                            <i class="bi bi-check-lg"></i> Duyệt
+                        </button>
+                    `;
                 } else {
-                    badge = `<span class="status-badge badge-da-day"><i class="bi bi-x-circle-fill"></i> Đã kết thúc</span>`;
+                    badge = `<span class="status-badge badge-da-day"><i class="bi bi-x-circle-fill"></i> ${c.trangThai}</span>`;
+                    actionButtons = `
+                        <button class="btn btn-outline-info" onclick="viewPrintContract(${c.id})" title="Xem hợp đồng">
+                            <i class="bi bi-file-earmark-text"></i>
+                        </button>
+                    `;
                 }
 
                 return `
@@ -336,19 +425,23 @@
                         <td><strong>#HĐ${c.id}</strong></td>
                         <td>
                             <strong class="text-primary">${s.maSinhVien || '-'}</strong>
-                            <div class="small text-muted">${u.hoTen || '-'}</div>
+                            <div class="small fw-semibold text-dark">${u.hoTen || 'Sinh viên'}</div>
                         </td>
                         <td>
                             <span class="badge bg-light text-dark border"><i class="bi bi-door-closed me-1"></i>${p.maPhong || '-'}</span>
+                            <div class="small text-muted">${p.loaiPhong || 'Chuẩn'}</div>
                         </td>
                         <td>${App.formatDate(c.ngayBatDau)}</td>
                         <td>${App.formatDate(c.ngayKetThuc)}</td>
                         <td class="fw-semibold text-primary">${App.formatMoney(c.tienPhong)}</td>
                         <td>${badge}</td>
                         <td class="text-end">
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteContract(${c.id})" title="Xóa hợp đồng">
-                                <i class="bi bi-trash"></i>
-                            </button>
+                            <div class="btn-group btn-group-sm">
+                                ${actionButtons}
+                                <button class="btn btn-outline-danger" onclick="deleteContract(${c.id})" title="Xóa hợp đồng">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 `;
@@ -364,7 +457,8 @@
                 const p = c.phong || {};
                 const matchesQuery = !query ||
                     (s.maSinhVien && s.maSinhVien.toLowerCase().includes(query)) ||
-                    (p.maPhong && p.maPhong.toLowerCase().includes(query));
+                    (p.maPhong && p.maPhong.toLowerCase().includes(query)) ||
+                    ('#HĐ' + c.id).toLowerCase().includes(query);
 
                 const matchesStatus = !status || c.trangThai === status;
 
@@ -376,10 +470,8 @@
 
         function openAddContractModal() {
             document.getElementById('contract-form').reset();
-            document.getElementById('form-contract-id').value = '';
             document.getElementById('contract-form').classList.remove('was-validated');
 
-            // Default dates
             const today = new Date().toISOString().split('T')[0];
             const nextYear = new Date();
             nextYear.setFullYear(nextYear.getFullYear() + 1);
@@ -409,7 +501,7 @@
             const trangThai = document.getElementById('trangThai').value;
 
             if (new Date(ngayKetThuc) < new Date(ngayBatDau)) {
-                App.toast('Ngày kết thúc phải bằng hoặc sau ngày bắt đầu!', 'warning');
+                App.toast('Ngày kết thúc phải sau ngày bắt đầu!', 'warning');
                 return;
             }
 
@@ -443,10 +535,130 @@
             }
         });
 
+        // Approve
+        async function approveContract(id) {
+            const res = await App.api(`/api/hop-dong/${id}/duyet`, { method: 'POST' });
+            if (res.success) {
+                App.toast('Duyệt hợp đồng thành công! Sĩ số phòng đã tăng thêm 1 sinh viên.', 'success');
+                loadContracts();
+            } else {
+                App.toast('Không thể duyệt hợp đồng: ' + res.error, 'danger');
+            }
+        }
+
+        // Open Extend Modal
+        function openExtendModal(id, currentEnd) {
+            document.getElementById('extend-contract-id').value = id;
+            document.getElementById('extend-contract-label').textContent = '#HĐ' + id;
+            document.getElementById('extend-current-end').textContent = App.formatDate(currentEnd);
+
+            const nextSixMonths = new Date();
+            nextSixMonths.setMonth(nextSixMonths.getMonth() + 6);
+            document.getElementById('extend-new-date').value = nextSixMonths.toISOString().split('T')[0];
+
+            extendModalInstance.show();
+        }
+
+        // Submit Extend
+        document.getElementById('extend-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('extend-contract-id').value;
+            const newDate = document.getElementById('extend-new-date').value;
+
+            if (!newDate) return;
+
+            const res = await App.api(`/api/hop-dong/${id}/gia-han?ngayKetThuc=${newDate}`, { method: 'POST' });
+            if (res.success) {
+                App.toast('Gia hạn hợp đồng thành công!', 'success');
+                extendModalInstance.hide();
+                loadContracts();
+            } else {
+                App.toast('Lỗi khi gia hạn hợp đồng: ' + res.error, 'danger');
+            }
+        });
+
+        // Terminate
+        async function thanhLyContract(id) {
+            const confirmed = await App.confirm({
+                title: 'Thanh lý hợp đồng lưu trú',
+                message: `Xác nhận thanh lý hợp đồng #HĐ${id}? Sinh viên sẽ kết thúc lưu trú và giải phóng 1 chỗ trong phòng.`,
+                confirmText: 'Xác nhận thanh lý',
+                btnClass: 'btn-warning'
+            });
+
+            if (!confirmed) return;
+
+            const res = await App.api(`/api/hop-dong/${id}/thanh-ly`, { method: 'POST' });
+            if (res.success) {
+                App.toast('Thanh lý hợp đồng thành công!', 'success');
+                loadContracts();
+            } else {
+                App.toast('Không thể thanh lý hợp đồng: ' + res.error, 'danger');
+            }
+        }
+
+        // Print Contract Preview
+        function viewPrintContract(id) {
+            const c = allContracts.find(item => item.id === id);
+            if (!c) return;
+            const s = c.sinhVien || {};
+            const u = s.nguoiDung || {};
+            const p = c.phong || {};
+
+            const content = `
+                <div class="border p-4 bg-white" style="font-family: 'Times New Roman', serif; line-height: 1.6;">
+                    <div class="text-center mb-4">
+                        <h6 class="fw-bold mb-0 text-uppercase">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</h6>
+                        <div>Độc lập - Tự do - Hạnh phúc</div>
+                        <div class="my-2">------------- o0o -------------</div>
+                        <h5 class="fw-bold text-uppercase mt-3">HỢP ĐỒNG THUÊ CHỖ Ở KÝ TÚC XÁ</h5>
+                        <div class="fst-italic text-muted">Số: ${c.id}/HĐ-KTX</div>
+                    </div>
+
+                    <p>Hôm nay, ngày ${new Date().toLocaleDateString('vi-VN')}, Ban Quản lý Ký túc xá thỏa thuận ký kết hợp đồng với sinh viên:</p>
+
+                    <div class="mb-3">
+                        <strong>BÊN THUÊ CHỖ Ở (SINH VIÊN):</strong><br>
+                        - Họ và tên: <strong>${u.hoTen || 'Sinh viên'}</strong> &bull; Giới tính: ${u.gioiTinh || '-'}<br>
+                        - Mã số sinh viên: <strong>${s.maSinhVien || '-'}</strong> &bull; Lớp: ${s.lop || '-'}<br>
+                        - Khoa: ${s.khoa || '-'} &bull; Ngành: ${s.nganh || '-'}<br>
+                        - Số điện thoại: ${u.soDienThoai || '-'} &bull; Email: ${u.email || '-'}<br>
+                        - Quê quán: ${s.queQuan || '-'}
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>ĐIỀU KHOẢN VỀ PHÒNG Ở:</strong><br>
+                        - Phòng bố trí: <strong>${p.maPhong || '-'}</strong> (Loại: ${p.loaiPhong || 'Chuẩn'})<br>
+                        - Thời hạn lưu trú: Từ ngày <strong>${App.formatDate(c.ngayBatDau)}</strong> đến ngày <strong>${App.formatDate(c.ngayKetThuc)}</strong><br>
+                        - Đơn giá phòng ở: <strong>${App.formatMoney(c.tienPhong)} / tháng</strong><br>
+                        - Tình trạng hợp đồng: <span class="badge bg-primary">${c.trangThai}</span>
+                    </div>
+
+                    <div class="row mt-5 text-center">
+                        <div class="col-6">
+                            <strong>ĐẠI DIỆN SINH VIÊN</strong><br>
+                            <span class="fst-italic">(Ký và ghi rõ họ tên)</span>
+                            <div style="height: 60px;"></div>
+                            <strong>${u.hoTen || ''}</strong>
+                        </div>
+                        <div class="col-6">
+                            <strong>ĐẠI DIỆN BAN QUẢN LÝ KTX</strong><br>
+                            <span class="fst-italic">(Ký và đóng dấu)</span>
+                            <div style="height: 60px;"></div>
+                            <strong>Quản lý KTX</strong>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('print-contract-content').innerHTML = content;
+            printModalInstance.show();
+        }
+
         async function deleteContract(id) {
             const confirmed = await App.confirm({
                 title: 'Xóa hợp đồng',
-                message: `Bạn có chắc chắn muốn xóa hợp đồng #HĐ${id}?`,
+                message: `Bạn có chắc chắn muốn xóa vĩnh viễn hợp đồng #HĐ${id}?`,
                 confirmText: 'Xóa hợp đồng',
                 btnClass: 'btn-danger'
             });
