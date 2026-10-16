@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Loại Phòng - Ký Túc Xá</title>
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+    <!-- ===================== SIDEBAR ===================== -->
+    <aside id="sidebar">
+        <div class="sidebar-header">
+            <a href="/index.html" class="brand-title">
+                <div class="brand-icon">
+                    <i class="bi bi-buildings"></i>
+                </div>
+                <div>
+                    <div class="fw-bold fs-6">KTX DORMITORY</div>
+                    <div class="text-secondary" style="font-size: 0.68rem; font-weight: normal;">Hệ Thống Quản Lý KTX</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-section-title">TỔNG QUAN</div>
+            <a href="/index.html" class="sidebar-link" data-menu="dashboard">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Bảng điều khiển</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 1: SINH VIÊN & TÀI KHOẢN</div>
+            <a href="/sinh-vien.html" class="sidebar-link" data-menu="sinh-vien">
+                <i class="bi bi-person-lines-fill"></i>
+                <span>Quản lý sinh viên</span>
+            </a>
+            <a href="/tai-khoan.html" class="sidebar-link" data-menu="tai-khoan">
+                <i class="bi bi-person-badge-fill"></i>
+                <span>Quản lý tài khoản</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 2: CƠ SỞ VẬT CHẤT</div>
+            <a href="/toa-nha.html" class="sidebar-link" data-menu="toa-nha">
+                <i class="bi bi-building"></i>
+                <span>Quản lý tòa nhà</span>
+            </a>
+            <a href="/phong.html" class="sidebar-link" data-menu="phong">
+                <i class="bi bi-door-open-fill"></i>
+                <span>Quản lý phòng</span>
+            </a>
+            <a href="/loai-phong.html" class="sidebar-link active" data-menu="loai-phong">
+                <i class="bi bi-tags-fill"></i>
+                <span>Quản lý loại phòng</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 3: HỢP ĐỒNG & ĐĂNG KÝ</div>
+            <a href="/hop-dong.html" class="sidebar-link" data-menu="hop-dong">
+                <i class="bi bi-file-earmark-text-fill"></i>
+                <span>Quản lý hợp đồng</span>
+            </a>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="btn btn-outline-light btn-sm w-100 d-flex align-items-center justify-content-center gap-2" onclick="App.auth.logout()">
+                <i class="bi bi-box-arrow-left"></i>
+                <span>Đăng xuất</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ===================== TOPBAR ===================== -->
+    <header id="topbar">
+        <div class="topbar-left">
+            <button class="btn btn-sm btn-light border d-lg-none" id="sidebar-toggle" title="Menu">
+                <i class="bi bi-list fs-5"></i>
+            </button>
+            <div>
+                <h6 class="mb-0 fw-bold text-dark">Quản Lý Loại Phòng</h6>
+                <small class="text-muted" style="font-size: 0.75rem;">Hệ thống &rsaquo; Danh mục tiêu chuẩn loại phòng</small>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <div class="user-badge dropdown">
+                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle gap-2 text-dark" data-bs-toggle="dropdown">
+                    <div class="user-avatar" id="topbar-user-avatar">A</div>
+                    <div class="d-none d-md-block text-start">
+                        <div class="fw-semibold text-dark small" id="topbar-user-name">Quản trị viên</div>
+                        <div class="text-muted" style="font-size: 0.72rem;" id="topbar-user-role">ADMIN</div>
+                    </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                    <li><a class="dropdown-item small" href="/tai-khoan.html"><i class="bi bi-person me-2"></i>Tài khoản</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item small text-danger" href="javascript:void(0)" onclick="App.auth.logout()"><i class="bi bi-box-arrow-right me-2"></i>Đăng xuất</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===================== MAIN CONTENT WRAPPER ===================== -->
+    <div id="main-wrapper">
+        <main class="content-container">
+
+            <!-- Title & Actions -->
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                <div>
+                    <h4 class="fw-bold mb-1 text-dark">Danh Mục Loại Phòng Ký Túc Xá</h4>
+                    <p class="text-muted small mb-0">Theo dõi tiêu chuẩn sức chứa, định mức đơn giá và thống kê số phòng thực tế.</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-secondary btn-sm" onclick="loadRoomTypes()">
+                        <i class="bi bi-arrow-clockwise me-1"></i> Tải lại
+                    </button>
+                    <a href="/phong.html" class="btn btn-primary btn-sm">
+                        <i class="bi bi-door-open-fill me-1"></i> Đi tới Quản lý phòng
+                    </a>
+                </div>
+            </div>
+
+            <!-- Search Card -->
+            <div class="ktx-card mb-4 p-3">
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                            <input type="text" id="type-search" class="form-control border-start-0" 
+                                   placeholder="Tìm kiếm loại phòng theo tên..." oninput="filterRoomTypes()">
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-md-end text-muted small">
+                        Tổng cộng: <strong id="type-count" class="text-primary">0</strong> loại phòng
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Card -->
+            <div class="ktx-card">
+                <div class="table-responsive">
+                    <table class="table ktx-table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Tên Loại Phòng</th>
+                                <th>Sức Chứa Tiêu Chuẩn</th>
+                                <th>Giá Thuê Tham Chiếu</th>
+                                <th>Tổng Số Phòng</th>
+                                <th>Phòng Còn Chỗ</th>
+                                <th>Phòng Đã Đầy</th>
+                                <th class="text-end">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="type-tbody">
+                            <tr>
+                                <td colspan="7" class="text-center py-4 text-muted">
+                                    <div class="spinner-border spinner-border-sm text-primary me-2"></div>
+                                    Đang tải dữ liệu loại phòng...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ===================== MODAL CHI TIẾT DANH SÁCH PHÒNG THEO LOẠI ===================== -->
+    <div class="modal fade" id="type-detail-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-6 fw-bold">
+                        <i class="bi bi-door-closed me-2 text-primary"></i>Danh Sách Phòng Thuộc Loại
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4" id="type-detail-content">
+                    <!-- Dynamic -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <a href="/phong.html" class="btn btn-sm btn-primary">Quản lý chi tiết phòng &rsaquo;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/app.js"></script>
+    <script>
+        let allTypes = [];
+        let detailModalInstance = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            App.initLayout('loai-phong');
+            detailModalInstance = new bootstrap.Modal(document.getElementById('type-detail-modal'));
+            loadRoomTypes();
+        });
+
+        // 1. Fetch Room Types
+        async function loadRoomTypes() {
+            const tbody = document.getElementById('type-tbody');
+            tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Đang tải dữ liệu loại phòng...</td></tr>`;
+
+            const res = await App.api('/api/loai-phong');
+            if (res.success && Array.isArray(res.data)) {
+                allTypes = res.data;
+                renderTypeTable(allTypes);
+            } else {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-danger"><i class="bi bi-exclamation-triangle me-1"></i> ${res.error || 'Lỗi khi tải loại phòng'}</td></tr>`;
+            }
+        }
+
+        // 2. Render Table
+        function renderTypeTable(types) {
+            const tbody = document.getElementById('type-tbody');
+            document.getElementById('type-count').textContent = types.length;
+
+            if (types.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted">Không có loại phòng nào phù hợp.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = types.map((t, idx) => {
+                return `
+                    <tr>
+                        <td>
+                            <strong class="text-primary">${t.tenLoai}</strong>
+                        </td>
+                        <td><span class="badge bg-light text-dark border">${t.sucChua} người / phòng</span></td>
+                        <td class="fw-semibold">${App.formatMoney(t.giaPhong)} / tháng</td>
+                        <td><strong>${t.tongSoPhong}</strong> phòng</td>
+                        <td><span class="status-badge badge-con-cho"><i class="bi bi-dot"></i> ${t.soPhongConCho} phòng</span></td>
+                        <td><span class="status-badge badge-da-day"><i class="bi bi-dot"></i> ${t.soPhongDaDay} phòng</span></td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-outline-primary" onclick="viewRoomsOfType(${idx})" title="Xem phòng">
+                                <i class="bi bi-list-ul me-1"></i> Xem danh sách phòng
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // 3. Search
+        function filterRoomTypes() {
+            const query = document.getElementById('type-search').value.toLowerCase().trim();
+            const filtered = allTypes.filter(t => !query || (t.tenLoai && t.tenLoai.toLowerCase().includes(query)));
+            renderTypeTable(filtered);
+        }
+
+        // 4. View Rooms of Type
+        function viewRoomsOfType(index) {
+            const t = allTypes[index];
+            if (!t) return;
+
+            const rooms = t.danhSachMaPhong || [];
+            let roomsHtml = '';
+
+            if (rooms.length === 0) {
+                roomsHtml = `<div class="text-muted text-center py-3">Chưa có phòng nào được gán loại phòng này trong hệ thống.</div>`;
+            } else {
+                roomsHtml = `
+                    <div class="d-flex flex-wrap gap-2">
+                        ${rooms.map(m => `<span class="badge bg-primary text-white p-2 fs-6"><i class="bi bi-door-closed me-1"></i>${m}</span>`).join('')}
+                    </div>
+                `;
+            }
+
+            const content = `
+                <div class="mb-3">
+                    <h5 class="fw-bold text-dark">${t.tenLoai}</h5>
+                    <div class="text-muted small">Sức chứa chuẩn: <strong>${t.sucChua} người</strong> &bull; Đơn giá: <strong>${App.formatMoney(t.giaPhong)}</strong></div>
+                </div>
+
+                <div class="row g-2 mb-3 text-center">
+                    <div class="col-4 border-end">
+                        <small class="text-muted">Tổng phòng</small>
+                        <div class="fw-bold fs-5">${t.tongSoPhong}</div>
+                    </div>
+                    <div class="col-4 border-end">
+                        <small class="text-muted">Còn chỗ</small>
+                        <div class="fw-bold text-success fs-5">${t.soPhongConCho}</div>
+                    </div>
+                    <div class="col-4">
+                        <small class="text-muted">Đã đầy</small>
+                        <div class="fw-bold text-danger fs-5">${t.soPhongDaDay}</div>
+                    </div>
+                </div>
+
+                <h6 class="fw-bold text-secondary mb-2 small text-uppercase">Danh sách các mã phòng:</h6>
+                ${roomsHtml}
+            `;
+
+            document.getElementById('type-detail-content').innerHTML = content;
+            detailModalInstance.show();
+        }
+    </script>
+</body>
+</html>

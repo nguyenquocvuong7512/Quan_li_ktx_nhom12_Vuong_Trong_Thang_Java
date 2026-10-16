@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Hợp Đồng & Đăng Ký Phòng - Ký Túc Xá</title>
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+    <!-- ===================== SIDEBAR ===================== -->
+    <aside id="sidebar">
+        <div class="sidebar-header">
+            <a href="/index.html" class="brand-title">
+                <div class="brand-icon">
+                    <i class="bi bi-buildings"></i>
+                </div>
+                <div>
+                    <div class="fw-bold fs-6">KTX DORMITORY</div>
+                    <div class="text-secondary" style="font-size: 0.68rem; font-weight: normal;">Hệ Thống Quản Lý KTX</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-section-title">TỔNG QUAN</div>
+            <a href="/index.html" class="sidebar-link" data-menu="dashboard">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Bảng điều khiển</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 1: SINH VIÊN & TÀI KHOẢN</div>
+            <a href="/sinh-vien.html" class="sidebar-link" data-menu="sinh-vien">
+                <i class="bi bi-person-lines-fill"></i>
+                <span>Quản lý sinh viên</span>
+            </a>
+            <a href="/tai-khoan.html" class="sidebar-link" data-menu="tai-khoan">
+                <i class="bi bi-person-badge-fill"></i>
+                <span>Quản lý tài khoản</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 2: CƠ SỞ VẬT CHẤT</div>
+            <a href="/toa-nha.html" class="sidebar-link" data-menu="toa-nha">
+                <i class="bi bi-building"></i>
+                <span>Quản lý tòa nhà</span>
+            </a>
+            <a href="/phong.html" class="sidebar-link" data-menu="phong">
+                <i class="bi bi-door-open-fill"></i>
+                <span>Quản lý phòng</span>
+            </a>
+            <a href="/loai-phong.html" class="sidebar-link" data-menu="loai-phong">
+                <i class="bi bi-tags-fill"></i>
+                <span>Quản lý loại phòng</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 3: HỢP ĐỒNG & ĐĂNG KÝ</div>
+            <a href="/hop-dong.html" class="sidebar-link active" data-menu="hop-dong">
+                <i class="bi bi-file-earmark-text-fill"></i>
+                <span>Quản lý hợp đồng</span>
+            </a>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="btn btn-outline-light btn-sm w-100 d-flex align-items-center justify-content-center gap-2" onclick="App.auth.logout()">
+                <i class="bi bi-box-arrow-left"></i>
+                <span>Đăng xuất</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ===================== TOPBAR ===================== -->
+    <header id="topbar">
+        <div class="topbar-left">
+            <button class="btn btn-sm btn-light border d-lg-none" id="sidebar-toggle" title="Menu">
+                <i class="bi bi-list fs-5"></i>
+            </button>
+            <div>
+                <h6 class="mb-0 fw-bold text-dark">Quản Lý Hợp Đồng Thuê KTX</h6>
+                <small class="text-muted" style="font-size: 0.75rem;">Hệ thống &rsaquo; Đăng ký phòng & Hợp đồng lưu trú (Người 3)</small>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <div class="user-badge dropdown">
+                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle gap-2 text-dark" data-bs-toggle="dropdown">
+                    <div class="user-avatar" id="topbar-user-avatar">A</div>
+                    <div class="d-none d-md-block text-start">
+                        <div class="fw-semibold text-dark small" id="topbar-user-name">Quản trị viên</div>
+                        <div class="text-muted" style="font-size: 0.72rem;" id="topbar-user-role">ADMIN</div>
+                    </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                    <li><a class="dropdown-item small" href="/tai-khoan.html"><i class="bi bi-person me-2"></i>Tài khoản</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item small text-danger" href="javascript:void(0)" onclick="App.auth.logout()"><i class="bi bi-box-arrow-right me-2"></i>Đăng xuất</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===================== MAIN CONTENT WRAPPER ===================== -->
+    <div id="main-wrapper">
+        <main class="content-container">
+
+            <!-- Title & Actions -->
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                <div>
+                    <h4 class="fw-bold mb-1 text-dark">Danh Sách Hợp Đồng Thuê Phòng</h4>
+                    <p class="text-muted small mb-0">Theo dõi hợp đồng lưu trú, ngày bắt đầu, ngày kết thúc và tiền phòng theo quy định.</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-secondary btn-sm" onclick="loadContracts()">
+                        <i class="bi bi-arrow-clockwise me-1"></i> Tải lại
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="openAddContractModal()">
+                        <i class="bi bi-file-earmark-plus me-1"></i> Đăng Ký Hợp Đồng Mới
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search & Filter Card -->
+            <div class="ktx-card mb-4 p-3">
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                            <input type="text" id="contract-search" class="form-control border-start-0" 
+                                   placeholder="Tìm theo Mã SV hoặc Mã phòng..." oninput="filterContracts()">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="filter-status" class="form-select" onchange="filterContracts()">
+                            <option value="">-- Tất cả trạng thái --</option>
+                            <option value="dang_hieu_luc">Đang hiệu lực</option>
+                            <option value="cho_duyet">Chờ duyệt</option>
+                            <option value="da_ket_thuc">Đã kết thúc</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 text-md-end text-muted small">
+                        Tổng cộng: <strong id="contract-count" class="text-primary">0</strong> hợp đồng
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Card -->
+            <div class="ktx-card">
+                <div class="table-responsive">
+                    <table class="table ktx-table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Mã HĐ</th>
+                                <th>Sinh Viên</th>
+                                <th>Phòng Ở</th>
+                                <th>Ngày Bắt Đầu</th>
+                                <th>Ngày Kết Thúc</th>
+                                <th>Tiền Phòng</th>
+                                <th>Trạng Thái</th>
+                                <th class="text-end">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contract-tbody">
+                            <tr>
+                                <td colspan="8" class="text-center py-4 text-muted">
+                                    <div class="spinner-border spinner-border-sm text-primary me-2"></div>
+                                    Đang tải dữ liệu hợp đồng...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ===================== MODAL THÊM HỢP ĐỒNG ===================== -->
+    <div class="modal fade" id="contract-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-6 fw-bold" id="contract-modal-title">
+                        <i class="bi bi-file-earmark-plus me-2 text-primary"></i>Tạo Hợp Đồng Thuê KTX
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="contract-form" novalidate>
+                    <input type="hidden" id="form-contract-id">
+
+                    <div class="modal-body p-4">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label for="sinhVienSelect" class="form-label">Sinh Viên Thuê <span class="text-danger">*</span></label>
+                                <select class="form-select" id="sinhVienSelect" required>
+                                    <option value="">-- Chọn sinh viên --</option>
+                                </select>
+                                <div class="invalid-feedback">Vui lòng chọn sinh viên.</div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="phongSelect" class="form-label">Phòng Ký Túc Xá <span class="text-danger">*</span></label>
+                                <select class="form-select" id="phongSelect" required onchange="handlePhongSelected()">
+                                    <option value="">-- Chọn phòng ký túc xá --</option>
+                                </select>
+                                <div class="invalid-feedback">Vui lòng chọn phòng.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="ngayBatDau" class="form-label">Ngày Bắt Đầu <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="ngayBatDau" required>
+                                <div class="invalid-feedback">Vui lòng chọn ngày bắt đầu.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="ngayKetThuc" class="form-label">Ngày Kết Thúc <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="ngayKetThuc" required>
+                                <div class="invalid-feedback">Ngày kết thúc phải sau ngày bắt đầu.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="tienPhong" class="form-label">Tiền Phòng (VNĐ) <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="tienPhong" required min="0" step="50000" value="1200000">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="trangThai" class="form-label">Trạng Thái HĐ</label>
+                                <select class="form-select" id="trangThai">
+                                    <option value="dang_hieu_luc">Đang hiệu lực</option>
+                                    <option value="cho_duyet">Chờ duyệt</option>
+                                    <option value="da_ket_thuc">Đã kết thúc</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-light border" data-bs-dismiss="modal">Hủy bỏ</button>
+                        <button type="submit" class="btn btn-sm btn-primary" id="save-contract-btn">
+                            <i class="bi bi-check2-circle me-1"></i> Lưu Hợp Đồng
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/app.js"></script>
+    <script>
+        let allContracts = [];
+        let allStudents = [];
+        let allRooms = [];
+        let contractModalInstance = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            App.initLayout('hop-dong');
+            contractModalInstance = new bootstrap.Modal(document.getElementById('contract-modal'));
+            loadDependencies();
+        });
+
+        async function loadDependencies() {
+            // Load students
+            const sRes = await App.api('/api/sinhvien');
+            if (sRes.success && Array.isArray(sRes.data)) {
+                allStudents = sRes.data;
+                const sSelect = document.getElementById('sinhVienSelect');
+                sSelect.innerHTML = '<option value="">-- Chọn sinh viên --</option>' +
+                    allStudents.map(s => {
+                        const u = s.nguoiDung || {};
+                        return `<option value="${s.id}">${s.maSinhVien} - ${u.hoTen || 'Sinh viên'}</option>`;
+                    }).join('');
+            }
+
+            // Load rooms
+            const rRes = await App.api('/api/phong');
+            if (rRes.success && Array.isArray(rRes.data)) {
+                allRooms = rRes.data;
+                const pSelect = document.getElementById('phongSelect');
+                pSelect.innerHTML = '<option value="">-- Chọn phòng ký túc xá --</option>' +
+                    allRooms.map(r => `<option value="${r.id}" data-price="${r.giaPhong}">${r.maPhong} (${r.loaiPhong || 'Chuẩn'} - ${App.formatMoney(r.giaPhong)})</option>`).join('');
+            }
+
+            loadContracts();
+        }
+
+        function handlePhongSelected() {
+            const select = document.getElementById('phongSelect');
+            const selectedOpt = select.options[select.selectedIndex];
+            if (selectedOpt && selectedOpt.dataset.price) {
+                document.getElementById('tienPhong').value = selectedOpt.dataset.price;
+            }
+        }
+
+        async function loadContracts() {
+            const tbody = document.getElementById('contract-tbody');
+            tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Đang tải danh sách hợp đồng...</td></tr>`;
+
+            const res = await App.api('/api/hop-dong');
+            if (res.success && Array.isArray(res.data)) {
+                allContracts = res.data;
+                renderContractTable(allContracts);
+            } else {
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-danger"><i class="bi bi-exclamation-triangle me-1"></i> ${res.error || 'Lỗi khi tải hợp đồng'}</td></tr>`;
+            }
+        }
+
+        function renderContractTable(contracts) {
+            const tbody = document.getElementById('contract-tbody');
+            document.getElementById('contract-count').textContent = contracts.length;
+
+            if (contracts.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted">Không tìm thấy hợp đồng nào.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = contracts.map(c => {
+                const s = c.sinhVien || {};
+                const u = s.nguoiDung || {};
+                const p = c.phong || {};
+
+                let badge = '';
+                if (c.trangThai === 'dang_hieu_luc') {
+                    badge = `<span class="status-badge badge-con-cho"><i class="bi bi-check-circle-fill"></i> Đang hiệu lực</span>`;
+                } else if (c.trangThai === 'cho_duyet') {
+                    badge = `<span class="status-badge badge-cho-duyet"><i class="bi bi-clock-fill"></i> Chờ duyệt</span>`;
+                } else {
+                    badge = `<span class="status-badge badge-da-day"><i class="bi bi-x-circle-fill"></i> Đã kết thúc</span>`;
+                }
+
+                return `
+                    <tr>
+                        <td><strong>#HĐ${c.id}</strong></td>
+                        <td>
+                            <strong class="text-primary">${s.maSinhVien || '-'}</strong>
+                            <div class="small text-muted">${u.hoTen || '-'}</div>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border"><i class="bi bi-door-closed me-1"></i>${p.maPhong || '-'}</span>
+                        </td>
+                        <td>${App.formatDate(c.ngayBatDau)}</td>
+                        <td>${App.formatDate(c.ngayKetThuc)}</td>
+                        <td class="fw-semibold text-primary">${App.formatMoney(c.tienPhong)}</td>
+                        <td>${badge}</td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteContract(${c.id})" title="Xóa hợp đồng">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function filterContracts() {
+            const query = document.getElementById('contract-search').value.toLowerCase().trim();
+            const status = document.getElementById('filter-status').value;
+
+            const filtered = allContracts.filter(c => {
+                const s = c.sinhVien || {};
+                const p = c.phong || {};
+                const matchesQuery = !query ||
+                    (s.maSinhVien && s.maSinhVien.toLowerCase().includes(query)) ||
+                    (p.maPhong && p.maPhong.toLowerCase().includes(query));
+
+                const matchesStatus = !status || c.trangThai === status;
+
+                return matchesQuery && matchesStatus;
+            });
+
+            renderContractTable(filtered);
+        }
+
+        function openAddContractModal() {
+            document.getElementById('contract-form').reset();
+            document.getElementById('form-contract-id').value = '';
+            document.getElementById('contract-form').classList.remove('was-validated');
+
+            // Default dates
+            const today = new Date().toISOString().split('T')[0];
+            const nextYear = new Date();
+            nextYear.setFullYear(nextYear.getFullYear() + 1);
+            const end = nextYear.toISOString().split('T')[0];
+
+            document.getElementById('ngayBatDau').value = today;
+            document.getElementById('ngayKetThuc').value = end;
+
+            contractModalInstance.show();
+        }
+
+        document.getElementById('contract-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+
+            if (!form.checkValidity()) {
+                e.stopPropagation();
+                form.classList.add('was-validated');
+                return;
+            }
+
+            const sinhVienId = document.getElementById('sinhVienSelect').value;
+            const phongId = document.getElementById('phongSelect').value;
+            const ngayBatDau = document.getElementById('ngayBatDau').value;
+            const ngayKetThuc = document.getElementById('ngayKetThuc').value;
+            const tienPhong = parseFloat(document.getElementById('tienPhong').value);
+            const trangThai = document.getElementById('trangThai').value;
+
+            if (new Date(ngayKetThuc) < new Date(ngayBatDau)) {
+                App.toast('Ngày kết thúc phải bằng hoặc sau ngày bắt đầu!', 'warning');
+                return;
+            }
+
+            const saveBtn = document.getElementById('save-contract-btn');
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Đang lưu...';
+
+            const payload = {
+                sinhVien: { id: parseInt(sinhVienId) },
+                phong: { id: parseInt(phongId) },
+                ngayBatDau,
+                ngayKetThuc,
+                tienPhong,
+                trangThai
+            };
+
+            const res = await App.api('/api/hop-dong', {
+                method: 'POST',
+                body: payload
+            });
+
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Lưu Hợp Đồng';
+
+            if (res.success) {
+                App.toast('Tạo hợp đồng thành công!', 'success');
+                contractModalInstance.hide();
+                loadContracts();
+            } else {
+                App.toast('Lỗi khi tạo hợp đồng: ' + res.error, 'danger');
+            }
+        });
+
+        async function deleteContract(id) {
+            const confirmed = await App.confirm({
+                title: 'Xóa hợp đồng',
+                message: `Bạn có chắc chắn muốn xóa hợp đồng #HĐ${id}?`,
+                confirmText: 'Xóa hợp đồng',
+                btnClass: 'btn-danger'
+            });
+
+            if (!confirmed) return;
+
+            const res = await App.api(`/api/hop-dong/${id}`, { method: 'DELETE' });
+            if (res.success) {
+                App.toast('Đã xóa hợp đồng thành công!', 'success');
+                loadContracts();
+            } else {
+                App.toast('Không thể xóa hợp đồng: ' + res.error, 'danger');
+            }
+        }
+    </script>
+</body>
+</html>

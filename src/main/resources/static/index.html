@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Điều Khiển - Quản Lý Ký Túc Xá</title>
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+    <!-- ===================== SIDEBAR ===================== -->
+    <aside id="sidebar">
+        <div class="sidebar-header">
+            <a href="/index.html" class="brand-title">
+                <div class="brand-icon">
+                    <i class="bi bi-buildings"></i>
+                </div>
+                <div>
+                    <div class="fw-bold fs-6">KTX DORMITORY</div>
+                    <div class="text-secondary" style="font-size: 0.68rem; font-weight: normal;">Hệ Thống Quản Lý KTX</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-section-title">TỔNG QUAN</div>
+            <a href="/index.html" class="sidebar-link active" data-menu="dashboard">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Bảng điều khiển</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 1: SINH VIÊN & TÀI KHOẢN</div>
+            <a href="/sinh-vien.html" class="sidebar-link" data-menu="sinh-vien">
+                <i class="bi bi-person-lines-fill"></i>
+                <span>Quản lý sinh viên</span>
+            </a>
+            <a href="/tai-khoan.html" class="sidebar-link" data-menu="tai-khoan">
+                <i class="bi bi-person-badge-fill"></i>
+                <span>Quản lý tài khoản</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 2: CƠ SỞ VẬT CHẤT</div>
+            <a href="/toa-nha.html" class="sidebar-link" data-menu="toa-nha">
+                <i class="bi bi-building"></i>
+                <span>Quản lý tòa nhà</span>
+            </a>
+            <a href="/phong.html" class="sidebar-link" data-menu="phong">
+                <i class="bi bi-door-open-fill"></i>
+                <span>Quản lý phòng</span>
+            </a>
+            <a href="/loai-phong.html" class="sidebar-link" data-menu="loai-phong">
+                <i class="bi bi-tags-fill"></i>
+                <span>Quản lý loại phòng</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 3: HỢP ĐỒNG & ĐĂNG KÝ</div>
+            <a href="/hop-dong.html" class="sidebar-link" data-menu="hop-dong">
+                <i class="bi bi-file-earmark-text-fill"></i>
+                <span>Quản lý hợp đồng</span>
+            </a>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="btn btn-outline-light btn-sm w-100 d-flex align-items-center justify-content-center gap-2" onclick="App.auth.logout()">
+                <i class="bi bi-box-arrow-left"></i>
+                <span>Đăng xuất</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ===================== TOPBAR ===================== -->
+    <header id="topbar">
+        <div class="topbar-left">
+            <button class="btn btn-sm btn-light border d-lg-none" id="sidebar-toggle" title="Menu">
+                <i class="bi bi-list fs-5"></i>
+            </button>
+            <div>
+                <h6 class="mb-0 fw-bold text-dark">Bảng Điều Khiển</h6>
+                <small class="text-muted" style="font-size: 0.75rem;">Hệ thống &rsaquo; Tổng quan hoạt động</small>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <div class="user-badge dropdown">
+                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle gap-2 text-dark" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="user-avatar" id="topbar-user-avatar">A</div>
+                    <div class="d-none d-md-block text-start">
+                        <div class="fw-semibold text-dark small" id="topbar-user-name">Quản trị viên</div>
+                        <div class="text-muted" style="font-size: 0.72rem;" id="topbar-user-role">ADMIN</div>
+                    </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                    <li><a class="dropdown-item small" href="/tai-khoan.html"><i class="bi bi-person me-2"></i>Tài khoản cá nhân</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item small text-danger" href="javascript:void(0)" onclick="App.auth.logout()"><i class="bi bi-box-arrow-right me-2"></i>Đăng xuất</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===================== MAIN CONTENT WRAPPER ===================== -->
+    <div id="main-wrapper">
+        <main class="content-container">
+
+            <!-- Banner / Welcome -->
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                <div>
+                    <h4 class="fw-bold mb-1 text-dark">Tổng Quan Ký Túc Xá</h4>
+                    <p class="text-muted small mb-0">Theo dõi trạng thái sức chứa phòng, sinh viên và hoạt động lưu trú theo thời gian thực.</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-secondary btn-sm" onclick="loadDashboardData()">
+                        <i class="bi bi-arrow-clockwise me-1"></i> Làm mới dữ liệu
+                    </button>
+                    <a href="/phong.html" class="btn btn-primary btn-sm">
+                        <i class="bi bi-plus-circle me-1"></i> Xem danh sách phòng
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="row g-3 mb-4">
+                <div class="col-sm-6 col-xl-3">
+                    <div class="stat-card">
+                        <div>
+                            <div class="stat-number" id="stat-students">0</div>
+                            <div class="stat-label">Tổng sinh viên</div>
+                        </div>
+                        <div class="stat-icon primary">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-xl-3">
+                    <div class="stat-card">
+                        <div>
+                            <div class="stat-number" id="stat-buildings">0</div>
+                            <div class="stat-label">Tòa nhà ký túc</div>
+                        </div>
+                        <div class="stat-icon success">
+                            <i class="bi bi-building-check"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-xl-3">
+                    <div class="stat-card">
+                        <div>
+                            <div class="stat-number" id="stat-rooms">0</div>
+                            <div class="stat-label">Tổng số phòng</div>
+                        </div>
+                        <div class="stat-icon purple">
+                            <i class="bi bi-door-closed-fill"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-xl-3">
+                    <div class="stat-card">
+                        <div>
+                            <div class="stat-number text-success" id="stat-available-rooms">0</div>
+                            <div class="stat-label">Phòng còn chỗ</div>
+                        </div>
+                        <div class="stat-icon warning">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two Column Overview -->
+            <div class="row g-3 mb-4">
+                <!-- Room Occupancy Card -->
+                <div class="col-lg-7">
+                    <div class="ktx-card h-100">
+                        <div class="card-header-clean">
+                            <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-pie-chart-fill me-2 text-primary"></i>Tình Trạng Phòng & Sức Chứa</h6>
+                            <span class="badge bg-light text-dark border">Thời gian thực</span>
+                        </div>
+                        <div class="p-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="small fw-semibold text-muted">Tỷ lệ phòng đã được lấp đầy</span>
+                                <span class="small fw-bold text-dark" id="occupancy-rate">0%</span>
+                            </div>
+                            <div class="progress mb-4" style="height: 12px; border-radius: 6px;">
+                                <div id="occupancy-bar" class="progress-bar bg-primary" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+
+                            <div class="row g-2 text-center">
+                                <div class="col-4 border-end">
+                                    <div class="small text-muted">Phòng trống/Còn chỗ</div>
+                                    <div class="fw-bold text-success fs-5 mt-1" id="box-avail-rooms">0</div>
+                                </div>
+                                <div class="col-4 border-end">
+                                    <div class="small text-muted">Phòng đã đầy</div>
+                                    <div class="fw-bold text-danger fs-5 mt-1" id="box-full-rooms">0</div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="small text-muted">Số loại phòng</div>
+                                    <div class="fw-bold text-primary fs-5 mt-1" id="box-room-types">0</div>
+                                </div>
+                            </div>
+
+                            <hr class="my-3">
+
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-file-earmark-check text-primary fs-4"></i>
+                                    <div>
+                                        <div class="small fw-bold text-dark">Hợp đồng lưu trú hiệu lực</div>
+                                        <div class="text-muted" style="font-size: 0.75rem;">Đang được sinh viên đăng ký sử dụng</div>
+                                    </div>
+                                </div>
+                                <span class="badge bg-primary fs-6 px-3 py-2" id="stat-active-contracts">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shortcuts Card -->
+                <div class="col-lg-5">
+                    <div class="ktx-card h-100">
+                        <div class="card-header-clean">
+                            <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-lightning-charge-fill me-2 text-warning"></i>Lối Tắt Quản Lý Nhanh</h6>
+                        </div>
+                        <div class="p-3 d-flex flex-column gap-2">
+                            <a href="/sinh-vien.html" class="p-2 border rounded d-flex align-items-center justify-content-between text-decoration-none text-dark hover-bg-light">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="bg-primary text-white rounded p-2 d-flex"><i class="bi bi-person-plus"></i></div>
+                                    <div>
+                                        <div class="fw-semibold small">Quản lý Sinh viên</div>
+                                        <div class="text-muted" style="font-size: 0.72rem;">Thêm mới, tìm kiếm và xem hồ sơ</div>
+                                    </div>
+                                </div>
+                                <i class="bi bi-chevron-right text-muted"></i>
+                            </a>
+
+                            <a href="/phong.html" class="p-2 border rounded d-flex align-items-center justify-content-between text-decoration-none text-dark">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="bg-success text-white rounded p-2 d-flex"><i class="bi bi-door-open"></i></div>
+                                    <div>
+                                        <div class="fw-semibold small">Quản lý Phòng ở</div>
+                                        <div class="text-muted" style="font-size: 0.72rem;">Kiểm tra sức chứa, phân phòng và giá thuê</div>
+                                    </div>
+                                </div>
+                                <i class="bi bi-chevron-right text-muted"></i>
+                            </a>
+
+                            <a href="/toa-nha.html" class="p-2 border rounded d-flex align-items-center justify-content-between text-decoration-none text-dark">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="bg-info text-white rounded p-2 d-flex"><i class="bi bi-building"></i></div>
+                                    <div>
+                                        <div class="fw-semibold small">Quản lý Tòa nhà</div>
+                                        <div class="text-muted" style="font-size: 0.72rem;">Danh sách tòa, tầng và các khu vực</div>
+                                    </div>
+                                </div>
+                                <i class="bi bi-chevron-right text-muted"></i>
+                            </a>
+
+                            <a href="/tai-khoan.html" class="p-2 border rounded d-flex align-items-center justify-content-between text-decoration-none text-dark">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="bg-secondary text-white rounded p-2 d-flex"><i class="bi bi-shield-lock"></i></div>
+                                    <div>
+                                        <div class="fw-semibold small">Quản lý Tài khoản</div>
+                                        <div class="text-muted" style="font-size: 0.72rem;">Phân quyền, cấp mật khẩu và trạng thái</div>
+                                    </div>
+                                </div>
+                                <i class="bi bi-chevron-right text-muted"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Available Rooms Table -->
+            <div class="ktx-card">
+                <div class="card-header-clean">
+                    <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-check2-circle text-success me-2"></i>Danh Sách Phòng Đang Còn Chỗ</h6>
+                    <a href="/phong.html" class="btn btn-outline-primary btn-sm">Xem tất cả phòng &rsaquo;</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table ktx-table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Mã Phòng</th>
+                                <th>Tòa Nhà / Tầng</th>
+                                <th>Loại Phòng</th>
+                                <th>Sức Chứa</th>
+                                <th>Đang Ở</th>
+                                <th>Giá Phòng / Tháng</th>
+                                <th>Trạng Thái</th>
+                                <th class="text-end">Hành Động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="available-rooms-tbody">
+                            <tr>
+                                <td colspan="8" class="text-center py-4 text-muted">
+                                    <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+                                    Đang tải dữ liệu phòng...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            App.initLayout('dashboard');
+            loadDashboardData();
+        });
+
+        async function loadDashboardData() {
+            // Load stats from /api/dashboard/stats
+            const statsRes = await App.api('/api/dashboard/stats');
+            if (statsRes.success && statsRes.data) {
+                const data = statsRes.data;
+                document.getElementById('stat-students').textContent = data.totalStudents || 0;
+                document.getElementById('stat-buildings').textContent = data.totalBuildings || 0;
+                document.getElementById('stat-rooms').textContent = data.totalRooms || 0;
+                document.getElementById('stat-available-rooms').textContent = data.availableRooms || 0;
+
+                document.getElementById('box-avail-rooms').textContent = data.availableRooms || 0;
+                document.getElementById('box-full-rooms').textContent = data.occupiedRooms || 0;
+                document.getElementById('box-room-types').textContent = data.totalRoomTypes || 0;
+                document.getElementById('stat-active-contracts').textContent = data.activeContracts || 0;
+
+                const totalRooms = data.totalRooms || 0;
+                const occRooms = data.occupiedRooms || 0;
+                const rate = totalRooms > 0 ? Math.round((occRooms / totalRooms) * 100) : 0;
+                document.getElementById('occupancy-rate').textContent = rate + '%';
+                const bar = document.getElementById('occupancy-bar');
+                bar.style.width = rate + '%';
+                bar.setAttribute('aria-valuenow', rate);
+            }
+
+            // Load available rooms list
+            const roomsRes = await App.api('/api/phong');
+            const tbody = document.getElementById('available-rooms-tbody');
+            if (roomsRes.success && Array.isArray(roomsRes.data)) {
+                const available = roomsRes.data.filter(r => r.trangThai === 'con_cho').slice(0, 5);
+                if (available.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted">Hiện tại không có phòng nào còn chỗ hoặc chưa có dữ liệu phòng.</td></tr>`;
+                } else {
+                    tbody.innerHTML = available.map(r => `
+                        <tr>
+                            <td><strong class="text-primary">${r.maPhong}</strong></td>
+                            <td>${r.tang && r.tang.toaNha ? r.tang.toaNha.tenToa : 'Tòa A1'} (Tầng ${r.tang ? r.tang.soTang : 1})</td>
+                            <td><span class="badge bg-light text-dark border">${r.loaiPhong || 'Chuẩn'}</span></td>
+                            <td>${r.sucChua} người</td>
+                            <td>${r.soNguoiHienTai || 0} người</td>
+                            <td class="fw-semibold">${App.formatMoney(r.giaPhong)}</td>
+                            <td><span class="status-badge badge-con-cho"><i class="bi bi-dot"></i> Còn chỗ</span></td>
+                            <td class="text-end">
+                                <a href="/phong.html" class="btn btn-sm btn-light border" title="Xem chi tiết">
+                                    <i class="bi bi-eye"></i> Chi tiết
+                                </a>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } else {
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-danger"><i class="bi bi-exclamation-triangle me-1"></i> Không thể tải dữ liệu phòng (Kiểm tra kết nối Backend)</td></tr>`;
+            }
+        }
+    </script>
+</body>
+</html>

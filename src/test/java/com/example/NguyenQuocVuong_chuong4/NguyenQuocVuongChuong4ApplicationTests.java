@@ -16,6 +16,10 @@ import com.example.NguyenQuocVuong_chuong4.repository.ToaNhaRepository;
 import com.example.NguyenQuocVuong_chuong4.service.HopDongService;
 import com.example.NguyenQuocVuong_chuong4.service.NguoiDungService;
 import com.example.NguyenQuocVuong_chuong4.service.PhongService;
+import com.example.NguyenQuocVuong_chuong4.controller.DashboardController;
+import com.example.NguyenQuocVuong_chuong4.controller.DashboardStatsDTO;
+import com.example.NguyenQuocVuong_chuong4.controller.LoaiPhongController;
+import com.example.NguyenQuocVuong_chuong4.controller.LoaiPhongDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,6 +27,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -52,6 +57,10 @@ class NguyenQuocVuongChuong4ApplicationTests {
 	private PhongService phongService;
 	@Autowired
 	private HopDongService hopDongService;
+	@Autowired
+	private DashboardController dashboardController;
+	@Autowired
+	private LoaiPhongController loaiPhongController;
 
 	@Test
 	void contextLoads() {
@@ -135,4 +144,17 @@ class NguyenQuocVuongChuong4ApplicationTests {
 		invalidContract.setNgayKetThuc(LocalDate.of(2026, 1, 1));
 		assertThrows(ResponseStatusException.class, () -> hopDongService.save(invalidContract));
 	}
+
+	@Test
+	void dashboardAndLoaiPhongEndpointsReturnAccurateAggregations() {
+		DashboardStatsDTO stats = dashboardController.getStats();
+		assertNotNull(stats);
+		assertTrue(stats.totalStudents() >= 0);
+		assertTrue(stats.totalRooms() >= 0);
+
+		List<LoaiPhongDTO> loaiPhongList = loaiPhongController.getAllLoaiPhong();
+		assertNotNull(loaiPhongList);
+		assertFalse(loaiPhongList.isEmpty());
+	}
 }
+

@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Sinh Viên - Ký Túc Xá</title>
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+    <!-- ===================== SIDEBAR ===================== -->
+    <aside id="sidebar">
+        <div class="sidebar-header">
+            <a href="/index.html" class="brand-title">
+                <div class="brand-icon">
+                    <i class="bi bi-buildings"></i>
+                </div>
+                <div>
+                    <div class="fw-bold fs-6">KTX DORMITORY</div>
+                    <div class="text-secondary" style="font-size: 0.68rem; font-weight: normal;">Hệ Thống Quản Lý KTX</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-section-title">TỔNG QUAN</div>
+            <a href="/index.html" class="sidebar-link" data-menu="dashboard">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Bảng điều khiển</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 1: SINH VIÊN & TÀI KHOẢN</div>
+            <a href="/sinh-vien.html" class="sidebar-link active" data-menu="sinh-vien">
+                <i class="bi bi-person-lines-fill"></i>
+                <span>Quản lý sinh viên</span>
+            </a>
+            <a href="/tai-khoan.html" class="sidebar-link" data-menu="tai-khoan">
+                <i class="bi bi-person-badge-fill"></i>
+                <span>Quản lý tài khoản</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 2: CƠ SỞ VẬT CHẤT</div>
+            <a href="/toa-nha.html" class="sidebar-link" data-menu="toa-nha">
+                <i class="bi bi-building"></i>
+                <span>Quản lý tòa nhà</span>
+            </a>
+            <a href="/phong.html" class="sidebar-link" data-menu="phong">
+                <i class="bi bi-door-open-fill"></i>
+                <span>Quản lý phòng</span>
+            </a>
+            <a href="/loai-phong.html" class="sidebar-link" data-menu="loai-phong">
+                <i class="bi bi-tags-fill"></i>
+                <span>Quản lý loại phòng</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 3: HỢP ĐỒNG & ĐĂNG KÝ</div>
+            <a href="/hop-dong.html" class="sidebar-link" data-menu="hop-dong">
+                <i class="bi bi-file-earmark-text-fill"></i>
+                <span>Quản lý hợp đồng</span>
+            </a>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="btn btn-outline-light btn-sm w-100 d-flex align-items-center justify-content-center gap-2" onclick="App.auth.logout()">
+                <i class="bi bi-box-arrow-left"></i>
+                <span>Đăng xuất</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ===================== TOPBAR ===================== -->
+    <header id="topbar">
+        <div class="topbar-left">
+            <button class="btn btn-sm btn-light border d-lg-none" id="sidebar-toggle" title="Menu">
+                <i class="bi bi-list fs-5"></i>
+            </button>
+            <div>
+                <h6 class="mb-0 fw-bold text-dark">Quản Lý Sinh Viên</h6>
+                <small class="text-muted" style="font-size: 0.75rem;">Hệ thống &rsaquo; Sinh viên & Tài khoản</small>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <div class="user-badge dropdown">
+                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle gap-2 text-dark" data-bs-toggle="dropdown">
+                    <div class="user-avatar" id="topbar-user-avatar">A</div>
+                    <div class="d-none d-md-block text-start">
+                        <div class="fw-semibold text-dark small" id="topbar-user-name">Quản trị viên</div>
+                        <div class="text-muted" style="font-size: 0.72rem;" id="topbar-user-role">ADMIN</div>
+                    </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                    <li><a class="dropdown-item small" href="/tai-khoan.html"><i class="bi bi-person me-2"></i>Tài khoản</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item small text-danger" href="javascript:void(0)" onclick="App.auth.logout()"><i class="bi bi-box-arrow-right me-2"></i>Đăng xuất</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===================== MAIN CONTENT ===================== -->
+    <div id="main-wrapper">
+        <main class="content-container">
+
+            <!-- Title & Actions -->
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                <div>
+                    <h4 class="fw-bold mb-1 text-dark">Danh Sách Sinh Viên Ký Túc Xá</h4>
+                    <p class="text-muted small mb-0">Quản lý hồ sơ thông tin sinh viên, khoa, ngành và tài khoản đăng nhập.</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-secondary btn-sm" onclick="loadStudents()">
+                        <i class="bi bi-arrow-clockwise me-1"></i> Tải lại
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="openAddStudentModal()">
+                        <i class="bi bi-person-plus-fill me-1"></i> Thêm Sinh Viên Mới
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search & Filter Card -->
+            <div class="ktx-card mb-4 p-3">
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                            <input type="text" id="search-input" class="form-control border-start-0" 
+                                   placeholder="Tìm theo Mã SV, Họ tên, Email hoặc Lớp..." oninput="filterStudents()">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <select id="filter-faculty" class="form-select" onchange="filterStudents()">
+                            <option value="">-- Tất cả Khoa / Ngành --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 text-md-end text-muted small">
+                        Hiển thị: <strong id="student-count" class="text-primary">0</strong> sinh viên
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Card -->
+            <div class="ktx-card">
+                <div class="table-responsive">
+                    <table class="table ktx-table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Mã Sinh Viên</th>
+                                <th>Họ Và Tên</th>
+                                <th>Giới Tính</th>
+                                <th>Ngày Sinh</th>
+                                <th>Email</th>
+                                <th>Số Điện Thoại</th>
+                                <th>Lớp / Ngành</th>
+                                <th>Quê Quán</th>
+                                <th class="text-end">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="student-tbody">
+                            <tr>
+                                <td colspan="9" class="text-center py-4 text-muted">
+                                    <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+                                    Đang tải dữ liệu sinh viên...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ===================== MODAL THÊM / SỬA SINH VIÊN ===================== -->
+    <div class="modal fade" id="student-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-6 fw-bold" id="student-modal-title">
+                        <i class="bi bi-person-fill me-2 text-primary"></i>Thêm Sinh Viên Mới
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="student-form" novalidate>
+                    <input type="hidden" id="student-id">
+                    <input type="hidden" id="account-id">
+
+                    <div class="modal-body p-4">
+                        <div class="row g-3">
+
+                            <!-- Section 1: Thông tin học tập -->
+                            <div class="col-12">
+                                <h6 class="fw-bold text-primary border-bottom pb-2 mb-3">
+                                    <i class="bi bi-mortarboard me-1"></i> 1. Thông Tin Học Tập & Hồ Sơ KTX
+                                </h6>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="maSinhVien" class="form-label">Mã Sinh Viên <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="maSinhVien" required maxlength="30" placeholder="VD: SV24001">
+                                <div class="invalid-feedback">Vui lòng nhập mã sinh viên hợp lệ.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="lop" class="form-label">Lớp Sinh Hoạt</label>
+                                <input type="text" class="form-control" id="lop" maxlength="50" placeholder="VD: CCQ2411D">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="khoa" class="form-label">Khoa</label>
+                                <input type="text" class="form-control" id="khoa" maxlength="100" placeholder="VD: Công nghệ thông tin">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="nganh" class="form-label">Ngành Học</label>
+                                <input type="text" class="form-control" id="nganh" maxlength="100" placeholder="VD: Kỹ thuật phần mềm">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="khoaHoc" class="form-label">Khóa Học (Năm)</label>
+                                <input type="number" class="form-control" id="khoaHoc" min="1" max="99" placeholder="VD: 24">
+                            </div>
+
+                            <div class="col-12">
+                                <label for="queQuan" class="form-label">Quê Quán / Địa Chỉ</label>
+                                <input type="text" class="form-control" id="queQuan" maxlength="150" placeholder="VD: TP. Hồ Chí Minh, Đồng Nai...">
+                            </div>
+
+                            <!-- Section 2: Thông tin cá nhân & Tài khoản -->
+                            <div class="col-12 mt-4">
+                                <h6 class="fw-bold text-primary border-bottom pb-2 mb-3">
+                                    <i class="bi bi-person-badge me-1"></i> 2. Thông Tin Cá Nhân & Tài Khoản Liên Kết
+                                </h6>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="hoTen" class="form-label">Họ Và Tên <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="hoTen" required maxlength="100" placeholder="VD: Nguyễn Văn An">
+                                <div class="invalid-feedback">Vui lòng nhập họ và tên.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Địa Chỉ Email <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="email" required maxlength="150" placeholder="VD: an@example.com">
+                                <div class="invalid-feedback">Vui lòng nhập email hợp lệ.</div>
+                            </div>
+
+                            <div class="col-md-6" id="password-group">
+                                <label for="matKhau" class="form-label">Mật Khẩu Đăng Nhập <span class="text-danger" id="pwd-required">*</span></label>
+                                <input type="password" class="form-control" id="matKhau" minlength="8" maxlength="50" placeholder="Tối thiểu 8 ký tự">
+                                <div class="form-text small" id="pwd-hint">Dùng để sinh viên đăng nhập hệ thống tra cứu.</div>
+                                <div class="invalid-feedback">Mật khẩu phải từ 8 ký tự trở lên.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="soDienThoai" class="form-label">Số Điện Thoại</label>
+                                <input type="tel" class="form-control" id="soDienThoai" maxlength="20" placeholder="VD: 0901234567">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="gioiTinh" class="form-label">Giới Tính</label>
+                                <select class="form-select" id="gioiTinh">
+                                    <option value="Nam">Nam</option>
+                                    <option value="Nu">Nữ</option>
+                                    <option value="Khac">Khác</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="ngaySinh" class="form-label">Ngày Sinh</label>
+                                <input type="date" class="form-control" id="ngaySinh">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-light border" data-bs-dismiss="modal">Hủy bỏ</button>
+                        <button type="submit" class="btn btn-sm btn-primary" id="save-student-btn">
+                            <i class="bi bi-check2-circle me-1"></i> Lưu Sinh Viên
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== MODAL CHI TIẾT SINH VIÊN ===================== -->
+    <div class="modal fade" id="student-detail-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-6 fw-bold">
+                        <i class="bi bi-info-circle me-2 text-primary"></i>Chi Tiết Sinh Viên
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4" id="student-detail-content">
+                    <!-- Dynamic details -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/app.js"></script>
+    <script>
+        let allStudents = [];
+        let studentModalInstance = null;
+        let detailModalInstance = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            App.initLayout('sinh-vien');
+            studentModalInstance = new bootstrap.Modal(document.getElementById('student-modal'));
+            detailModalInstance = new bootstrap.Modal(document.getElementById('student-detail-modal'));
+            loadStudents();
+        });
+
+        // 1. Fetch Students
+        async function loadStudents() {
+            const tbody = document.getElementById('student-tbody');
+            tbody.innerHTML = `<tr><td colspan="9" class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Đang tải dữ liệu sinh viên...</td></tr>`;
+
+            const res = await App.api('/api/sinhvien');
+            if (res.success && Array.isArray(res.data)) {
+                allStudents = res.data;
+                populateFacultyFilter(allStudents);
+                renderStudentTable(allStudents);
+            } else {
+                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-4 text-danger"><i class="bi bi-exclamation-triangle me-1"></i> ${res.error || 'Lỗi khi tải danh sách sinh viên'}</td></tr>`;
+            }
+        }
+
+        // 2. Populate Faculty Filter
+        function populateFacultyFilter(students) {
+            const select = document.getElementById('filter-faculty');
+            const currentVal = select.value;
+            const faculties = [...new Set(students.map(s => s.khoa).filter(Boolean))];
+
+            select.innerHTML = '<option value="">-- Tất cả Khoa / Ngành --</option>' +
+                faculties.map(f => `<option value="${f}">${f}</option>`).join('');
+            select.value = currentVal;
+        }
+
+        // 3. Render Table
+        function renderStudentTable(students) {
+            const tbody = document.getElementById('student-tbody');
+            document.getElementById('student-count').textContent = students.length;
+
+            if (students.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-4 text-muted">Không tìm thấy sinh viên nào phù hợp.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = students.map(s => {
+                const u = s.nguoiDung || {};
+                return `
+                    <tr>
+                        <td><strong class="text-primary">${s.maSinhVien}</strong></td>
+                        <td class="fw-semibold">${u.hoTen || '-'}</td>
+                        <td>${u.gioiTinh || '-'}</td>
+                        <td>${App.formatDate(u.ngaySinh)}</td>
+                        <td><small class="text-muted">${u.email || '-'}</small></td>
+                        <td>${u.soDienThoai || '-'}</td>
+                        <td><span class="badge bg-light text-dark border">${s.lop || 'Chưa rõ'}</span> ${s.khoa ? `<div class="small text-muted">${s.khoa}</div>` : ''}</td>
+                        <td><small>${s.queQuan || '-'}</small></td>
+                        <td class="text-end">
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-secondary" onclick="viewStudentDetail(${s.id})" title="Xem chi tiết">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button class="btn btn-outline-primary" onclick="openEditStudentModal(${s.id})" title="Chỉnh sửa">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-outline-danger" onclick="deleteStudent(${s.id}, '${s.maSinhVien}')" title="Xóa">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // 4. Search & Filter
+        function filterStudents() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            const faculty = document.getElementById('filter-faculty').value;
+
+            const filtered = allStudents.filter(s => {
+                const u = s.nguoiDung || {};
+                const matchesQuery = !query ||
+                    (s.maSinhVien && s.maSinhVien.toLowerCase().includes(query)) ||
+                    (u.hoTen && u.hoTen.toLowerCase().includes(query)) ||
+                    (u.email && u.email.toLowerCase().includes(query)) ||
+                    (s.lop && s.lop.toLowerCase().includes(query));
+
+                const matchesFaculty = !faculty || s.khoa === faculty;
+
+                return matchesQuery && matchesFaculty;
+            });
+
+            renderStudentTable(filtered);
+        }
+
+        // 5. Open Modal Add
+        function openAddStudentModal() {
+            document.getElementById('student-modal-title').innerHTML = '<i class="bi bi-person-plus me-2 text-primary"></i>Thêm Sinh Viên Mới';
+            document.getElementById('student-form').reset();
+            document.getElementById('student-id').value = '';
+            document.getElementById('account-id').value = '';
+            document.getElementById('student-form').classList.remove('was-validated');
+
+            document.getElementById('matKhau').required = true;
+            document.getElementById('pwd-required').classList.remove('d-none');
+            document.getElementById('pwd-hint').textContent = 'Bắt buộc khi tạo mới tài khoản cho sinh viên (tối thiểu 8 ký tự).';
+
+            studentModalInstance.show();
+        }
+
+        // 6. Open Modal Edit
+        function openEditStudentModal(id) {
+            const student = allStudents.find(s => s.id === id);
+            if (!student) return;
+
+            document.getElementById('student-modal-title').innerHTML = '<i class="bi bi-pencil-square me-2 text-primary"></i>Chỉnh Sửa Sinh Viên: ' + student.maSinhVien;
+            document.getElementById('student-form').classList.remove('was-validated');
+
+            const u = student.nguoiDung || {};
+            document.getElementById('student-id').value = student.id;
+            document.getElementById('account-id').value = u.id || '';
+
+            // Set academic fields
+            document.getElementById('maSinhVien').value = student.maSinhVien || '';
+            document.getElementById('lop').value = student.lop || '';
+            document.getElementById('khoa').value = student.khoa || '';
+            document.getElementById('nganh').value = student.nganh || '';
+            document.getElementById('khoaHoc').value = student.khoaHoc || '';
+            document.getElementById('queQuan').value = student.queQuan || '';
+
+            // Set personal / account fields
+            document.getElementById('hoTen').value = u.hoTen || '';
+            document.getElementById('email').value = u.email || '';
+            document.getElementById('soDienThoai').value = u.soDienThoai || '';
+            document.getElementById('gioiTinh').value = u.gioiTinh || 'Nam';
+            document.getElementById('ngaySinh').value = u.ngaySinh || '';
+
+            // Password is not strictly required when editing
+            document.getElementById('matKhau').value = '';
+            document.getElementById('matKhau').required = false;
+            document.getElementById('pwd-required').classList.add('d-none');
+            document.getElementById('pwd-hint').textContent = 'Để trống nếu không muốn thay đổi mật khẩu hiện tại.';
+
+            studentModalInstance.show();
+        }
+
+        // 7. Save Student Form (Add or Edit)
+        document.getElementById('student-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+
+            if (!form.checkValidity()) {
+                e.stopPropagation();
+                form.classList.add('was-validated');
+                return;
+            }
+
+            const studentId = document.getElementById('student-id').value;
+            const accountId = document.getElementById('account-id').value;
+
+            const maSinhVien = document.getElementById('maSinhVien').value.trim();
+            const lop = document.getElementById('lop').value.trim();
+            const khoa = document.getElementById('khoa').value.trim();
+            const nganh = document.getElementById('nganh').value.trim();
+            const khoaHocVal = document.getElementById('khoaHoc').value;
+            const khoaHoc = khoaHocVal ? parseInt(khoaHocVal) : null;
+            const queQuan = document.getElementById('queQuan').value.trim();
+
+            const hoTen = document.getElementById('hoTen').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const matKhau = document.getElementById('matKhau').value;
+            const soDienThoai = document.getElementById('soDienThoai').value.trim();
+            const gioiTinh = document.getElementById('gioiTinh').value;
+            const ngaySinh = document.getElementById('ngaySinh').value || null;
+
+            const saveBtn = document.getElementById('save-student-btn');
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Đang lưu...';
+
+            if (!studentId) {
+                // ADD FLOW: 1) Create NguoiDung -> 2) Create SinhVien
+                const accountPayload = {
+                    maNguoiDung: maSinhVien,
+                    hoTen,
+                    email,
+                    matKhau: matKhau || 'password123',
+                    soDienThoai,
+                    gioiTinh,
+                    ngaySinh,
+                    trangThai: 'hoat_dong'
+                };
+
+                const accountRes = await App.api('/api/tai-khoan', {
+                    method: 'POST',
+                    body: accountPayload
+                });
+
+                if (!accountRes.success) {
+                    saveBtn.disabled = false;
+                    saveBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Lưu Sinh Viên';
+                    App.toast('Không thể tạo tài khoản sinh viên: ' + accountRes.error, 'danger');
+                    return;
+                }
+
+                const createdAccId = accountRes.data.id;
+
+                const studentPayload = {
+                    maSinhVien,
+                    lop,
+                    khoa,
+                    nganh,
+                    khoaHoc,
+                    queQuan,
+                    nguoiDung: { id: createdAccId }
+                };
+
+                const studentRes = await App.api('/api/sinhvien', {
+                    method: 'POST',
+                    body: studentPayload
+                });
+
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Lưu Sinh Viên';
+
+                if (studentRes.success) {
+                    App.toast('Thêm sinh viên thành công!', 'success');
+                    studentModalInstance.hide();
+                    loadStudents();
+                } else {
+                    App.toast('Lỗi khi lưu thông tin sinh viên: ' + studentRes.error, 'danger');
+                }
+            } else {
+                // EDIT FLOW: Update NguoiDung + Update SinhVien
+                if (accountId) {
+                    const accPayload = {
+                        maNguoiDung: maSinhVien,
+                        hoTen,
+                        email,
+                        soDienThoai,
+                        gioiTinh,
+                        ngaySinh,
+                        trangThai: 'hoat_dong'
+                    };
+                    if (matKhau) {
+                        accPayload.matKhau = matKhau;
+                    }
+                    await App.api(`/api/tai-khoan/${accountId}`, {
+                        method: 'PUT',
+                        body: accPayload
+                    });
+                }
+
+                const studentPayload = {
+                    id: parseInt(studentId),
+                    maSinhVien,
+                    lop,
+                    khoa,
+                    nganh,
+                    khoaHoc,
+                    queQuan,
+                    nguoiDung: { id: parseInt(accountId) }
+                };
+
+                const updateRes = await App.api(`/api/sinhvien/${studentId}`, {
+                    method: 'PUT',
+                    body: studentPayload
+                });
+
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Lưu Sinh Viên';
+
+                if (updateRes.success) {
+                    App.toast('Cập nhật hồ sơ sinh viên thành công!', 'success');
+                    studentModalInstance.hide();
+                    loadStudents();
+                } else {
+                    App.toast('Lỗi khi cập nhật sinh viên: ' + updateRes.error, 'danger');
+                }
+            }
+        });
+
+        // 8. View Detail
+        function viewStudentDetail(id) {
+            const student = allStudents.find(s => s.id === id);
+            if (!student) return;
+            const u = student.nguoiDung || {};
+
+            const content = `
+                <div class="text-center mb-4">
+                    <div class="user-avatar mx-auto mb-2" style="width: 54px; height: 54px; font-size: 1.5rem;">
+                        ${(u.hoTen ? u.hoTen.charAt(0) : 'S').toUpperCase()}
+                    </div>
+                    <h5 class="fw-bold mb-0 text-dark">${u.hoTen || 'Chưa có tên'}</h5>
+                    <span class="badge bg-primary text-white mt-1">${student.maSinhVien}</span>
+                </div>
+
+                <div class="row g-2 small">
+                    <div class="col-6 text-muted">Lớp học:</div>
+                    <div class="col-6 fw-bold text-end">${student.lop || '-'}</div>
+
+                    <div class="col-6 text-muted">Khoa:</div>
+                    <div class="col-6 fw-semibold text-end">${student.khoa || '-'}</div>
+
+                    <div class="col-6 text-muted">Ngành:</div>
+                    <div class="col-6 fw-semibold text-end">${student.nganh || '-'}</div>
+
+                    <div class="col-6 text-muted">Khóa tuyển sinh:</div>
+                    <div class="col-6 fw-semibold text-end">${student.khoaHoc || '-'}</div>
+
+                    <div class="col-6 text-muted">Quê quán:</div>
+                    <div class="col-6 fw-semibold text-end">${student.queQuan || '-'}</div>
+
+                    <hr class="my-2">
+
+                    <div class="col-6 text-muted">Email liên lạc:</div>
+                    <div class="col-6 text-end">${u.email || '-'}</div>
+
+                    <div class="col-6 text-muted">Số điện thoại:</div>
+                    <div class="col-6 text-end">${u.soDienThoai || '-'}</div>
+
+                    <div class="col-6 text-muted">Giới tính:</div>
+                    <div class="col-6 text-end">${u.gioiTinh || '-'}</div>
+
+                    <div class="col-6 text-muted">Ngày sinh:</div>
+                    <div class="col-6 text-end">${App.formatDate(u.ngaySinh)}</div>
+
+                    <div class="col-6 text-muted">Trạng thái tài khoản:</div>
+                    <div class="col-6 text-end"><span class="status-badge badge-hoat-dong">${u.trangThai || 'hoat_dong'}</span></div>
+                </div>
+            `;
+
+            document.getElementById('student-detail-content').innerHTML = content;
+            detailModalInstance.show();
+        }
+
+        // 9. Delete Student
+        async function deleteStudent(id, maSinhVien) {
+            const confirmed = await App.confirm({
+                title: 'Xóa sinh viên',
+                message: `Bạn có chắc chắn muốn xóa sinh viên ${maSinhVien}? Hành động này sẽ hủy hồ sơ sinh viên trong hệ thống KTX.`,
+                confirmText: 'Xóa sinh viên',
+                btnClass: 'btn-danger'
+            });
+
+            if (!confirmed) return;
+
+            const res = await App.api(`/api/sinhvien/${id}`, { method: 'DELETE' });
+            if (res.success) {
+                App.toast(`Đã xóa sinh viên ${maSinhVien} thành công!`, 'success');
+                loadStudents();
+            } else {
+                App.toast(`Không thể xóa sinh viên: ${res.error}`, 'danger');
+            }
+        }
+    </script>
+</body>
+</html>

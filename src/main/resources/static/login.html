@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - Hệ Thống Quản Lý Ký Túc Xá</title>
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="login-body">
+
+    <div class="login-card">
+        <div class="text-center mb-4">
+            <div class="brand-icon mx-auto mb-3" style="width: 52px; height: 52px; font-size: 1.75rem;">
+                <i class="bi bi-buildings"></i>
+            </div>
+            <h4 class="fw-bold mb-1 text-dark">Quản Lý Ký Túc Xá</h4>
+            <p class="text-muted small">Đăng nhập tài khoản để truy cập hệ thống</p>
+        </div>
+
+        <!-- Alert Container -->
+        <div id="login-alert" class="alert alert-danger d-none py-2 small" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-1"></i>
+            <span id="login-alert-msg">Email hoặc mật khẩu không chính xác!</span>
+        </div>
+
+        <form id="login-form">
+            <div class="mb-3">
+                <label for="identifier" class="form-label">Tên đăng nhập hoặc Email <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light text-muted"><i class="bi bi-person"></i></span>
+                    <input type="text" class="form-control" id="identifier" name="identifier" 
+                           placeholder="Nhập email hoặc mã người dùng (VD: ND001)" required autofocus>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Mật khẩu <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light text-muted"><i class="bi bi-shield-lock"></i></span>
+                    <input type="password" class="form-control" id="password" name="password" 
+                           placeholder="Nhập mật khẩu" required minlength="6">
+                    <button class="btn btn-outline-secondary" type="button" id="toggle-password" title="Hiện/ẩn mật khẩu">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="remember-me" checked>
+                    <label class="form-check-label small text-muted" for="remember-me">
+                        Ghi nhớ đăng nhập
+                    </label>
+                </div>
+                <a href="javascript:void(0)" onclick="App.toast('Vui lòng liên hệ quản trị viên ký túc xá để cấp lại mật khẩu!', 'info')" class="small text-decoration-none text-primary">Quên mật khẩu?</a>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2 d-flex align-items-center justify-content-center gap-2" id="submit-btn">
+                <span id="btn-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                <span id="btn-text"><i class="bi bi-box-arrow-in-right me-1"></i> Đăng nhập</span>
+            </button>
+        </form>
+
+        <div class="mt-4 pt-3 border-top text-center">
+            <p class="text-muted small mb-0">Hệ thống bài tập lớn Nhóm 12 &copy; 2026</p>
+            <div class="small text-secondary mt-1">
+                Tài khoản mẫu: <code>cuong@example.com</code> hoặc <code>ND001</code>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/app.js"></script>
+    <script>
+        // Toggle password visibility
+        const toggleBtn = document.getElementById('toggle-password');
+        const passwordInput = document.getElementById('password');
+        toggleBtn.addEventListener('click', () => {
+            const isPassword = passwordInput.getAttribute('type') === 'password';
+            passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+            toggleBtn.innerHTML = isPassword ? '<i class="bi bi-eye-slash"></i>' : '<i class="bi bi-eye"></i>';
+        });
+
+        // Handle Login Submission
+        const loginForm = document.getElementById('login-form');
+        const alertBox = document.getElementById('login-alert');
+        const alertMsg = document.getElementById('login-alert-msg');
+        const submitBtn = document.getElementById('submit-btn');
+        const btnSpinner = document.getElementById('btn-spinner');
+        const btnText = document.getElementById('btn-text');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            alertBox.classList.add('d-none');
+
+            const identifier = document.getElementById('identifier').value.trim();
+            const password = passwordInput.value;
+
+            if (!identifier || !password) {
+                alertMsg.textContent = 'Vui lòng điền đầy đủ tên đăng nhập và mật khẩu!';
+                alertBox.classList.remove('d-none');
+                return;
+            }
+
+            // Set loading state
+            submitBtn.disabled = true;
+            btnSpinner.classList.remove('d-none');
+            btnText.textContent = ' Đang xác thực...';
+
+            // Call Backend Auth API
+            const result = await App.api('/api/auth/login', {
+                method: 'POST',
+                body: { identifier, password }
+            });
+
+            submitBtn.disabled = false;
+            btnSpinner.classList.add('d-none');
+            btnText.innerHTML = '<i class="bi bi-box-arrow-in-right me-1"></i> Đăng nhập';
+
+            if (result.success && result.data) {
+                // Save user info and redirect to dashboard
+                App.auth.setUser(result.data);
+                App.toast('Đăng nhập thành công! Chào mừng ' + (result.data.hoTen || result.data.maNguoiDung));
+                setTimeout(() => {
+                    window.location.href = '/index.html';
+                }, 600);
+            } else {
+                // Check if backend unreachable or credentials invalid
+                if (result.status === 401) {
+                    alertMsg.textContent = 'Tài khoản hoặc mật khẩu không chính xác hoặc tài khoản đã bị khóa!';
+                } else if (result.status === 0) {
+                    alertMsg.textContent = result.error + ' (Đang ở chế độ xem giao diện, bạn có thể đăng nhập demo)';
+                    // Provide convenient quick demo login if backend is not currently connected to MySQL
+                    App.auth.setUser({
+                        id: 1,
+                        maNguoiDung: 'ADMIN01',
+                        hoTen: 'Quản Trị Viên (Demo)',
+                        email: identifier
+                    });
+                    App.toast('Đăng nhập ở chế độ Demo (khi MySQL chưa bật)', 'warning');
+                    setTimeout(() => { window.location.href = '/index.html'; }, 1000);
+                    return;
+                } else {
+                    alertMsg.textContent = result.error || 'Đăng nhập thất bại!';
+                }
+                alertBox.classList.remove('d-none');
+            }
+        });
+    </script>
+</body>
+</html>

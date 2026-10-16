@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Tài Khoản - Ký Túc Xá</title>
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+    <!-- ===================== SIDEBAR ===================== -->
+    <aside id="sidebar">
+        <div class="sidebar-header">
+            <a href="/index.html" class="brand-title">
+                <div class="brand-icon">
+                    <i class="bi bi-buildings"></i>
+                </div>
+                <div>
+                    <div class="fw-bold fs-6">KTX DORMITORY</div>
+                    <div class="text-secondary" style="font-size: 0.68rem; font-weight: normal;">Hệ Thống Quản Lý KTX</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-section-title">TỔNG QUAN</div>
+            <a href="/index.html" class="sidebar-link" data-menu="dashboard">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Bảng điều khiển</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 1: SINH VIÊN & TÀI KHOẢN</div>
+            <a href="/sinh-vien.html" class="sidebar-link" data-menu="sinh-vien">
+                <i class="bi bi-person-lines-fill"></i>
+                <span>Quản lý sinh viên</span>
+            </a>
+            <a href="/tai-khoan.html" class="sidebar-link active" data-menu="tai-khoan">
+                <i class="bi bi-person-badge-fill"></i>
+                <span>Quản lý tài khoản</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 2: CƠ SỞ VẬT CHẤT</div>
+            <a href="/toa-nha.html" class="sidebar-link" data-menu="toa-nha">
+                <i class="bi bi-building"></i>
+                <span>Quản lý tòa nhà</span>
+            </a>
+            <a href="/phong.html" class="sidebar-link" data-menu="phong">
+                <i class="bi bi-door-open-fill"></i>
+                <span>Quản lý phòng</span>
+            </a>
+            <a href="/loai-phong.html" class="sidebar-link" data-menu="loai-phong">
+                <i class="bi bi-tags-fill"></i>
+                <span>Quản lý loại phòng</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 3: HỢP ĐỒNG & ĐĂNG KÝ</div>
+            <a href="/hop-dong.html" class="sidebar-link" data-menu="hop-dong">
+                <i class="bi bi-file-earmark-text-fill"></i>
+                <span>Quản lý hợp đồng</span>
+            </a>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="btn btn-outline-light btn-sm w-100 d-flex align-items-center justify-content-center gap-2" onclick="App.auth.logout()">
+                <i class="bi bi-box-arrow-left"></i>
+                <span>Đăng xuất</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ===================== TOPBAR ===================== -->
+    <header id="topbar">
+        <div class="topbar-left">
+            <button class="btn btn-sm btn-light border d-lg-none" id="sidebar-toggle" title="Menu">
+                <i class="bi bi-list fs-5"></i>
+            </button>
+            <div>
+                <h6 class="mb-0 fw-bold text-dark">Quản Lý Tài Khoản</h6>
+                <small class="text-muted" style="font-size: 0.75rem;">Hệ thống &rsaquo; Phân quyền & Tài khoản người dùng</small>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <div class="user-badge dropdown">
+                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle gap-2 text-dark" data-bs-toggle="dropdown">
+                    <div class="user-avatar" id="topbar-user-avatar">A</div>
+                    <div class="d-none d-md-block text-start">
+                        <div class="fw-semibold text-dark small" id="topbar-user-name">Quản trị viên</div>
+                        <div class="text-muted" style="font-size: 0.72rem;" id="topbar-user-role">ADMIN</div>
+                    </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                    <li><a class="dropdown-item small" href="/tai-khoan.html"><i class="bi bi-person me-2"></i>Tài khoản</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item small text-danger" href="javascript:void(0)" onclick="App.auth.logout()"><i class="bi bi-box-arrow-right me-2"></i>Đăng xuất</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===================== MAIN CONTENT WRAPPER ===================== -->
+    <div id="main-wrapper">
+        <main class="content-container">
+
+            <!-- Title & Actions -->
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                <div>
+                    <h4 class="fw-bold mb-1 text-dark">Danh Sách Tài Khoản Người Dùng</h4>
+                    <p class="text-muted small mb-0">Quản lý tài khoản đăng nhập, trạng thái hoạt động và đổi mật khẩu.</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-secondary btn-sm" onclick="loadAccounts()">
+                        <i class="bi bi-arrow-clockwise me-1"></i> Tải lại
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="openAddAccountModal()">
+                        <i class="bi bi-plus-circle me-1"></i> Thêm Tài Khoản Mới
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search & Filter Card -->
+            <div class="ktx-card mb-4 p-3">
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                            <input type="text" id="account-search" class="form-control border-start-0" 
+                                   placeholder="Tìm theo Mã người dùng, Họ tên hoặc Email..." oninput="filterAccounts()">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="filter-status" class="form-select" onchange="filterAccounts()">
+                            <option value="">-- Tất cả trạng thái --</option>
+                            <option value="hoat_dong">Hoạt động</option>
+                            <option value="bi_khoa">Bị khóa</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 text-md-end text-muted small">
+                        Tổng số: <strong id="account-count" class="text-primary">0</strong> tài khoản
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Card -->
+            <div class="ktx-card">
+                <div class="table-responsive">
+                    <table class="table ktx-table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Mã Người Dùng</th>
+                                <th>Họ Và Tên</th>
+                                <th>Email</th>
+                                <th>Số Điện Thoại</th>
+                                <th>Giới Tính</th>
+                                <th>Ngày Sinh</th>
+                                <th>Trạng Thái</th>
+                                <th class="text-end">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="account-tbody">
+                            <tr>
+                                <td colspan="8" class="text-center py-4 text-muted">
+                                    <div class="spinner-border spinner-border-sm text-primary me-2"></div>
+                                    Đang tải dữ liệu tài khoản...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ===================== MODAL THÊM / SỬA TÀI KHOẢN ===================== -->
+    <div class="modal fade" id="account-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-6 fw-bold" id="account-modal-title">
+                        <i class="bi bi-person-plus-fill me-2 text-primary"></i>Thêm Tài Khoản Mới
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="account-form" novalidate>
+                    <input type="hidden" id="form-account-id">
+
+                    <div class="modal-body p-4">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="maNguoiDung" class="form-label">Mã Người Dùng <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="maNguoiDung" required maxlength="30" placeholder="VD: ND004">
+                                <div class="invalid-feedback">Vui lòng nhập mã người dùng.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="hoTen" class="form-label">Họ Và Tên <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="hoTen" required maxlength="100" placeholder="VD: Trần Văn Bình">
+                                <div class="invalid-feedback">Vui lòng nhập họ và tên.</div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="email" class="form-label">Địa Chỉ Email <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="email" required maxlength="150" placeholder="VD: binh@example.com">
+                                <div class="invalid-feedback">Vui lòng nhập email hợp lệ.</div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="matKhau" class="form-label">Mật Khẩu <span class="text-danger" id="acc-pwd-req">*</span></label>
+                                <input type="password" class="form-control" id="matKhau" minlength="8" maxlength="50" placeholder="Tối thiểu 8 ký tự">
+                                <div class="form-text small" id="acc-pwd-hint">Mật khẩu được mã hóa an toàn bằng chuẩn BCrypt.</div>
+                                <div class="invalid-feedback">Mật khẩu phải từ 8 ký tự trở lên.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="soDienThoai" class="form-label">Số Điện Thoại</label>
+                                <input type="tel" class="form-control" id="soDienThoai" maxlength="20" placeholder="VD: 0912345678">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="gioiTinh" class="form-label">Giới Tính</label>
+                                <select class="form-select" id="gioiTinh">
+                                    <option value="Nam">Nam</option>
+                                    <option value="Nu">Nữ</option>
+                                    <option value="Khac">Khác</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="ngaySinh" class="form-label">Ngày Sinh</label>
+                                <input type="date" class="form-control" id="ngaySinh">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="trangThai" class="form-label">Trạng Thái</label>
+                                <select class="form-select" id="trangThai">
+                                    <option value="hoat_dong">Hoạt động</option>
+                                    <option value="bi_khoa">Bị khóa</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-light border" data-bs-dismiss="modal">Hủy bỏ</button>
+                        <button type="submit" class="btn btn-sm btn-primary" id="save-account-btn">
+                            <i class="bi bi-check2-circle me-1"></i> Lưu Tài Khoản
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/app.js"></script>
+    <script>
+        let allAccounts = [];
+        let accountModalInstance = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            App.initLayout('tai-khoan');
+            accountModalInstance = new bootstrap.Modal(document.getElementById('account-modal'));
+            loadAccounts();
+        });
+
+        // 1. Fetch Accounts
+        async function loadAccounts() {
+            const tbody = document.getElementById('account-tbody');
+            tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Đang tải danh sách tài khoản...</td></tr>`;
+
+            const res = await App.api('/api/tai-khoan');
+            if (res.success && Array.isArray(res.data)) {
+                allAccounts = res.data;
+                renderAccountTable(allAccounts);
+            } else {
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-danger"><i class="bi bi-exclamation-triangle me-1"></i> ${res.error || 'Lỗi khi tải tài khoản'}</td></tr>`;
+            }
+        }
+
+        // 2. Render Table
+        function renderAccountTable(accounts) {
+            const tbody = document.getElementById('account-tbody');
+            document.getElementById('account-count').textContent = accounts.length;
+
+            if (accounts.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted">Không tìm thấy tài khoản nào.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = accounts.map(a => {
+                const isLocked = a.trangThai === 'bi_khoa';
+                const statusBadge = isLocked 
+                    ? `<span class="status-badge badge-bi-khoa"><i class="bi bi-lock-fill"></i> Bị khóa</span>`
+                    : `<span class="status-badge badge-hoat-dong"><i class="bi bi-check-circle-fill"></i> Hoạt động</span>`;
+
+                const toggleLockBtn = isLocked
+                    ? `<button class="btn btn-outline-success" onclick="toggleAccountLock(${a.id}, 'hoat_dong', '${a.maNguoiDung}')" title="Mở khóa tài khoản"><i class="bi bi-unlock"></i></button>`
+                    : `<button class="btn btn-outline-warning" onclick="toggleAccountLock(${a.id}, 'bi_khoa', '${a.maNguoiDung}')" title="Khóa tài khoản"><i class="bi bi-lock"></i></button>`;
+
+                return `
+                    <tr>
+                        <td><strong class="text-primary">${a.maNguoiDung}</strong></td>
+                        <td class="fw-semibold">${a.hoTen || '-'}</td>
+                        <td><span class="text-muted small">${a.email || '-'}</span></td>
+                        <td>${a.soDienThoai || '-'}</td>
+                        <td>${a.gioiTinh || '-'}</td>
+                        <td>${App.formatDate(a.ngaySinh)}</td>
+                        <td>${statusBadge}</td>
+                        <td class="text-end">
+                            <div class="btn-group btn-group-sm">
+                                ${toggleLockBtn}
+                                <button class="btn btn-outline-primary" onclick="openEditAccountModal(${a.id})" title="Chỉnh sửa">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-outline-danger" onclick="deleteAccount(${a.id}, '${a.maNguoiDung}')" title="Xóa tài khoản">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // 3. Search & Filter
+        function filterAccounts() {
+            const query = document.getElementById('account-search').value.toLowerCase().trim();
+            const status = document.getElementById('filter-status').value;
+
+            const filtered = allAccounts.filter(a => {
+                const matchesQuery = !query ||
+                    (a.maNguoiDung && a.maNguoiDung.toLowerCase().includes(query)) ||
+                    (a.hoTen && a.hoTen.toLowerCase().includes(query)) ||
+                    (a.email && a.email.toLowerCase().includes(query));
+
+                const matchesStatus = !status || a.trangThai === status;
+
+                return matchesQuery && matchesStatus;
+            });
+
+            renderAccountTable(filtered);
+        }
+
+        // 4. Open Modal Add
+        function openAddAccountModal() {
+            document.getElementById('account-modal-title').innerHTML = '<i class="bi bi-person-plus-fill me-2 text-primary"></i>Thêm Tài Khoản Mới';
+            document.getElementById('account-form').reset();
+            document.getElementById('form-account-id').value = '';
+            document.getElementById('account-form').classList.remove('was-validated');
+
+            document.getElementById('matKhau').required = true;
+            document.getElementById('acc-pwd-req').classList.remove('d-none');
+            document.getElementById('acc-pwd-hint').textContent = 'Bắt buộc khi tạo mới (tối thiểu 8 ký tự).';
+
+            accountModalInstance.show();
+        }
+
+        // 5. Open Modal Edit
+        function openEditAccountModal(id) {
+            const acc = allAccounts.find(a => a.id === id);
+            if (!acc) return;
+
+            document.getElementById('account-modal-title').innerHTML = '<i class="bi bi-pencil-square me-2 text-primary"></i>Chỉnh Sửa Tài Khoản: ' + acc.maNguoiDung;
+            document.getElementById('account-form').classList.remove('was-validated');
+
+            document.getElementById('form-account-id').value = acc.id;
+            document.getElementById('maNguoiDung').value = acc.maNguoiDung || '';
+            document.getElementById('hoTen').value = acc.hoTen || '';
+            document.getElementById('email').value = acc.email || '';
+            document.getElementById('soDienThoai').value = acc.soDienThoai || '';
+            document.getElementById('gioiTinh').value = acc.gioiTinh || 'Nam';
+            document.getElementById('ngaySinh').value = acc.ngaySinh || '';
+            document.getElementById('trangThai').value = acc.trangThai || 'hoat_dong';
+
+            document.getElementById('matKhau').value = '';
+            document.getElementById('matKhau').required = false;
+            document.getElementById('acc-pwd-req').classList.add('d-none');
+            document.getElementById('acc-pwd-hint').textContent = 'Để trống nếu không muốn đổi mật khẩu.';
+
+            accountModalInstance.show();
+        }
+
+        // 6. Save Account Form
+        document.getElementById('account-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+
+            if (!form.checkValidity()) {
+                e.stopPropagation();
+                form.classList.add('was-validated');
+                return;
+            }
+
+            const id = document.getElementById('form-account-id').value;
+            const maNguoiDung = document.getElementById('maNguoiDung').value.trim();
+            const hoTen = document.getElementById('hoTen').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const matKhau = document.getElementById('matKhau').value;
+            const soDienThoai = document.getElementById('soDienThoai').value.trim();
+            const gioiTinh = document.getElementById('gioiTinh').value;
+            const ngaySinh = document.getElementById('ngaySinh').value || null;
+            const trangThai = document.getElementById('trangThai').value;
+
+            const saveBtn = document.getElementById('save-account-btn');
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Đang lưu...';
+
+            const payload = {
+                maNguoiDung,
+                hoTen,
+                email,
+                soDienThoai,
+                gioiTinh,
+                ngaySinh,
+                trangThai
+            };
+
+            if (matKhau) {
+                payload.matKhau = matKhau;
+            }
+
+            let res;
+            if (!id) {
+                // Create
+                payload.matKhau = matKhau || 'password123';
+                res = await App.api('/api/tai-khoan', {
+                    method: 'POST',
+                    body: payload
+                });
+            } else {
+                // Update
+                payload.id = parseInt(id);
+                res = await App.api(`/api/tai-khoan/${id}`, {
+                    method: 'PUT',
+                    body: payload
+                });
+            }
+
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Lưu Tài Khoản';
+
+            if (res.success) {
+                App.toast(id ? 'Cập nhật tài khoản thành công!' : 'Tạo tài khoản mới thành công!', 'success');
+                accountModalInstance.hide();
+                loadAccounts();
+            } else {
+                App.toast('Lỗi khi lưu tài khoản: ' + res.error, 'danger');
+            }
+        });
+
+        // 7. Toggle Lock Account
+        async function toggleAccountLock(id, newStatus, maNguoiDung) {
+            const acc = allAccounts.find(a => a.id === id);
+            if (!acc) return;
+
+            const actionName = newStatus === 'bi_khoa' ? 'khóa' : 'mở khóa';
+            const confirmed = await App.confirm({
+                title: `${newStatus === 'bi_khoa' ? 'Khóa' : 'Mở khóa'} tài khoản`,
+                message: `Bạn có chắc chắn muốn ${actionName} tài khoản ${maNguoiDung}?`,
+                confirmText: newStatus === 'bi_khoa' ? 'Khóa tài khoản' : 'Mở khóa',
+                btnClass: newStatus === 'bi_khoa' ? 'btn-warning' : 'btn-success'
+            });
+
+            if (!confirmed) return;
+
+            const updatedAcc = { ...acc, trangThai: newStatus };
+            const res = await App.api(`/api/tai-khoan/${id}`, {
+                method: 'PUT',
+                body: updatedAcc
+            });
+
+            if (res.success) {
+                App.toast(`Đã ${actionName} tài khoản ${maNguoiDung} thành công!`, 'success');
+                loadAccounts();
+            } else {
+                App.toast(`Không thể ${actionName} tài khoản: ${res.error}`, 'danger');
+            }
+        }
+
+        // 8. Delete Account
+        async function deleteAccount(id, maNguoiDung) {
+            const confirmed = await App.confirm({
+                title: 'Xóa tài khoản',
+                message: `Bạn có chắc chắn muốn xóa tài khoản ${maNguoiDung}? Nếu tài khoản này đang được dùng bởi một sinh viên hoặc có dữ liệu liên kết, thao tác có thể bị từ chối bởi cơ sở dữ liệu.`,
+                confirmText: 'Xóa tài khoản',
+                btnClass: 'btn-danger'
+            });
+
+            if (!confirmed) return;
+
+            const res = await App.api(`/api/tai-khoan/${id}`, { method: 'DELETE' });
+            if (res.success) {
+                App.toast(`Đã xóa tài khoản ${maNguoiDung} thành công!`, 'success');
+                loadAccounts();
+            } else {
+                App.toast(`Không thể xóa tài khoản: ${res.error}`, 'danger');
+            }
+        }
+    </script>
+</body>
+</html>
