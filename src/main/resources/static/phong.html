@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Phòng Ở - Ký Túc Xá</title>
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+    <!-- ===================== SIDEBAR ===================== -->
+    <aside id="sidebar">
+        <div class="sidebar-header">
+            <a href="/index.html" class="brand-title">
+                <div class="brand-icon">
+                    <i class="bi bi-buildings"></i>
+                </div>
+                <div>
+                    <div class="fw-bold fs-6">KTX DORMITORY</div>
+                    <div class="text-secondary" style="font-size: 0.68rem; font-weight: normal;">Hệ Thống Quản Lý KTX</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-section-title">TỔNG QUAN</div>
+            <a href="/index.html" class="sidebar-link" data-menu="dashboard">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Bảng điều khiển</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 1: SINH VIÊN & TÀI KHOẢN</div>
+            <a href="/sinh-vien.html" class="sidebar-link" data-menu="sinh-vien">
+                <i class="bi bi-person-lines-fill"></i>
+                <span>Quản lý sinh viên</span>
+            </a>
+            <a href="/tai-khoan.html" class="sidebar-link" data-menu="tai-khoan">
+                <i class="bi bi-person-badge-fill"></i>
+                <span>Quản lý tài khoản</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 2: CƠ SỞ VẬT CHẤT</div>
+            <a href="/toa-nha.html" class="sidebar-link" data-menu="toa-nha">
+                <i class="bi bi-building"></i>
+                <span>Quản lý tòa nhà</span>
+            </a>
+            <a href="/phong.html" class="sidebar-link active" data-menu="phong">
+                <i class="bi bi-door-open-fill"></i>
+                <span>Quản lý phòng</span>
+            </a>
+            <a href="/loai-phong.html" class="sidebar-link" data-menu="loai-phong">
+                <i class="bi bi-tags-fill"></i>
+                <span>Quản lý loại phòng</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 3: HỢP ĐỒNG & ĐĂNG KÝ</div>
+            <a href="/dang-ky-phong.html" class="sidebar-link" data-menu="dang-ky-phong">
+                <i class="bi bi-clipboard2-check-fill"></i>
+                <span>Quản lý đăng ký phòng</span>
+            </a>
+            <a href="/hop-dong.html" class="sidebar-link" data-menu="hop-dong">
+                <i class="bi bi-file-earmark-text-fill"></i>
+                <span>Quản lý hợp đồng</span>
+            </a>
+            <a href="/sinh-vien-phong.html" class="sidebar-link" data-menu="sinh-vien-phong">
+                <i class="bi bi-people-fill"></i>
+                <span>Quan hệ sinh viên - phòng</span>
+            </a>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="btn btn-outline-light btn-sm w-100 d-flex align-items-center justify-content-center gap-2" onclick="App.auth.logout()">
+                <i class="bi bi-box-arrow-left"></i>
+                <span>Đăng xuất</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ===================== TOPBAR ===================== -->
+    <header id="topbar">
+        <div class="topbar-left">
+            <button class="btn btn-sm btn-light border d-lg-none" id="sidebar-toggle" title="Menu">
+                <i class="bi bi-list fs-5"></i>
+            </button>
+            <div>
+                <h6 class="mb-0 fw-bold text-dark">Quản Lý Phòng Ở</h6>
+                <small class="text-muted" style="font-size: 0.75rem;">Hệ thống &rsaquo; Sơ đồ phòng & Sức chứa</small>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <div class="user-badge dropdown">
+                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle gap-2 text-dark" data-bs-toggle="dropdown">
+                    <div class="user-avatar" id="topbar-user-avatar">A</div>
+                    <div class="d-none d-md-block text-start">
+                        <div class="fw-semibold text-dark small" id="topbar-user-name">Quản trị viên</div>
+                        <div class="text-muted" style="font-size: 0.72rem;" id="topbar-user-role">ADMIN</div>
+                    </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                    <li><a class="dropdown-item small" href="/tai-khoan.html"><i class="bi bi-person me-2"></i>Tài khoản</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item small text-danger" href="javascript:void(0)" onclick="App.auth.logout()"><i class="bi bi-box-arrow-right me-2"></i>Đăng xuất</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===================== MAIN CONTENT WRAPPER ===================== -->
+    <div id="main-wrapper">
+        <main class="content-container">
+
+            <!-- Title & Actions -->
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                <div>
+                    <h4 class="fw-bold mb-1 text-dark">Danh Sách Phòng Ở Ký Túc Xá</h4>
+                    <p class="text-muted small mb-0">Theo dõi sức chứa, số sinh viên đang ở, mức giá và trạng thái phòng.</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-secondary btn-sm" onclick="loadRooms()">
+                        <i class="bi bi-arrow-clockwise me-1"></i> Tải lại
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="openAddRoomModal()">
+                        <i class="bi bi-plus-circle me-1"></i> Thêm Phòng Mới
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search & Filter Card -->
+            <div class="ktx-card mb-4 p-3">
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                            <input type="text" id="room-search" class="form-control border-start-0" 
+                                   placeholder="Tìm kiếm theo mã phòng..." oninput="filterRooms()">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="filter-building" class="form-select" onchange="filterRooms()">
+                            <option value="">-- Tất cả Tòa nhà --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="filter-status" class="form-select" onchange="filterRooms()">
+                            <option value="">-- Tất cả trạng thái --</option>
+                            <option value="con_cho">Còn chỗ</option>
+                            <option value="da_day">Đã đầy</option>
+                            <option value="dang_sua_chua">Đang sửa chữa</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 text-md-end text-muted small">
+                        Tổng: <strong id="room-count" class="text-primary">0</strong> phòng
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Card -->
+            <div class="ktx-card">
+                <div class="table-responsive">
+                    <table class="table ktx-table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Mã Phòng</th>
+                                <th>Tòa Nhà / Tầng</th>
+                                <th>Loại Phòng</th>
+                                <th>Sức Chứa</th>
+                                <th>Đang Ở</th>
+                                <th>Giá Thuê / Tháng</th>
+                                <th>Trạng Thái</th>
+                                <th class="text-end">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="room-tbody">
+                            <tr>
+                                <td colspan="8" class="text-center py-4 text-muted">
+                                    <div class="spinner-border spinner-border-sm text-primary me-2"></div>
+                                    Đang tải dữ liệu phòng...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ===================== MODAL THÊM / SỬA PHÒNG ===================== -->
+    <div class="modal fade" id="room-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-6 fw-bold" id="room-modal-title">
+                        <i class="bi bi-door-open-fill me-2 text-primary"></i>Thêm Phòng Mới
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="room-form" novalidate>
+                    <input type="hidden" id="form-room-id">
+
+                    <div class="modal-body p-4">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="buildingSelect" class="form-label">Tòa Nhà <span class="text-danger">*</span></label>
+                                <select class="form-select" id="buildingSelect" required onchange="handleBuildingChange()">
+                                    <option value="">-- Chọn tòa nhà --</option>
+                                </select>
+                                <div class="invalid-feedback">Vui lòng chọn tòa nhà.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="tangSelect" class="form-label">Tầng <span class="text-danger">*</span></label>
+                                <select class="form-select" id="tangSelect" required>
+                                    <option value="">-- Chọn tầng --</option>
+                                </select>
+                                <div class="invalid-feedback">Vui lòng chọn tầng.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="maPhong" class="form-label">Mã Phòng <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="maPhong" required maxlength="30" placeholder="VD: A1-103">
+                                <div class="invalid-feedback">Vui lòng nhập mã phòng.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="loaiPhong" class="form-label">Loại Phòng <span class="text-danger">*</span></label>
+                                <select class="form-select" id="loaiPhong" required onchange="handleLoaiPhongChange()">
+                                    <option value="4 nguoi">Phòng 4 người</option>
+                                    <option value="2 nguoi">Phòng 2 người</option>
+                                    <option value="6 nguoi">Phòng 6 người</option>
+                                    <option value="8 nguoi">Phòng 8 người</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="sucChua" class="form-label">Sức Chứa (Người) <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="sucChua" required min="1" max="20" value="4">
+                                <div class="invalid-feedback">Sức chứa phải lớn hơn 0.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="soNguoiHienTai" class="form-label">Số Người Đang Ở</label>
+                                <input type="number" class="form-control" id="soNguoiHienTai" min="0" max="20" value="0">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="giaPhong" class="form-label">Giá Phòng (VNĐ / Tháng) <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="giaPhong" required min="0" step="50000" value="1200000">
+                                <div class="invalid-feedback">Giá phòng không được âm.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="trangThai" class="form-label">Trạng Thái</label>
+                                <select class="form-select" id="trangThai">
+                                    <option value="con_cho">Còn chỗ</option>
+                                    <option value="da_day">Đã đầy</option>
+                                    <option value="dang_sua_chua">Đang sửa chữa</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-light border" data-bs-dismiss="modal">Hủy bỏ</button>
+                        <button type="submit" class="btn btn-sm btn-primary" id="save-room-btn">
+                            <i class="bi bi-check2-circle me-1"></i> Lưu Phòng
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== MODAL CHI TIẾT PHÒNG ===================== -->
+    <div class="modal fade" id="room-detail-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-6 fw-bold">
+                        <i class="bi bi-info-circle me-2 text-primary"></i>Chi Tiết Phòng Ở
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4" id="room-detail-content">
+                    <!-- Dynamic details -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/app.js"></script>
+    <script>
+        let allRooms = [];
+        let allBuildings = [];
+        let allTangs = [];
+        let roomModalInstance = null;
+        let detailModalInstance = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            App.initLayout('phong');
+            roomModalInstance = new bootstrap.Modal(document.getElementById('room-modal'));
+            detailModalInstance = new bootstrap.Modal(document.getElementById('room-detail-modal'));
+            loadDependenciesAndRooms();
+        });
+
+        // 1. Load Buildings, Tangs & Rooms
+        async function loadDependenciesAndRooms() {
+            // Load buildings
+            const bRes = await App.api('/api/toa-nha');
+            if (bRes.success && Array.isArray(bRes.data)) {
+                allBuildings = bRes.data;
+                populateBuildingDropdowns(allBuildings);
+            }
+
+            // Load tangs
+            const tRes = await App.api('/api/tang');
+            if (tRes.success && Array.isArray(tRes.data)) {
+                allTangs = tRes.data;
+            }
+
+            loadRooms();
+        }
+
+        function populateBuildingDropdowns(buildings) {
+            // Filter
+            const filterBuilding = document.getElementById('filter-building');
+            filterBuilding.innerHTML = '<option value="">-- Tất cả Tòa nhà --</option>' +
+                buildings.map(b => `<option value="${b.id}">${b.tenToa} (${b.maToa})</option>`).join('');
+
+            // Modal form
+            const select = document.getElementById('buildingSelect');
+            select.innerHTML = '<option value="">-- Chọn tòa nhà --</option>' +
+                buildings.map(b => `<option value="${b.id}">${b.tenToa} (${b.maToa})</option>`).join('');
+        }
+
+        function handleBuildingChange() {
+            const buildingId = document.getElementById('buildingSelect').value;
+            const tangSelect = document.getElementById('tangSelect');
+
+            if (!buildingId) {
+                tangSelect.innerHTML = '<option value="">-- Chọn tầng --</option>';
+                return;
+            }
+
+            // Filter floors belonging to this building
+            const floors = allTangs.filter(t => t.toaNha && t.toaNha.id == buildingId);
+            if (floors.length === 0) {
+                // If building exists but no tang records yet, show options based on building's soTang
+                const b = allBuildings.find(x => x.id == buildingId);
+                const count = b ? b.soTang : 3;
+                let opts = '';
+                for (let i = 1; i <= count; i++) {
+                    opts += `<option value="auto-${i}">Tầng ${i}</option>`;
+                }
+                tangSelect.innerHTML = opts;
+            } else {
+                tangSelect.innerHTML = floors.map(t => `<option value="${t.id}">Tầng ${t.soTang}</option>`).join('');
+            }
+        }
+
+        function handleLoaiPhongChange() {
+            const val = document.getElementById('loaiPhong').value;
+            const sucChua = document.getElementById('sucChua');
+            const giaPhong = document.getElementById('giaPhong');
+
+            if (val === '2 nguoi') {
+                sucChua.value = 2;
+                giaPhong.value = 1500000;
+            } else if (val === '4 nguoi') {
+                sucChua.value = 4;
+                giaPhong.value = 1200000;
+            } else if (val === '6 nguoi') {
+                sucChua.value = 6;
+                giaPhong.value = 900000;
+            } else if (val === '8 nguoi') {
+                sucChua.value = 8;
+                giaPhong.value = 650000;
+            }
+        }
+
+        // 2. Fetch Rooms
+        async function loadRooms() {
+            const tbody = document.getElementById('room-tbody');
+            tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Đang tải dữ liệu phòng...</td></tr>`;
+
+            const res = await App.api('/api/phong');
+            if (res.success && Array.isArray(res.data)) {
+                allRooms = res.data;
+                renderRoomTable(allRooms);
+            } else {
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-danger"><i class="bi bi-exclamation-triangle me-1"></i> ${res.error || 'Lỗi khi tải danh sách phòng'}</td></tr>`;
+            }
+        }
+
+        // 3. Render Table
+        function renderRoomTable(rooms) {
+            const tbody = document.getElementById('room-tbody');
+            document.getElementById('room-count').textContent = rooms.length;
+
+            if (rooms.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted">Không tìm thấy phòng nào phù hợp.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = rooms.map(r => {
+                const t = r.tang || {};
+                const toa = t.toaNha || {};
+
+                let badge = '';
+                if (r.trangThai === 'con_cho') {
+                    badge = `<span class="status-badge badge-con-cho"><i class="bi bi-check-circle-fill"></i> Còn chỗ</span>`;
+                } else if (r.trangThai === 'da_day' || (r.soNguoiHienTai >= r.sucChua)) {
+                    badge = `<span class="status-badge badge-da-day"><i class="bi bi-person-x-fill"></i> Đã đầy</span>`;
+                } else {
+                    badge = `<span class="status-badge badge-sua-chua"><i class="bi bi-wrench"></i> Sửa chữa</span>`;
+                }
+
+                return `
+                    <tr>
+                        <td><strong class="text-primary">${r.maPhong}</strong></td>
+                        <td>${toa.tenToa || 'Tòa A1'} (Tầng ${t.soTang || 1})</td>
+                        <td><span class="badge bg-light text-dark border">${r.loaiPhong || '4 người'}</span></td>
+                        <td><strong>${r.sucChua}</strong> người</td>
+                        <td><span class="badge ${r.soNguoiHienTai >= r.sucChua ? 'bg-danger' : 'bg-primary'}">${r.soNguoiHienTai || 0}</span> / ${r.sucChua}</td>
+                        <td class="fw-semibold">${App.formatMoney(r.giaPhong)}</td>
+                        <td>${badge}</td>
+                        <td class="text-end">
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-secondary" onclick="viewRoomDetail(${r.id})" title="Xem chi tiết">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button class="btn btn-outline-primary" onclick="openEditRoomModal(${r.id})" title="Chỉnh sửa">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-outline-danger" onclick="deleteRoom(${r.id}, '${r.maPhong}')" title="Xóa">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // 4. Filter & Search
+        function filterRooms() {
+            const query = document.getElementById('room-search').value.toLowerCase().trim();
+            const buildingId = document.getElementById('filter-building').value;
+            const status = document.getElementById('filter-status').value;
+
+            const filtered = allRooms.filter(r => {
+                const matchesQuery = !query || (r.maPhong && r.maPhong.toLowerCase().includes(query));
+                const matchesBuilding = !buildingId || (r.tang && r.tang.toaNha && r.tang.toaNha.id == buildingId);
+                const matchesStatus = !status || r.trangThai === status;
+
+                return matchesQuery && matchesBuilding && matchesStatus;
+            });
+
+            renderRoomTable(filtered);
+        }
+
+        // 5. Open Modal Add
+        function openAddRoomModal() {
+            document.getElementById('room-modal-title').innerHTML = '<i class="bi bi-door-open-fill me-2 text-primary"></i>Thêm Phòng Mới';
+            document.getElementById('room-form').reset();
+            document.getElementById('form-room-id').value = '';
+            document.getElementById('room-form').classList.remove('was-validated');
+
+            if (allBuildings.length > 0) {
+                document.getElementById('buildingSelect').value = allBuildings[0].id;
+                handleBuildingChange();
+            }
+
+            roomModalInstance.show();
+        }
+
+        // 6. Open Modal Edit
+        function openEditRoomModal(id) {
+            const r = allRooms.find(item => item.id === id);
+            if (!r) return;
+
+            document.getElementById('room-modal-title').innerHTML = '<i class="bi bi-pencil-square me-2 text-primary"></i>Chỉnh Sửa Phòng: ' + r.maPhong;
+            document.getElementById('room-form').classList.remove('was-validated');
+
+            document.getElementById('form-room-id').value = r.id;
+            document.getElementById('maPhong').value = r.maPhong || '';
+            document.getElementById('sucChua').value = r.sucChua || 4;
+            document.getElementById('soNguoiHienTai').value = r.soNguoiHienTai || 0;
+            document.getElementById('loaiPhong').value = r.loaiPhong || '4 nguoi';
+            document.getElementById('giaPhong').value = r.giaPhong || 1200000;
+            document.getElementById('trangThai').value = r.trangThai || 'con_cho';
+
+            const t = r.tang || {};
+            const toa = t.toaNha || {};
+            if (toa.id) {
+                document.getElementById('buildingSelect').value = toa.id;
+                handleBuildingChange();
+                if (t.id) {
+                    document.getElementById('tangSelect').value = t.id;
+                }
+            }
+
+            roomModalInstance.show();
+        }
+
+        // 7. Save Room Form
+        document.getElementById('room-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+
+            if (!form.checkValidity()) {
+                e.stopPropagation();
+                form.classList.add('was-validated');
+                return;
+            }
+
+            const id = document.getElementById('form-room-id').value;
+            const buildingId = document.getElementById('buildingSelect').value;
+            let tangVal = document.getElementById('tangSelect').value;
+            const maPhong = document.getElementById('maPhong').value.trim();
+            const sucChua = parseInt(document.getElementById('sucChua').value);
+            const soNguoiHienTai = parseInt(document.getElementById('soNguoiHienTai').value || 0);
+            const loaiPhong = document.getElementById('loaiPhong').value;
+            const giaPhong = parseFloat(document.getElementById('giaPhong').value);
+            const trangThai = document.getElementById('trangThai').value;
+
+            if (soNguoiHienTai > sucChua) {
+                App.toast('Số người hiện tại không được vượt quá sức chứa tối đa!', 'warning');
+                return;
+            }
+
+            const saveBtn = document.getElementById('save-room-btn');
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Đang lưu...';
+
+            let tangId = null;
+            // Handle automatic floor creation if not exists yet
+            if (tangVal.startsWith('auto-')) {
+                const floorNum = parseInt(tangVal.replace('auto-', ''));
+                const createFloorRes = await App.api('/api/tang', {
+                    method: 'POST',
+                    body: {
+                        toaNha: { id: parseInt(buildingId) },
+                        soTang: floorNum
+                    }
+                });
+                if (createFloorRes.success) {
+                    tangId = createFloorRes.data.id;
+                    allTangs.push(createFloorRes.data);
+                } else {
+                    saveBtn.disabled = false;
+                    saveBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Lưu Phòng';
+                    App.toast('Không thể khởi tạo tầng cho tòa nhà: ' + createFloorRes.error, 'danger');
+                    return;
+                }
+            } else {
+                tangId = parseInt(tangVal);
+            }
+
+            const payload = {
+                tang: { id: tangId },
+                maPhong,
+                sucChua,
+                soNguoiHienTai,
+                loaiPhong,
+                giaPhong,
+                trangThai
+            };
+
+            let res;
+            if (!id) {
+                res = await App.api('/api/phong', {
+                    method: 'POST',
+                    body: payload
+                });
+            } else {
+                payload.id = parseInt(id);
+                res = await App.api(`/api/phong/${id}`, {
+                    method: 'PUT',
+                    body: payload
+                });
+            }
+
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Lưu Phòng';
+
+            if (res.success) {
+                App.toast(id ? 'Cập nhật phòng thành công!' : 'Thêm phòng mới thành công!', 'success');
+                roomModalInstance.hide();
+                loadRooms();
+            } else {
+                App.toast('Lỗi khi lưu phòng: ' + res.error, 'danger');
+            }
+        });
+
+        // 8. View Detail
+        function viewRoomDetail(id) {
+            const r = allRooms.find(item => item.id === id);
+            if (!r) return;
+            const t = r.tang || {};
+            const toa = t.toaNha || {};
+
+            const content = `
+                <div class="text-center mb-3">
+                    <div class="stat-icon purple mx-auto mb-2" style="width: 50px; height: 50px;">
+                        <i class="bi bi-door-open"></i>
+                    </div>
+                    <h5 class="fw-bold mb-0">${r.maPhong}</h5>
+                    <span class="badge bg-primary mt-1">${r.loaiPhong || 'Chuẩn'}</span>
+                </div>
+
+                <div class="row g-2 small">
+                    <div class="col-6 text-muted">Tòa nhà:</div>
+                    <div class="col-6 fw-bold text-end">${toa.tenToa || 'Tòa A1'} (${toa.maToa || '-'})</div>
+
+                    <div class="col-6 text-muted">Vị trí:</div>
+                    <div class="col-6 fw-semibold text-end">Tầng ${t.soTang || 1}</div>
+
+                    <div class="col-6 text-muted">Sức chứa tối đa:</div>
+                    <div class="col-6 fw-bold text-end">${r.sucChua} người</div>
+
+                    <div class="col-6 text-muted">Số người hiện tại:</div>
+                    <div class="col-6 fw-bold text-end text-primary">${r.soNguoiHienTai || 0} người</div>
+
+                    <div class="col-6 text-muted">Giá thuê phòng:</div>
+                    <div class="col-6 fw-bold text-end text-success">${App.formatMoney(r.giaPhong)} / tháng</div>
+
+                    <div class="col-6 text-muted">Trạng thái:</div>
+                    <div class="col-6 text-end">
+                        <span class="badge ${r.trangThai === 'con_cho' ? 'bg-success' : 'bg-danger'}">${r.trangThai}</span>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('room-detail-content').innerHTML = content;
+            detailModalInstance.show();
+        }
+
+        // 9. Delete Room
+        async function deleteRoom(id, maPhong) {
+            const confirmed = await App.confirm({
+                title: 'Xóa phòng',
+                message: `Bạn có chắc chắn muốn xóa phòng ${maPhong}? Nếu phòng này đang có sinh viên ký hợp đồng ở hoặc có tài sản phân bổ, cơ sở dữ liệu sẽ chặn việc xóa.`,
+                confirmText: 'Xóa phòng',
+                btnClass: 'btn-danger'
+            });
+
+            if (!confirmed) return;
+
+            const res = await App.api(`/api/phong/${id}`, { method: 'DELETE' });
+            if (res.success) {
+                App.toast(`Đã xóa phòng ${maPhong} thành công!`, 'success');
+                loadRooms();
+            } else {
+                App.toast(`Không thể xóa phòng: ${res.error}`, 'danger');
+            }
+        }
+    </script>
+</body>
+</html>

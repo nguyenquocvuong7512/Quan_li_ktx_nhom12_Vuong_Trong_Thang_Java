@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Tòa Nhà - Ký Túc Xá</title>
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+    <!-- ===================== SIDEBAR ===================== -->
+    <aside id="sidebar">
+        <div class="sidebar-header">
+            <a href="/index.html" class="brand-title">
+                <div class="brand-icon">
+                    <i class="bi bi-buildings"></i>
+                </div>
+                <div>
+                    <div class="fw-bold fs-6">KTX DORMITORY</div>
+                    <div class="text-secondary" style="font-size: 0.68rem; font-weight: normal;">Hệ Thống Quản Lý KTX</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-section-title">TỔNG QUAN</div>
+            <a href="/index.html" class="sidebar-link" data-menu="dashboard">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Bảng điều khiển</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 1: SINH VIÊN & TÀI KHOẢN</div>
+            <a href="/sinh-vien.html" class="sidebar-link" data-menu="sinh-vien">
+                <i class="bi bi-person-lines-fill"></i>
+                <span>Quản lý sinh viên</span>
+            </a>
+            <a href="/tai-khoan.html" class="sidebar-link" data-menu="tai-khoan">
+                <i class="bi bi-person-badge-fill"></i>
+                <span>Quản lý tài khoản</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 2: CƠ SỞ VẬT CHẤT</div>
+            <a href="/toa-nha.html" class="sidebar-link active" data-menu="toa-nha">
+                <i class="bi bi-building"></i>
+                <span>Quản lý tòa nhà</span>
+            </a>
+            <a href="/phong.html" class="sidebar-link" data-menu="phong">
+                <i class="bi bi-door-open-fill"></i>
+                <span>Quản lý phòng</span>
+            </a>
+            <a href="/loai-phong.html" class="sidebar-link" data-menu="loai-phong">
+                <i class="bi bi-tags-fill"></i>
+                <span>Quản lý loại phòng</span>
+            </a>
+
+            <div class="nav-section-title">NGƯỜI 3: HỢP ĐỒNG & ĐĂNG KÝ</div>
+            <a href="/dang-ky-phong.html" class="sidebar-link" data-menu="dang-ky-phong">
+                <i class="bi bi-clipboard2-check-fill"></i>
+                <span>Quản lý đăng ký phòng</span>
+            </a>
+            <a href="/hop-dong.html" class="sidebar-link" data-menu="hop-dong">
+                <i class="bi bi-file-earmark-text-fill"></i>
+                <span>Quản lý hợp đồng</span>
+            </a>
+            <a href="/sinh-vien-phong.html" class="sidebar-link" data-menu="sinh-vien-phong">
+                <i class="bi bi-people-fill"></i>
+                <span>Quan hệ sinh viên - phòng</span>
+            </a>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="btn btn-outline-light btn-sm w-100 d-flex align-items-center justify-content-center gap-2" onclick="App.auth.logout()">
+                <i class="bi bi-box-arrow-left"></i>
+                <span>Đăng xuất</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ===================== TOPBAR ===================== -->
+    <header id="topbar">
+        <div class="topbar-left">
+            <button class="btn btn-sm btn-light border d-lg-none" id="sidebar-toggle" title="Menu">
+                <i class="bi bi-list fs-5"></i>
+            </button>
+            <div>
+                <h6 class="mb-0 fw-bold text-dark">Quản Lý Tòa Nhà Ký Túc Xá</h6>
+                <small class="text-muted" style="font-size: 0.75rem;">Hệ thống &rsaquo; Cơ sở vật chất & Tòa nhà</small>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <div class="user-badge dropdown">
+                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle gap-2 text-dark" data-bs-toggle="dropdown">
+                    <div class="user-avatar" id="topbar-user-avatar">A</div>
+                    <div class="d-none d-md-block text-start">
+                        <div class="fw-semibold text-dark small" id="topbar-user-name">Quản trị viên</div>
+                        <div class="text-muted" style="font-size: 0.72rem;" id="topbar-user-role">ADMIN</div>
+                    </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                    <li><a class="dropdown-item small" href="/tai-khoan.html"><i class="bi bi-person me-2"></i>Tài khoản</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item small text-danger" href="javascript:void(0)" onclick="App.auth.logout()"><i class="bi bi-box-arrow-right me-2"></i>Đăng xuất</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===================== MAIN CONTENT WRAPPER ===================== -->
+    <div id="main-wrapper">
+        <main class="content-container">
+
+            <!-- Title & Actions -->
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                <div>
+                    <h4 class="fw-bold mb-1 text-dark">Danh Sách Tòa Nhà</h4>
+                    <p class="text-muted small mb-0">Quản lý các tòa nhà ký túc xá, số tầng, phân khu và phân bố phòng ở.</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-secondary btn-sm" onclick="loadBuildings()">
+                        <i class="bi bi-arrow-clockwise me-1"></i> Tải lại
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="openAddBuildingModal()">
+                        <i class="bi bi-building-add me-1"></i> Thêm Tòa Nhà Mới
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search & Filter Card -->
+            <div class="ktx-card mb-4 p-3">
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                            <input type="text" id="building-search" class="form-control border-start-0" 
+                                   placeholder="Tìm theo Mã tòa hoặc Tên tòa nhà..." oninput="filterBuildings()">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="filter-khu" class="form-select" onchange="filterBuildings()">
+                            <option value="">-- Tất cả Phân khu --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 text-md-end text-muted small">
+                        Tổng số: <strong id="building-count" class="text-primary">0</strong> tòa nhà
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Card -->
+            <div class="ktx-card">
+                <div class="table-responsive">
+                    <table class="table ktx-table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Mã Tòa Nhà</th>
+                                <th>Tên Tòa Nhà</th>
+                                <th>Thuộc Phân Khu</th>
+                                <th>Số Tầng</th>
+                                <th>Mô Tả Vị Trí / Đặc Điểm</th>
+                                <th class="text-end">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="building-tbody">
+                            <tr>
+                                <td colspan="6" class="text-center py-4 text-muted">
+                                    <div class="spinner-border spinner-border-sm text-primary me-2"></div>
+                                    Đang tải danh sách tòa nhà...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ===================== MODAL THÊM / SỬA TÒA NHÀ ===================== -->
+    <div class="modal fade" id="building-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-6 fw-bold" id="building-modal-title">
+                        <i class="bi bi-building me-2 text-primary"></i>Thêm Tòa Nhà Mới
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="building-form" novalidate>
+                    <input type="hidden" id="form-building-id">
+
+                    <div class="modal-body p-4">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label for="khuSelect" class="form-label">Thuộc Phân Khu <span class="text-danger">*</span></label>
+                                <select class="form-select" id="khuSelect" required>
+                                    <option value="">-- Chọn phân khu ký túc xá --</option>
+                                </select>
+                                <div class="invalid-feedback">Vui lòng chọn phân khu cho tòa nhà.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="maToa" class="form-label">Mã Tòa Nhà <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="maToa" required maxlength="20" placeholder="VD: TOA-A1">
+                                <div class="invalid-feedback">Vui lòng nhập mã tòa nhà.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="tenToa" class="form-label">Tên Tòa Nhà <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="tenToa" required maxlength="100" placeholder="VD: Tòa A1">
+                                <div class="invalid-feedback">Vui lòng nhập tên tòa nhà.</div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="soTang" class="form-label">Số Tầng <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="soTang" required min="1" max="50" value="3">
+                                <div class="invalid-feedback">Số tầng phải là số nguyên dương lớn hơn 0.</div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="moTa" class="form-label">Mô Tả / Ghi Chú</label>
+                                <textarea class="form-control" id="moTa" rows="3" placeholder="Ghi chú về vị trí, tiện ích..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-light border" data-bs-dismiss="modal">Hủy bỏ</button>
+                        <button type="submit" class="btn btn-sm btn-primary" id="save-building-btn">
+                            <i class="bi bi-check2-circle me-1"></i> Lưu Tòa Nhà
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== MODAL CHI TIẾT TÒA NHÀ ===================== -->
+    <div class="modal fade" id="building-detail-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-6 fw-bold">
+                        <i class="bi bi-info-circle me-2 text-primary"></i>Chi Tiết Tòa Nhà
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4" id="building-detail-content">
+                    <!-- Dynamic details -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/app.js"></script>
+    <script>
+        let allBuildings = [];
+        let allKhus = [];
+        let buildingModalInstance = null;
+        let detailModalInstance = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            App.initLayout('toa-nha');
+            buildingModalInstance = new bootstrap.Modal(document.getElementById('building-modal'));
+            detailModalInstance = new bootstrap.Modal(document.getElementById('building-detail-modal'));
+            loadKhusAndBuildings();
+        });
+
+        // 1. Fetch Khus and Buildings
+        async function loadKhusAndBuildings() {
+            // Load Khus
+            const khuRes = await App.api('/api/khu');
+            if (khuRes.success && Array.isArray(khuRes.data)) {
+                allKhus = khuRes.data;
+                populateKhuDropdowns(allKhus);
+            }
+            loadBuildings();
+        }
+
+        function populateKhuDropdowns(khus) {
+            // Filter dropdown
+            const filterKhu = document.getElementById('filter-khu');
+            filterKhu.innerHTML = '<option value="">-- Tất cả Phân khu --</option>' +
+                khus.map(k => `<option value="${k.id}">${k.tenKhu} (${k.maKhu})</option>`).join('');
+
+            // Modal form dropdown
+            const formSelect = document.getElementById('khuSelect');
+            formSelect.innerHTML = '<option value="">-- Chọn phân khu ký túc xá --</option>' +
+                khus.map(k => `<option value="${k.id}">${k.tenKhu} (${k.maKhu})</option>`).join('');
+        }
+
+        // 2. Fetch Buildings
+        async function loadBuildings() {
+            const tbody = document.getElementById('building-tbody');
+            tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Đang tải danh sách tòa nhà...</td></tr>`;
+
+            const res = await App.api('/api/toa-nha');
+            if (res.success && Array.isArray(res.data)) {
+                allBuildings = res.data;
+                renderBuildingTable(allBuildings);
+            } else {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-danger"><i class="bi bi-exclamation-triangle me-1"></i> ${res.error || 'Lỗi khi tải danh sách tòa nhà'}</td></tr>`;
+            }
+        }
+
+        // 3. Render Table
+        function renderBuildingTable(buildings) {
+            const tbody = document.getElementById('building-tbody');
+            document.getElementById('building-count').textContent = buildings.length;
+
+            if (buildings.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-muted">Không tìm thấy tòa nhà nào.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = buildings.map(b => {
+                const k = b.khu || {};
+                return `
+                    <tr>
+                        <td><strong class="text-primary">${b.maToa}</strong></td>
+                        <td class="fw-semibold text-dark">${b.tenToa}</td>
+                        <td><span class="badge bg-light text-dark border">${k.tenKhu || 'Khu A'}</span></td>
+                        <td><strong>${b.soTang}</strong> tầng</td>
+                        <td><small class="text-muted">${b.moTa || 'Không có mô tả'}</small></td>
+                        <td class="text-end">
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-secondary" onclick="viewBuildingDetail(${b.id})" title="Xem chi tiết">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button class="btn btn-outline-primary" onclick="openEditBuildingModal(${b.id})" title="Chỉnh sửa">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-outline-danger" onclick="deleteBuilding(${b.id}, '${b.maToa}')" title="Xóa">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // 4. Search & Filter
+        function filterBuildings() {
+            const query = document.getElementById('building-search').value.toLowerCase().trim();
+            const khuId = document.getElementById('filter-khu').value;
+
+            const filtered = allBuildings.filter(b => {
+                const matchesQuery = !query ||
+                    (b.maToa && b.maToa.toLowerCase().includes(query)) ||
+                    (b.tenToa && b.tenToa.toLowerCase().includes(query));
+
+                const matchesKhu = !khuId || (b.khu && b.khu.id == khuId);
+
+                return matchesQuery && matchesKhu;
+            });
+
+            renderBuildingTable(filtered);
+        }
+
+        // 5. Open Modal Add
+        function openAddBuildingModal() {
+            document.getElementById('building-modal-title').innerHTML = '<i class="bi bi-building-add me-2 text-primary"></i>Thêm Tòa Nhà Mới';
+            document.getElementById('building-form').reset();
+            document.getElementById('form-building-id').value = '';
+            document.getElementById('building-form').classList.remove('was-validated');
+
+            if (allKhus.length > 0) {
+                document.getElementById('khuSelect').value = allKhus[0].id;
+            }
+
+            buildingModalInstance.show();
+        }
+
+        // 6. Open Modal Edit
+        function openEditBuildingModal(id) {
+            const b = allBuildings.find(item => item.id === id);
+            if (!b) return;
+
+            document.getElementById('building-modal-title').innerHTML = '<i class="bi bi-pencil-square me-2 text-primary"></i>Chỉnh Sửa Tòa Nhà: ' + b.tenToa;
+            document.getElementById('building-form').classList.remove('was-validated');
+
+            document.getElementById('form-building-id').value = b.id;
+            document.getElementById('maToa').value = b.maToa || '';
+            document.getElementById('tenToa').value = b.tenToa || '';
+            document.getElementById('soTang').value = b.soTang || 1;
+            document.getElementById('moTa').value = b.moTa || '';
+
+            if (b.khu && b.khu.id) {
+                document.getElementById('khuSelect').value = b.khu.id;
+            }
+
+            buildingModalInstance.show();
+        }
+
+        // 7. Save Building Form
+        document.getElementById('building-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+
+            if (!form.checkValidity()) {
+                e.stopPropagation();
+                form.classList.add('was-validated');
+                return;
+            }
+
+            const id = document.getElementById('form-building-id').value;
+            const khuId = document.getElementById('khuSelect').value;
+            const maToa = document.getElementById('maToa').value.trim();
+            const tenToa = document.getElementById('tenToa').value.trim();
+            const soTang = parseInt(document.getElementById('soTang').value);
+            const moTa = document.getElementById('moTa').value.trim();
+
+            const saveBtn = document.getElementById('save-building-btn');
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Đang lưu...';
+
+            const payload = {
+                khu: { id: parseInt(khuId) },
+                maToa,
+                tenToa,
+                soTang,
+                moTa
+            };
+
+            let res;
+            if (!id) {
+                res = await App.api('/api/toa-nha', {
+                    method: 'POST',
+                    body: payload
+                });
+            } else {
+                payload.id = parseInt(id);
+                res = await App.api(`/api/toa-nha/${id}`, {
+                    method: 'PUT',
+                    body: payload
+                });
+            }
+
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Lưu Tòa Nhà';
+
+            if (res.success) {
+                App.toast(id ? 'Cập nhật tòa nhà thành công!' : 'Thêm tòa nhà mới thành công!', 'success');
+                buildingModalInstance.hide();
+                loadBuildings();
+            } else {
+                App.toast('Lỗi khi lưu tòa nhà: ' + res.error, 'danger');
+            }
+        });
+
+        // 8. View Detail
+        function viewBuildingDetail(id) {
+            const b = allBuildings.find(item => item.id === id);
+            if (!b) return;
+            const k = b.khu || {};
+
+            const content = `
+                <div class="text-center mb-3">
+                    <div class="stat-icon primary mx-auto mb-2" style="width: 50px; height: 50px;">
+                        <i class="bi bi-building"></i>
+                    </div>
+                    <h5 class="fw-bold mb-0">${b.tenToa}</h5>
+                    <span class="badge bg-primary mt-1">${b.maToa}</span>
+                </div>
+
+                <div class="row g-2 small">
+                    <div class="col-6 text-muted">Phân khu trực thuộc:</div>
+                    <div class="col-6 fw-bold text-end">${k.tenKhu || 'Khu A'} (${k.maKhu || '-'})</div>
+
+                    <div class="col-6 text-muted">Tổng số tầng:</div>
+                    <div class="col-6 fw-semibold text-end">${b.soTang} tầng</div>
+
+                    <div class="col-6 text-muted">Địa chỉ khu:</div>
+                    <div class="col-6 text-end">${k.diaChi || 'Cơ sở chính'}</div>
+
+                    <div class="col-12 mt-2">
+                        <div class="text-muted mb-1">Mô tả đặc điểm:</div>
+                        <div class="p-2 bg-light border rounded">${b.moTa || 'Không có ghi chú thêm.'}</div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('building-detail-content').innerHTML = content;
+            detailModalInstance.show();
+        }
+
+        // 9. Delete Building
+        async function deleteBuilding(id, maToa) {
+            const confirmed = await App.confirm({
+                title: 'Xóa tòa nhà',
+                message: `Bạn có chắc chắn muốn xóa tòa nhà ${maToa}? Nếu tòa nhà đang có tầng và phòng trực thuộc, hệ thống sẽ ngăn chặn việc xóa để đảm bảo toàn vẹn dữ liệu.`,
+                confirmText: 'Xóa tòa nhà',
+                btnClass: 'btn-danger'
+            });
+
+            if (!confirmed) return;
+
+            const res = await App.api(`/api/toa-nha/${id}`, { method: 'DELETE' });
+            if (res.success) {
+                App.toast(`Đã xóa tòa nhà ${maToa} thành công!`, 'success');
+                loadBuildings();
+            } else {
+                App.toast(`Không thể xóa tòa nhà: ${res.error}`, 'danger');
+            }
+        }
+    </script>
+</body>
+</html>
