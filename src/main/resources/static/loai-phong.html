@@ -4,9 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản Lý Loại Phòng - Ký Túc Xá</title>
+    <!-- Google Fonts: Be Vietnam Pro & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Bootstrap 5 CSS & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Tailwind CSS v3 (Play CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            corePlugins: { preflight: false },
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Be Vietnam Pro"', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/styles.css">
 </head>
@@ -20,20 +47,20 @@
                     <i class="bi bi-buildings"></i>
                 </div>
                 <div>
-                    <div class="fw-bold fs-6">KTX DORMITORY</div>
-                    <div class="text-secondary" style="font-size: 0.68rem; font-weight: normal;">Hệ Thống Quản Lý KTX</div>
+                    <div class="fw-bold fs-6 tracking-wide">KTX DORMITORY</div>
+                    <div class="text-sky-300" style="font-size: 0.68rem; font-weight: normal;">Hệ Thống Quản Lý KTX</div>
                 </div>
             </a>
         </div>
 
         <div class="sidebar-nav">
-            <div class="nav-section-title">TỔNG QUAN</div>
+            <div class="nav-section-title">⚡ TỔNG QUAN HỆ THỐNG</div>
             <a href="/index.html" class="sidebar-link" data-menu="dashboard">
                 <i class="bi bi-grid-1x2-fill"></i>
                 <span>Bảng điều khiển</span>
             </a>
 
-            <div class="nav-section-title">NGƯỜI 1: SINH VIÊN & TÀI KHOẢN</div>
+            <div class="nav-section-title">👥 QUẢN LÝ SINH VIÊN</div>
             <a href="/sinh-vien.html" class="sidebar-link" data-menu="sinh-vien">
                 <i class="bi bi-person-lines-fill"></i>
                 <span>Quản lý sinh viên</span>
@@ -43,7 +70,7 @@
                 <span>Quản lý tài khoản</span>
             </a>
 
-            <div class="nav-section-title">NGƯỜI 2: CƠ SỞ VẬT CHẤT</div>
+            <div class="nav-section-title">🏢 CƠ SỞ VẬT CHẤT</div>
             <a href="/toa-nha.html" class="sidebar-link" data-menu="toa-nha">
                 <i class="bi bi-building"></i>
                 <span>Quản lý tòa nhà</span>
@@ -57,7 +84,7 @@
                 <span>Quản lý loại phòng</span>
             </a>
 
-            <div class="nav-section-title">NGƯỜI 3: HỢP ĐỒNG & ĐĂNG KÝ</div>
+            <div class="nav-section-title">📋 HỢP ĐỒNG & DỊCH VỤ</div>
             <a href="/dang-ky-phong.html" class="sidebar-link" data-menu="dang-ky-phong">
                 <i class="bi bi-clipboard2-check-fill"></i>
                 <span>Quản lý đăng ký phòng</span>
@@ -73,7 +100,7 @@
         </div>
 
         <div class="sidebar-footer">
-            <button class="btn btn-outline-light btn-sm w-100 d-flex align-items-center justify-content-center gap-2" onclick="App.auth.logout()">
+            <button class="btn btn-outline-light btn-sm w-100 d-flex align-items-center justify-content-center gap-2 rounded-pill" onclick="App.auth.logout()">
                 <i class="bi bi-box-arrow-left"></i>
                 <span>Đăng xuất</span>
             </button>
@@ -115,39 +142,39 @@
         <main class="content-container">
 
             <!-- Title & Actions -->
-            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 animate-fade-in-up">
                 <div>
                     <h4 class="fw-bold mb-1 text-dark">Danh Mục Loại Phòng Ký Túc Xá</h4>
                     <p class="text-muted small mb-0">Theo dõi tiêu chuẩn sức chứa, định mức đơn giá và thống kê số phòng thực tế.</p>
                 </div>
                 <div class="d-flex gap-2">
-                    <button class="btn btn-outline-secondary btn-sm" onclick="loadRoomTypes()">
+                    <button class="btn btn-outline-secondary btn-sm rounded-pill px-3 py-1.5" onclick="loadRoomTypes()">
                         <i class="bi bi-arrow-clockwise me-1"></i> Tải lại
                     </button>
-                    <a href="/phong.html" class="btn btn-primary btn-sm">
+                    <a href="/phong.html" class="btn btn-primary btn-sm rounded-pill px-3.5 py-1.5">
                         <i class="bi bi-door-open-fill me-1"></i> Đi tới Quản lý phòng
                     </a>
                 </div>
             </div>
 
             <!-- Search Card -->
-            <div class="ktx-card mb-4 p-3">
+            <div class="ktx-card mb-4 p-3 animate-fade-in-up delay-1">
                 <div class="row g-2 align-items-center">
                     <div class="col-md-6">
                         <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                            <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search text-sky-600"></i></span>
                             <input type="text" id="type-search" class="form-control border-start-0" 
                                    placeholder="Tìm kiếm loại phòng theo tên..." oninput="filterRoomTypes()">
                         </div>
                     </div>
                     <div class="col-md-6 text-md-end text-muted small">
-                        Tổng cộng: <strong id="type-count" class="text-primary">0</strong> loại phòng
+                        Tổng cộng: <strong id="type-count" class="text-sky-600 font-bold fs-6">0</strong> loại phòng
                     </div>
                 </div>
             </div>
 
             <!-- Table Card -->
-            <div class="ktx-card">
+            <div class="ktx-card animate-fade-in-up delay-2">
                 <div class="table-responsive">
                     <table class="table ktx-table align-middle">
                         <thead>
@@ -238,15 +265,20 @@
                 return `
                     <tr>
                         <td>
-                            <strong class="text-primary">${t.tenLoai}</strong>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="w-8 h-8 rounded-circle bg-sky-100 text-sky-700 d-inline-flex align-items-center justify-content-center fw-bold small">
+                                    <i class="bi bi-tags-fill"></i>
+                                </div>
+                                <span class="fw-bold text-sky-600">${t.tenLoai}</span>
+                            </div>
                         </td>
-                        <td><span class="badge bg-light text-dark border">${t.sucChua} người / phòng</span></td>
-                        <td class="fw-semibold">${App.formatMoney(t.giaPhong)} / tháng</td>
-                        <td><strong>${t.tongSoPhong}</strong> phòng</td>
-                        <td><span class="status-badge badge-con-cho"><i class="bi bi-dot"></i> ${t.soPhongConCho} phòng</span></td>
-                        <td><span class="status-badge badge-da-day"><i class="bi bi-dot"></i> ${t.soPhongDaDay} phòng</span></td>
+                        <td><span class="badge bg-light text-secondary border rounded-pill px-2.5 py-1 font-semibold">${t.sucChua} người / phòng</span></td>
+                        <td class="fw-bold text-sky-700">${App.formatMoney(t.giaPhong)} <small class="text-muted fw-normal">/ tháng</small></td>
+                        <td><span class="fw-bold text-dark">${t.tongSoPhong}</span> <small class="text-muted">phòng</small></td>
+                        <td><span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1"><i class="bi bi-check-circle-fill me-1"></i>${t.soPhongConCho} phòng</span></td>
+                        <td><span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-2.5 py-1"><i class="bi bi-door-closed-fill me-1"></i>${t.soPhongDaDay} phòng</span></td>
                         <td class="text-end">
-                            <button class="btn btn-sm btn-outline-primary" onclick="viewRoomsOfType(${idx})" title="Xem phòng">
+                            <button class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1" onclick="viewRoomsOfType(${idx})" title="Xem phòng">
                                 <i class="bi bi-list-ul me-1"></i> Xem danh sách phòng
                             </button>
                         </td>

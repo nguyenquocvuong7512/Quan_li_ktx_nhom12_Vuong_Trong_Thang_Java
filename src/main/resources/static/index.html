@@ -4,9 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bảng Điều Khiển - Quản Lý Ký Túc Xá</title>
+    <!-- Google Fonts: Be Vietnam Pro & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Bootstrap 5 CSS & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Tailwind CSS v3 (Play CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            corePlugins: { preflight: false },
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Be Vietnam Pro"', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/styles.css">
 </head>
@@ -20,20 +47,20 @@
                     <i class="bi bi-buildings"></i>
                 </div>
                 <div>
-                    <div class="fw-bold fs-6">KTX DORMITORY</div>
-                    <div class="text-secondary" style="font-size: 0.68rem; font-weight: normal;">Hệ Thống Quản Lý KTX</div>
+                    <div class="fw-bold fs-6 tracking-tight">KTX DORMITORY</div>
+                    <div class="text-sky-300" style="font-size: 0.68rem; font-weight: normal;">Hệ Thống Quản Lý KTX</div>
                 </div>
             </a>
         </div>
 
         <div class="sidebar-nav">
-            <div class="nav-section-title">TỔNG QUAN</div>
+            <div class="nav-section-title">⚡ TỔNG QUAN HỆ THỐNG</div>
             <a href="/index.html" class="sidebar-link active" data-menu="dashboard">
                 <i class="bi bi-grid-1x2-fill"></i>
                 <span>Bảng điều khiển</span>
             </a>
 
-            <div class="nav-section-title">NGƯỜI 1: SINH VIÊN & TÀI KHOẢN</div>
+            <div class="nav-section-title">👥 QUẢN LÝ SINH VIÊN</div>
             <a href="/sinh-vien.html" class="sidebar-link" data-menu="sinh-vien">
                 <i class="bi bi-person-lines-fill"></i>
                 <span>Quản lý sinh viên</span>
@@ -43,21 +70,21 @@
                 <span>Quản lý tài khoản</span>
             </a>
 
-            <div class="nav-section-title">NGƯỜI 2: CƠ SỞ VẬT CHẤT</div>
+            <div class="nav-section-title">🏢 CƠ SỞ VẬT CHẤT</div>
             <a href="/toa-nha.html" class="sidebar-link" data-menu="toa-nha">
-                <i class="bi bi-building"></i>
+                <i class="bi bi-buildings"></i>
                 <span>Quản lý tòa nhà</span>
             </a>
             <a href="/phong.html" class="sidebar-link" data-menu="phong">
                 <i class="bi bi-door-open-fill"></i>
-                <span>Quản lý phòng</span>
+                <span>Quản lý phòng ở</span>
             </a>
             <a href="/loai-phong.html" class="sidebar-link" data-menu="loai-phong">
                 <i class="bi bi-tags-fill"></i>
                 <span>Quản lý loại phòng</span>
             </a>
 
-            <div class="nav-section-title">NGƯỜI 3: HỢP ĐỒNG & ĐĂNG KÝ</div>
+            <div class="nav-section-title">📋 HỢP ĐỒNG & DỊCH VỤ</div>
             <a href="/dang-ky-phong.html" class="sidebar-link" data-menu="dang-ky-phong">
                 <i class="bi bi-clipboard2-check-fill"></i>
                 <span>Quản lý đăng ký phòng</span>
@@ -87,24 +114,32 @@
                 <i class="bi bi-list fs-5"></i>
             </button>
             <div>
-                <h6 class="mb-0 fw-bold text-dark">Bảng Điều Khiển</h6>
-                <small class="text-muted" style="font-size: 0.75rem;">Hệ thống &rsaquo; Tổng quan hoạt động</small>
+                <h6 class="mb-0 fw-bold text-dark d-flex align-items-center gap-2">
+                    Bảng Điều Khiển KTX <span class="badge bg-sky-100 text-sky-800 font-semibold" style="font-size: 0.72rem;">Hệ thống Online</span>
+                </h6>
+                <small class="text-muted" style="font-size: 0.75rem;">Trung tâm quản trị ký túc xá & lưu trú sinh viên</small>
             </div>
         </div>
 
         <div class="topbar-right">
+            <div class="d-none d-md-flex align-items-center gap-2 me-2">
+                <span class="badge bg-slate-100 text-slate-700 border border-slate-200 px-3 py-2 rounded-pill font-medium text-xs">
+                    <i class="bi bi-calendar-event me-1 text-sky-600"></i> <span id="topbar-date">Hôm nay</span>
+                </span>
+            </div>
+
             <div class="user-badge dropdown">
                 <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle gap-2 text-dark" data-bs-toggle="dropdown" aria-expanded="false">
                     <div class="user-avatar" id="topbar-user-avatar">A</div>
                     <div class="d-none d-md-block text-start">
                         <div class="fw-semibold text-dark small" id="topbar-user-name">Quản trị viên</div>
-                        <div class="text-muted" style="font-size: 0.72rem;" id="topbar-user-role">ADMIN</div>
+                        <div class="text-sky-600 fw-bold" style="font-size: 0.7rem;" id="topbar-user-role">ADMINISTRATOR</div>
                     </div>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                    <li><a class="dropdown-item small" href="/tai-khoan.html"><i class="bi bi-person me-2"></i>Tài khoản cá nhân</a></li>
+                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3 mt-2">
+                    <li><a class="dropdown-item small py-2" href="/tai-khoan.html"><i class="bi bi-person me-2 text-sky-600"></i>Tài khoản cá nhân</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item small text-danger" href="javascript:void(0)" onclick="App.auth.logout()"><i class="bi bi-box-arrow-right me-2"></i>Đăng xuất</a></li>
+                    <li><a class="dropdown-item small text-danger py-2" href="javascript:void(0)" onclick="App.auth.logout()"><i class="bi bi-box-arrow-right me-2"></i>Đăng xuất</a></li>
                 </ul>
             </div>
         </div>
@@ -114,202 +149,299 @@
     <div id="main-wrapper">
         <main class="content-container">
 
-            <!-- Banner / Welcome -->
-            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-                <div>
-                    <h4 class="fw-bold mb-1 text-dark">Tổng Quan Ký Túc Xá</h4>
-                    <p class="text-muted small mb-0">Theo dõi trạng thái sức chứa phòng, sinh viên và hoạt động lưu trú theo thời gian thực.</p>
-                </div>
-                <div class="d-flex gap-2">
-                    <button class="btn btn-outline-secondary btn-sm" onclick="loadDashboardData()">
-                        <i class="bi bi-arrow-clockwise me-1"></i> Làm mới dữ liệu
-                    </button>
-                    <a href="/phong.html" class="btn btn-primary btn-sm">
-                        <i class="bi bi-plus-circle me-1"></i> Xem danh sách phòng
-                    </a>
+            <!-- ===================== HERO WELCOME BANNER (STEALTH NAVY & CYAN) ===================== -->
+            <div class="hero-welcome-card animate-fade-in-up">
+                <div class="row align-items-center g-4">
+                    <div class="col-lg-8">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                            <span class="hero-tag">
+                                <i class="bi bi-cpu-fill text-sky-400"></i> Smart KTX Operations
+                            </span>
+                            <span class="hero-tag">
+                                <i class="bi bi-shield-check text-emerald-400"></i> Trực tháp 24/7 • An toàn
+                            </span>
+                        </div>
+                        <h3 class="fw-bold mb-2 text-white" style="letter-spacing: -0.02em;">
+                            Bảng Điều Khiển Trung Tâm Ký Túc Xá 🏢⚡
+                        </h3>
+                        <p class="text-sky-100 mb-4 small" style="max-width: 620px; line-height: 1.6;">
+                            Hệ thống tự động theo dõi sức chứa phòng, hợp đồng sinh viên và số liệu lưu trú theo thời gian thực.
+                        </p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="/dang-ky-phong.html" class="btn btn-primary btn-sm px-3.5 py-2">
+                                <i class="bi bi-plus-circle me-1"></i> Xếp phòng mới ngay
+                            </a>
+                            <button class="btn btn-glass btn-sm px-3.5 py-2" onclick="loadDashboardData()">
+                                <i class="bi bi-arrow-clockwise me-1"></i> Làm mới số liệu
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 text-center d-none d-lg-block">
+                        <div class="p-4 bg-slate-900/60 backdrop-blur-md rounded-3xl border border-sky-500/30 inline-block shadow-2xl hero-floating-box">
+                            <div class="text-4xl mb-2 text-sky-400"><i class="bi bi-building-gear"></i></div>
+                            <div class="text-white font-bold text-sm">Dormitory Hub Pro</div>
+                            <div class="text-sky-200 text-xs mt-0.5">Vận hành thông minh & chính xác</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Stats Grid -->
-            <div class="row g-3 mb-4">
+            <!-- ===================== COOL TECH STATS CARDS ===================== -->
+            <div class="row g-3 mb-4 animate-fade-in-up delay-1">
+                <!-- Stat 1: Students (Ocean Blue) -->
                 <div class="col-sm-6 col-xl-3">
                     <div class="stat-card">
                         <div>
-                            <div class="stat-number" id="stat-students">0</div>
-                            <div class="stat-label">Tổng sinh viên</div>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span class="badge bg-sky-50 text-sky-700 border border-sky-200 font-semibold text-xs px-2 py-0.5 rounded-full">
+                                    <i class="bi bi-dot"></i> Sinh viên
+                                </span>
+                            </div>
+                            <div class="stat-number text-slate-800" id="stat-students">0</div>
+                            <div class="stat-label">Tổng sinh viên lưu trú</div>
                         </div>
                         <div class="stat-icon primary">
-                            <i class="bi bi-people-fill"></i>
+                            <i class="bi bi-mortarboard-fill"></i>
                         </div>
                     </div>
                 </div>
 
+                <!-- Stat 2: Buildings (Emerald Tech) -->
                 <div class="col-sm-6 col-xl-3">
                     <div class="stat-card">
                         <div>
-                            <div class="stat-number" id="stat-buildings">0</div>
-                            <div class="stat-label">Tòa nhà ký túc</div>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span class="badge bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold text-xs px-2 py-0.5 rounded-full">
+                                    <i class="bi bi-dot"></i> Tòa nhà
+                                </span>
+                            </div>
+                            <div class="stat-number text-slate-800" id="stat-buildings">0</div>
+                            <div class="stat-label">Tòa nhà ký túc xá</div>
                         </div>
                         <div class="stat-icon success">
-                            <i class="bi bi-building-check"></i>
+                            <i class="bi bi-buildings-fill"></i>
                         </div>
                     </div>
                 </div>
 
+                <!-- Stat 3: Total Rooms (Amber Gold) -->
                 <div class="col-sm-6 col-xl-3">
                     <div class="stat-card">
                         <div>
-                            <div class="stat-number" id="stat-rooms">0</div>
-                            <div class="stat-label">Tổng số phòng</div>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span class="badge bg-amber-50 text-amber-700 border border-amber-200 font-semibold text-xs px-2 py-0.5 rounded-full">
+                                    <i class="bi bi-dot"></i> Tổng số phòng
+                                </span>
+                            </div>
+                            <div class="stat-number text-slate-800" id="stat-rooms">0</div>
+                            <div class="stat-label">Phòng đang quản lý</div>
                         </div>
-                        <div class="stat-icon purple">
+                        <div class="stat-icon warning">
+                            <i class="bi bi-door-open-fill"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stat 4: Available Rooms (Cyan Teal) -->
+                <div class="col-sm-6 col-xl-3">
+                    <div class="stat-card">
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span class="badge bg-teal-50 text-teal-700 border border-teal-200 font-semibold text-xs px-2 py-0.5 rounded-full">
+                                    <i class="bi bi-check-circle-fill"></i> Sẵn sàng đón
+                                </span>
+                            </div>
+                            <div class="stat-number text-emerald-600" id="stat-available-rooms">0</div>
+                            <div class="stat-label">Phòng hiện còn chỗ</div>
+                        </div>
+                        <div class="stat-icon danger">
                             <i class="bi bi-door-closed-fill"></i>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-sm-6 col-xl-3">
-                    <div class="stat-card">
-                        <div>
-                            <div class="stat-number text-success" id="stat-available-rooms">0</div>
-                            <div class="stat-label">Phòng còn chỗ</div>
-                        </div>
-                        <div class="stat-icon warning">
-                            <i class="bi bi-check-circle-fill"></i>
-                        </div>
-                    </div>
-                </div>
             </div>
 
-            <!-- Two Column Overview -->
-            <div class="row g-3 mb-4">
-                <!-- Room Occupancy Card -->
+            <!-- ===================== TWO COLUMN ASYMMETRIC OVERVIEW ===================== -->
+            <div class="row g-4 mb-4 animate-fade-in-up delay-2">
+                <!-- Room Occupancy Card (Left Column - 7/12) -->
                 <div class="col-lg-7">
                     <div class="ktx-card h-100">
                         <div class="card-header-clean">
-                            <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-pie-chart-fill me-2 text-primary"></i>Tình Trạng Phòng & Sức Chứa</h6>
-                            <span class="badge bg-light text-dark border">Thời gian thực</span>
+                            <div>
+                                <h6 class="mb-0 fw-bold text-dark d-flex align-items-center gap-2">
+                                    <i class="bi bi-pie-chart-fill text-sky-600"></i>
+                                    Tình Trạng Sức Chứa & Tỷ Lệ Lấp Đầy
+                                </h6>
+                                <small class="text-muted" style="font-size: 0.75rem;">Phân tích tải phòng ký túc xá thời gian thực</small>
+                            </div>
+                            <span class="badge bg-sky-50 text-sky-700 border border-sky-200 rounded-pill px-3 py-1 font-semibold text-xs">
+                                Live Tracker
+                            </span>
                         </div>
-                        <div class="p-3">
+                        <div class="p-4">
+                            <!-- Progress Bar with Cyan-Blue Gradient -->
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <span class="small fw-semibold text-muted">Tỷ lệ phòng đã được lấp đầy</span>
-                                <span class="small fw-bold text-dark" id="occupancy-rate">0%</span>
+                                <span class="small fw-bold text-secondary">Tỷ lệ phòng đã có sinh viên ở</span>
+                                <span class="small fw-extrabold text-sky-700 fs-6" id="occupancy-rate">0%</span>
                             </div>
-                            <div class="progress mb-4" style="height: 12px; border-radius: 6px;">
-                                <div id="occupancy-bar" class="progress-bar bg-primary" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress mb-4" style="height: 14px; border-radius: 9999px; background: #e2e8f0; overflow: hidden; padding: 2px;">
+                                <div id="occupancy-bar" class="progress-bar rounded-pill" role="progressbar" 
+                                     style="width: 0%; background: linear-gradient(90deg, #0284c7, #06b6d4, #10b981);" 
+                                     aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
 
-                            <div class="row g-2 text-center">
-                                <div class="col-4 border-end">
-                                    <div class="small text-muted">Phòng trống/Còn chỗ</div>
-                                    <div class="fw-bold text-success fs-5 mt-1" id="box-avail-rooms">0</div>
-                                </div>
-                                <div class="col-4 border-end">
-                                    <div class="small text-muted">Phòng đã đầy</div>
-                                    <div class="fw-bold text-danger fs-5 mt-1" id="box-full-rooms">0</div>
-                                </div>
+                            <!-- 3 Mini Stats -->
+                            <div class="row g-3 text-center mb-4">
                                 <div class="col-4">
-                                    <div class="small text-muted">Số loại phòng</div>
-                                    <div class="fw-bold text-primary fs-5 mt-1" id="box-room-types">0</div>
-                                </div>
-                            </div>
-
-                            <hr class="my-3">
-
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center gap-2">
-                                    <i class="bi bi-file-earmark-check text-primary fs-4"></i>
-                                    <div>
-                                        <div class="small fw-bold text-dark">Hợp đồng lưu trú hiệu lực</div>
-                                        <div class="text-muted" style="font-size: 0.75rem;">Đang được sinh viên đăng ký sử dụng</div>
+                                    <div class="p-3 bg-emerald-50/80 border border-emerald-200 rounded-2xl">
+                                        <div class="text-emerald-800 font-semibold" style="font-size: 0.75rem;">Phòng còn chỗ</div>
+                                        <div class="fw-bold text-emerald-600 fs-4 mt-1" id="box-avail-rooms">0</div>
                                     </div>
                                 </div>
-                                <span class="badge bg-primary fs-6 px-3 py-2" id="stat-active-contracts">0</span>
+                                <div class="col-4">
+                                    <div class="p-3 bg-slate-100/80 border border-slate-200 rounded-2xl">
+                                        <div class="text-slate-700 font-semibold" style="font-size: 0.75rem;">Phòng đã đầy</div>
+                                        <div class="fw-bold text-slate-800 fs-4 mt-1" id="box-full-rooms">0</div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="p-3 bg-sky-50/80 border border-sky-200 rounded-2xl">
+                                        <div class="text-sky-800 font-semibold" style="font-size: 0.75rem;">Loại phòng</div>
+                                        <div class="fw-bold text-sky-700 fs-4 mt-1" id="box-room-types">0</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Active Contracts Pill Card -->
+                            <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-sky-600 text-white flex items-center justify-center font-bold text-lg shadow-md">
+                                        <i class="bi bi-file-earmark-check"></i>
+                                    </div>
+                                    <div>
+                                        <div class="small fw-bold text-dark">Hợp đồng lưu trú có hiệu lực</div>
+                                        <div class="text-muted" style="font-size: 0.75rem;">Đang phục vụ sinh viên trong ký túc xá</div>
+                                    </div>
+                                </div>
+                                <span class="badge bg-sky-600 text-white fs-6 px-3.5 py-2 rounded-pill shadow-sm" id="stat-active-contracts">0</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Shortcuts Card -->
+                <!-- Shortcuts & Quick Hub Card (Right Column - 5/12) -->
                 <div class="col-lg-5">
                     <div class="ktx-card h-100">
                         <div class="card-header-clean">
-                            <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-lightning-charge-fill me-2 text-warning"></i>Lối Tắt Quản Lý Nhanh</h6>
+                            <div>
+                                <h6 class="mb-0 fw-bold text-dark d-flex align-items-center gap-2">
+                                    <i class="bi bi-lightning-charge-fill text-amber-500"></i>
+                                    Lối Tắt Quản Lý Nhanh
+                                </h6>
+                                <small class="text-muted" style="font-size: 0.75rem;">Truy cập chức năng phổ biến 1 chạm</small>
+                            </div>
                         </div>
-                        <div class="p-3 d-flex flex-column gap-2">
-                            <a href="/sinh-vien.html" class="p-2 border rounded d-flex align-items-center justify-content-between text-decoration-none text-dark hover-bg-light">
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="bg-primary text-white rounded p-2 d-flex"><i class="bi bi-person-plus"></i></div>
+                        <div class="p-4 d-flex flex-column gap-2.5">
+                            <a href="/sinh-vien.html" class="shortcut-item">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500 to-blue-600 text-white flex items-center justify-center shadow-md">
+                                        <i class="bi bi-person-plus-fill"></i>
+                                    </div>
                                     <div>
-                                        <div class="fw-semibold small">Quản lý Sinh viên</div>
-                                        <div class="text-muted" style="font-size: 0.72rem;">Thêm mới, tìm kiếm và xem hồ sơ</div>
+                                        <div class="fw-semibold small text-dark">Hồ sơ Sinh viên</div>
+                                        <div class="text-muted" style="font-size: 0.72rem;">Thêm mới, tìm kiếm và xem chi tiết</div>
                                     </div>
                                 </div>
-                                <i class="bi bi-chevron-right text-muted"></i>
+                                <i class="bi bi-chevron-right text-sky-500"></i>
                             </a>
 
-                            <a href="/phong.html" class="p-2 border rounded d-flex align-items-center justify-content-between text-decoration-none text-dark">
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="bg-success text-white rounded p-2 d-flex"><i class="bi bi-door-open"></i></div>
+                            <a href="/phong.html" class="shortcut-item">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-emerald-600 text-white flex items-center justify-center shadow-md">
+                                        <i class="bi bi-door-open-fill"></i>
+                                    </div>
                                     <div>
-                                        <div class="fw-semibold small">Quản lý Phòng ở</div>
-                                        <div class="text-muted" style="font-size: 0.72rem;">Kiểm tra sức chứa, phân phòng và giá thuê</div>
+                                        <div class="fw-semibold small text-dark">Sơ đồ Phòng ở</div>
+                                        <div class="text-muted" style="font-size: 0.72rem;">Kiểm tra sức chứa, giường & giá thuê</div>
                                     </div>
                                 </div>
-                                <i class="bi bi-chevron-right text-muted"></i>
+                                <i class="bi bi-chevron-right text-teal-500"></i>
                             </a>
 
-                            <a href="/toa-nha.html" class="p-2 border rounded d-flex align-items-center justify-content-between text-decoration-none text-dark">
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="bg-info text-white rounded p-2 d-flex"><i class="bi bi-building"></i></div>
+                            <a href="/toa-nha.html" class="shortcut-item">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-700 text-white flex items-center justify-center shadow-md">
+                                        <i class="bi bi-buildings-fill"></i>
+                                    </div>
                                     <div>
-                                        <div class="fw-semibold small">Quản lý Tòa nhà</div>
-                                        <div class="text-muted" style="font-size: 0.72rem;">Danh sách tòa, tầng và các khu vực</div>
+                                        <div class="fw-semibold small text-dark">Khuôn viên Tòa nhà</div>
+                                        <div class="text-muted" style="font-size: 0.72rem;">Quản lý tầng, tòa nhà và khu vực</div>
                                     </div>
                                 </div>
-                                <i class="bi bi-chevron-right text-muted"></i>
+                                <i class="bi bi-chevron-right text-indigo-500"></i>
                             </a>
 
-                            <a href="/tai-khoan.html" class="p-2 border rounded d-flex align-items-center justify-content-between text-decoration-none text-dark">
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="bg-secondary text-white rounded p-2 d-flex"><i class="bi bi-shield-lock"></i></div>
+                            <a href="/tai-khoan.html" class="shortcut-item">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 text-white flex items-center justify-center shadow-md">
+                                        <i class="bi bi-shield-lock-fill"></i>
+                                    </div>
                                     <div>
-                                        <div class="fw-semibold small">Quản lý Tài khoản</div>
-                                        <div class="text-muted" style="font-size: 0.72rem;">Phân quyền, cấp mật khẩu và trạng thái</div>
+                                        <div class="fw-semibold small text-dark">Phân quyền Tài khoản</div>
+                                        <div class="text-muted" style="font-size: 0.72rem;">Cấp tài khoản, mật khẩu & quyền hạn</div>
                                     </div>
                                 </div>
-                                <i class="bi bi-chevron-right text-muted"></i>
+                                <i class="bi bi-chevron-right text-slate-500"></i>
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Recent Available Rooms Table -->
-            <div class="ktx-card">
-                <div class="card-header-clean">
-                    <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-check2-circle text-success me-2"></i>Danh Sách Phòng Đang Còn Chỗ</h6>
-                    <a href="/phong.html" class="btn btn-outline-primary btn-sm">Xem tất cả phòng &rsaquo;</a>
+            <!-- ===================== AVAILABLE ROOMS TABLE (VISUAL CARD TABLE) ===================== -->
+            <div class="ktx-card animate-fade-in-up delay-3">
+                <div class="card-header-clean d-flex flex-wrap align-items-center justify-content-between gap-3 p-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-sky-500 to-blue-700 text-white flex items-center justify-center font-bold text-xl shadow-md">
+                            <i class="bi bi-door-open-fill"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 fw-bold text-dark d-flex align-items-center gap-2">
+                                Danh Sách Phòng KTX Đang Còn Chỗ Sẵn Sàng Đón Tiếp
+                                <span class="badge bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-pill px-3 py-1 font-semibold text-xs">
+                                    <i class="bi bi-check-circle-fill me-1 text-emerald-500"></i> <span id="badge-avail-count">0</span> phòng trống
+                                </span>
+                            </h5>
+                            <small class="text-muted" style="font-size: 0.78rem;">Trực quan hóa sức chứa, slot trống và mức giá phòng theo thời gian thực</small>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="/dang-ky-phong.html" class="btn btn-sm btn-primary rounded-pill px-3.5 py-2 text-xs">
+                            <i class="bi bi-plus-circle me-1"></i> Đăng ký xếp phòng
+                        </a>
+                        <a href="/phong.html" class="btn btn-sm btn-outline-secondary rounded-pill px-3.5 py-2 text-xs">
+                            <i class="bi bi-grid-3x3-gap me-1"></i> Xem tất cả phòng &rsaquo;
+                        </a>
+                    </div>
                 </div>
+
                 <div class="table-responsive">
-                    <table class="table ktx-table align-middle">
+                    <table class="table ktx-table align-middle mb-0">
                         <thead>
-                            <tr>
-                                <th>Mã Phòng</th>
-                                <th>Tòa Nhà / Tầng</th>
-                                <th>Loại Phòng</th>
-                                <th>Sức Chứa</th>
-                                <th>Đang Ở</th>
-                                <th>Giá Phòng / Tháng</th>
-                                <th>Trạng Thái</th>
-                                <th class="text-end">Hành Động</th>
+                            <tr class="bg-slate-50 border-bottom border-slate-200">
+                                <th class="py-3 px-4 text-xs font-bold text-slate-600 uppercase tracking-wider">Thông Tin Phòng</th>
+                                <th class="py-3 px-4 text-xs font-bold text-slate-600 uppercase tracking-wider">Loại Phòng</th>
+                                <th class="py-3 px-4 text-xs font-bold text-slate-600 uppercase tracking-wider" style="min-width: 190px;">Sức Chứa & Hiện Trạng</th>
+                                <th class="py-3 px-4 text-xs font-bold text-slate-600 uppercase tracking-wider">Giá Thuê / Tháng</th>
+                                <th class="py-3 px-4 text-xs font-bold text-slate-600 uppercase tracking-wider">Trạng Thái</th>
+                                <th class="py-3 px-4 text-xs font-bold text-slate-600 uppercase tracking-wider text-end">Thao Tác</th>
                             </tr>
                         </thead>
                         <tbody id="available-rooms-tbody">
                             <tr>
-                                <td colspan="8" class="text-center py-4 text-muted">
-                                    <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
-                                    Đang tải dữ liệu phòng...
+                                <td colspan="6" class="text-center py-5 text-muted">
+                                    <div class="spinner-border spinner-border-sm text-sky-600 me-2" role="status"></div>
+                                    Đang tải dữ liệu phòng trực tuyến...
                                 </td>
                             </tr>
                         </tbody>
@@ -326,60 +458,164 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             App.initLayout('dashboard');
+            
+            // Set current date in topbar
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('vi-VN', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' });
+            const dateEl = document.getElementById('topbar-date');
+            if (dateEl) dateEl.textContent = dateStr;
+
             loadDashboardData();
         });
+
+        // Smooth number counter animation (Spring Boot MVC + JS Micro-interaction)
+        function animateCounter(elementId, targetValue, duration = 900) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            const target = parseInt(targetValue, 10) || 0;
+            if (target === 0) { el.textContent = '0'; return; }
+            const startTime = performance.now();
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                // Ease out cubic
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const current = Math.floor(easeOut * target);
+                el.textContent = current.toLocaleString('vi-VN');
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    el.textContent = target.toLocaleString('vi-VN');
+                }
+            }
+            requestAnimationFrame(update);
+        }
 
         async function loadDashboardData() {
             // Load stats from /api/dashboard/stats
             const statsRes = await App.api('/api/dashboard/stats');
             if (statsRes.success && statsRes.data) {
                 const data = statsRes.data;
-                document.getElementById('stat-students').textContent = data.totalStudents || 0;
-                document.getElementById('stat-buildings').textContent = data.totalBuildings || 0;
-                document.getElementById('stat-rooms').textContent = data.totalRooms || 0;
-                document.getElementById('stat-available-rooms').textContent = data.availableRooms || 0;
+                // Animate numbers counting up smoothly
+                animateCounter('stat-students', data.totalStudents || 0);
+                animateCounter('stat-buildings', data.totalBuildings || 0);
+                animateCounter('stat-rooms', data.totalRooms || 0);
+                animateCounter('stat-available-rooms', data.availableRooms || 0);
 
-                document.getElementById('box-avail-rooms').textContent = data.availableRooms || 0;
-                document.getElementById('box-full-rooms').textContent = data.occupiedRooms || 0;
-                document.getElementById('box-room-types').textContent = data.totalRoomTypes || 0;
-                document.getElementById('stat-active-contracts').textContent = data.activeContracts || 0;
+                animateCounter('box-avail-rooms', data.availableRooms || 0);
+                animateCounter('box-full-rooms', data.occupiedRooms || 0);
+                animateCounter('box-room-types', data.totalRoomTypes || 0);
+                animateCounter('stat-active-contracts', data.activeContracts || 0);
 
                 const totalRooms = data.totalRooms || 0;
                 const occRooms = data.occupiedRooms || 0;
                 const rate = totalRooms > 0 ? Math.round((occRooms / totalRooms) * 100) : 0;
-                document.getElementById('occupancy-rate').textContent = rate + '%';
+                
+                // Animate progress bar fill and text
                 const bar = document.getElementById('occupancy-bar');
-                bar.style.width = rate + '%';
-                bar.setAttribute('aria-valuenow', rate);
+                const rateText = document.getElementById('occupancy-rate');
+                if (bar) {
+                    setTimeout(() => {
+                        bar.style.width = rate + '%';
+                        bar.setAttribute('aria-valuenow', rate);
+                    }, 150);
+                }
+                if (rateText) {
+                    animateCounter('occupancy-rate', rate, 800);
+                    // Append % after update
+                    setTimeout(() => { rateText.textContent = rate + '%'; }, 850);
+                }
             }
 
             // Load available rooms list
             const roomsRes = await App.api('/api/phong');
             const tbody = document.getElementById('available-rooms-tbody');
             if (roomsRes.success && Array.isArray(roomsRes.data)) {
-                const available = roomsRes.data.filter(r => r.trangThai === 'con_cho').slice(0, 5);
+                const available = roomsRes.data.filter(r => r.trangThai === 'con_cho').slice(0, 6);
+                const countBadge = document.getElementById('badge-avail-count');
+                if (countBadge) countBadge.textContent = available.length;
+
                 if (available.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted">Hiện tại không có phòng nào còn chỗ hoặc chưa có dữ liệu phòng.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="6" class="text-center py-5 text-muted">Hiện tại không có phòng nào còn chỗ hoặc chưa có dữ liệu phòng.</td></tr>`;
                 } else {
-                    tbody.innerHTML = available.map(r => `
-                        <tr>
-                            <td><strong class="text-primary">${r.maPhong}</strong></td>
-                            <td>${r.tang && r.tang.toaNha ? r.tang.toaNha.tenToa : 'Tòa A1'} (Tầng ${r.tang ? r.tang.soTang : 1})</td>
-                            <td><span class="badge bg-light text-dark border">${r.loaiPhong || 'Chuẩn'}</span></td>
-                            <td>${r.sucChua} người</td>
-                            <td>${r.soNguoiHienTai || 0} người</td>
-                            <td class="fw-semibold">${App.formatMoney(r.giaPhong)}</td>
-                            <td><span class="status-badge badge-con-cho"><i class="bi bi-dot"></i> Còn chỗ</span></td>
-                            <td class="text-end">
-                                <a href="/phong.html" class="btn btn-sm btn-light border" title="Xem chi tiết">
-                                    <i class="bi bi-eye"></i> Chi tiết
-                                </a>
+                    tbody.innerHTML = available.map(r => {
+                        const sucChua = r.sucChua || 1;
+                        const dangO = r.soNguoiHienTai || 0;
+                        const conTrong = Math.max(0, sucChua - dangO);
+                        const percent = Math.min(100, Math.round((dangO / sucChua) * 100));
+                        const tenToa = r.tang && r.tang.toaNha ? r.tang.toaNha.tenToa : 'Tòa A1';
+                        const soTang = r.tang ? r.tang.soTang : 1;
+
+                        return `
+                        <tr class="align-middle border-bottom border-slate-100 transition-all duration-150 hover:bg-slate-50">
+                            <td class="py-3.5 px-4">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-sky-500 via-blue-600 to-slate-800 text-white flex items-center justify-center font-extrabold text-sm shadow-sm flex-shrink-0">
+                                        <i class="bi bi-door-open"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-dark fs-6 tracking-tight d-flex align-items-center gap-2">
+                                            <span>${r.maPhong}</span>
+                                            <span class="badge bg-sky-50 text-sky-700 border border-sky-200 text-[10px] font-semibold px-2 py-0.5 rounded-full">
+                                                Tầng ${soTang}
+                                            </span>
+                                        </div>
+                                        <div class="text-muted small d-flex align-items-center gap-1 mt-0.5" style="font-size: 0.78rem;">
+                                            <i class="bi bi-building text-sky-600"></i> ${tenToa}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3.5 px-4">
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                                    <i class="bi bi-tag-fill text-sky-600"></i> ${r.loaiPhong || 'Phòng chuẩn'}
+                                </span>
+                            </td>
+                            <td class="py-3.5 px-4">
+                                <div style="min-width: 175px;">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span class="small font-bold text-dark">${dangO}/${sucChua} người</span>
+                                        <span class="badge bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs px-2 py-0.5 rounded-full font-semibold">
+                                            Còn ${conTrong} chỗ
+                                        </span>
+                                    </div>
+                                    <div class="progress" style="height: 8px; border-radius: 9999px; background: #e2e8f0;">
+                                        <div class="progress-bar rounded-pill" role="progressbar" 
+                                             style="width: ${percent}%; background: linear-gradient(90deg, #0284c7, #06b6d4, #10b981);" 
+                                             aria-valuenow="${percent}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3.5 px-4">
+                                <div class="fw-extrabold text-sky-700 fs-6 font-mono">${App.formatMoney(r.giaPhong)}</div>
+                                <div class="text-muted" style="font-size: 0.72rem;">/ tháng</div>
+                            </td>
+                            <td class="py-3.5 px-4">
+                                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-xs">
+                                    <span class="pulse-radar-container">
+                                        <span class="pulse-radar-ring"></span>
+                                        <span class="pulse-radar-core"></span>
+                                    </span>
+                                    Còn slot
+                                </span>
+                            </td>
+                            <td class="py-3.5 px-4 text-end">
+                                <div class="d-inline-flex gap-1.5">
+                                    <a href="/dang-ky-phong.html" class="btn btn-sm btn-primary rounded-pill px-3 py-1.5 text-xs shadow-xs d-inline-flex align-items-center gap-1">
+                                        <i class="bi bi-person-plus-fill"></i> Xếp ngay
+                                    </a>
+                                    <a href="/phong.html" class="btn btn-sm btn-outline-secondary rounded-pill px-2.5 py-1.5 text-xs" title="Xem chi tiết phòng">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
-                    `).join('');
+                        `;
+                    }).join('');
                 }
             } else {
-                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-danger"><i class="bi bi-exclamation-triangle me-1"></i> Không thể tải dữ liệu phòng (Kiểm tra kết nối Backend)</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-5 text-danger"><i class="bi bi-exclamation-triangle me-1"></i> Không thể tải dữ liệu phòng (Kiểm tra kết nối Backend)</td></tr>`;
             }
         }
     </script>
