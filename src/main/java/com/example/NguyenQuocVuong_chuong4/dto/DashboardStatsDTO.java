@@ -1,4 +1,4 @@
-package com.example.NguyenQuocVuong_chuong4.controller;
+package com.example.NguyenQuocVuong_chuong4.dto;
 
 public record DashboardStatsDTO(
         long totalStudents,

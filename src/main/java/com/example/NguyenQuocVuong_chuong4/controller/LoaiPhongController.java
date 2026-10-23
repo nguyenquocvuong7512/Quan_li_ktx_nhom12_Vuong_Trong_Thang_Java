@@ -1,5 +1,6 @@
 package com.example.NguyenQuocVuong_chuong4.controller;
 
+import com.example.NguyenQuocVuong_chuong4.dto.LoaiPhongDTO;
 import com.example.NguyenQuocVuong_chuong4.model.Phong;
 import com.example.NguyenQuocVuong_chuong4.repository.PhongRepository;
 import org.springframework.web.bind.annotation.GetMapping;

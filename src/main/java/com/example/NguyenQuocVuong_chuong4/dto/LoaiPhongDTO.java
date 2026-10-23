@@ -1,4 +1,4 @@
-package com.example.NguyenQuocVuong_chuong4.controller;
+package com.example.NguyenQuocVuong_chuong4.dto;
 
 import java.math.BigDecimal;
 import java.util.List;

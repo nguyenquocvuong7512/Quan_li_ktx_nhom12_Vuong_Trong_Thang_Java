@@ -1,4 +1,4 @@
-package com.example.NguyenQuocVuong_chuong4.controller;
+package com.example.NguyenQuocVuong_chuong4.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
