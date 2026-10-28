@@ -1,5 +1,7 @@
 package com.example.NguyenQuocVuong_chuong4.dto;
 
+import java.math.BigDecimal;
+
 public record DashboardStatsDTO(
         long totalStudents,
         long totalBuildings,
@@ -9,6 +11,11 @@ public record DashboardStatsDTO(
         long occupiedRooms,
         long totalAccounts,
         long totalContracts,
-        long activeContracts
+        long activeContracts,
+        long totalInvoices,
+        long unpaidInvoices,
+        long overdueInvoices,
+        BigDecimal totalRevenue,
+        BigDecimal totalDebt
 ) {
 }
