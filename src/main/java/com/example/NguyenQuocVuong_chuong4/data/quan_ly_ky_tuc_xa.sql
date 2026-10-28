@@ -170,6 +170,7 @@ CREATE TABLE tai_san_phong (
     ngay_cap DATE NOT NULL,
     ngay_thu_hoi DATE NULL,
     trang_thai VARCHAR(30) NOT NULL DEFAULT 'dang_su_dung',
+    ghi_chu TEXT NULL,
     CONSTRAINT chk_tai_san_phong_so_luong CHECK (so_luong > 0),
     CONSTRAINT chk_tai_san_phong_ngay CHECK (ngay_thu_hoi IS NULL OR ngay_thu_hoi >= ngay_cap),
     CONSTRAINT fk_tsp_tai_san FOREIGN KEY (tai_san_id)
@@ -201,19 +202,38 @@ CREATE TABLE lich_su_tai_san (
 -- 7. Khoan thu va thanh toan
 CREATE TABLE khoan_thu (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    ma_hoa_don VARCHAR(50) NULL UNIQUE,
+    thang VARCHAR(20) NULL,
     sinh_vien_id BIGINT UNSIGNED NOT NULL,
     hop_dong_id BIGINT UNSIGNED NULL,
-    loai_khoan_thu VARCHAR(50) NOT NULL,
-    so_tien DECIMAL(12,2) NOT NULL,
+    phong_id BIGINT UNSIGNED NULL,
+    loai_khoan_thu VARCHAR(50) NOT NULL DEFAULT 'hoa_don_thang',
+    so_tien DECIMAL(12,2) NOT NULL DEFAULT 0,
+    tien_phong DECIMAL(12,2) NOT NULL DEFAULT 0,
+    tien_dien DECIMAL(12,2) NOT NULL DEFAULT 0,
+    chi_so_dien_cu INT NULL DEFAULT 0,
+    chi_so_dien_moi INT NULL DEFAULT 0,
+    tien_nuoc DECIMAL(12,2) NOT NULL DEFAULT 0,
+    chi_so_nuoc_cu INT NULL DEFAULT 0,
+    chi_so_nuoc_moi INT NULL DEFAULT 0,
+    tien_internet DECIMAL(12,2) NOT NULL DEFAULT 0,
+    tien_dich_vu DECIMAL(12,2) NOT NULL DEFAULT 0,
+    da_thanh_toan DECIMAL(12,2) NOT NULL DEFAULT 0,
+    con_lai DECIMAL(12,2) NOT NULL DEFAULT 0,
     han_thanh_toan DATE NULL,
     trang_thai VARCHAR(30) NOT NULL DEFAULT 'chua_thanh_toan',
+    ghi_chu TEXT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT chk_khoan_thu_so_tien CHECK (so_tien >= 0),
     CONSTRAINT fk_khoan_thu_sinh_vien FOREIGN KEY (sinh_vien_id)
         REFERENCES sinh_vien(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     CONSTRAINT fk_khoan_thu_hop_dong FOREIGN KEY (hop_dong_id)
         REFERENCES hop_dong(id) ON UPDATE CASCADE ON DELETE SET NULL,
+    CONSTRAINT fk_khoan_thu_phong FOREIGN KEY (phong_id)
+        REFERENCES phong(id) ON UPDATE CASCADE ON DELETE SET NULL,
     INDEX idx_khoan_thu_sinh_vien (sinh_vien_id),
+    INDEX idx_khoan_thu_phong (phong_id),
+    INDEX idx_khoan_thu_thang (thang),
     INDEX idx_khoan_thu_trang_thai (trang_thai)
 ) ENGINE=InnoDB;
 
@@ -225,6 +245,8 @@ CREATE TABLE thanh_toan (
     ma_giao_dich VARCHAR(100) NULL UNIQUE,
     thoi_gian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     trang_thai VARCHAR(30) NOT NULL DEFAULT 'thanh_cong',
+    ghi_chu VARCHAR(255) NULL,
+    nguoi_thu VARCHAR(100) NULL,
     CONSTRAINT chk_thanh_toan_so_tien CHECK (so_tien > 0),
     CONSTRAINT fk_thanh_toan_khoan_thu FOREIGN KEY (khoan_thu_id)
         REFERENCES khoan_thu(id) ON UPDATE CASCADE ON DELETE RESTRICT,

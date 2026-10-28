@@ -24,17 +24,20 @@ public class DashboardController {
     private final PhongRepository phongRepository;
     private final NguoiDungRepository nguoiDungRepository;
     private final HopDongRepository hopDongRepository;
+    private final com.example.NguyenQuocVuong_chuong4.repository.KhoanThuRepository khoanThuRepository;
 
     public DashboardController(SinhVienRepository sinhVienRepository,
                                ToaNhaRepository toaNhaRepository,
                                PhongRepository phongRepository,
                                NguoiDungRepository nguoiDungRepository,
-                               HopDongRepository hopDongRepository) {
+                               HopDongRepository hopDongRepository,
+                               com.example.NguyenQuocVuong_chuong4.repository.KhoanThuRepository khoanThuRepository) {
         this.sinhVienRepository = sinhVienRepository;
         this.toaNhaRepository = toaNhaRepository;
         this.phongRepository = phongRepository;
         this.nguoiDungRepository = nguoiDungRepository;
         this.hopDongRepository = hopDongRepository;
+        this.khoanThuRepository = khoanThuRepository;
     }
 
     @GetMapping("/stats")
@@ -70,6 +73,25 @@ public class DashboardController {
                 .filter(h -> "dang_hieu_luc".equalsIgnoreCase(h.getTrangThai()))
                 .count();
 
+        List<com.example.NguyenQuocVuong_chuong4.model.KhoanThu> invoices = khoanThuRepository.findAll();
+        long totalInvoices = invoices.size();
+        long unpaidInvoices = invoices.stream()
+                .filter(k -> !"da_thanh_toan".equalsIgnoreCase(k.getTrangThai()))
+                .count();
+        long overdueInvoices = invoices.stream()
+                .filter(k -> "qua_han".equalsIgnoreCase(k.getTrangThai())
+                        || (!"da_thanh_toan".equalsIgnoreCase(k.getTrangThai())
+                        && k.getHanThanhToan() != null && java.time.LocalDate.now().isAfter(k.getHanThanhToan())))
+                .count();
+
+        java.math.BigDecimal totalRevenue = invoices.stream()
+                .map(k -> k.getDaThanhToan() != null ? k.getDaThanhToan() : java.math.BigDecimal.ZERO)
+                .reduce(java.math.BigDecimal.ZERO, java.math.BigDecimal::add);
+
+        java.math.BigDecimal totalDebt = invoices.stream()
+                .map(k -> k.getConLai() != null ? k.getConLai() : java.math.BigDecimal.ZERO)
+                .reduce(java.math.BigDecimal.ZERO, java.math.BigDecimal::add);
+
         return new DashboardStatsDTO(
                 totalStudents,
                 totalBuildings,
@@ -79,7 +101,12 @@ public class DashboardController {
                 occupiedRooms,
                 totalAccounts,
                 totalContracts,
-                activeContracts
+                activeContracts,
+                totalInvoices,
+                unpaidInvoices,
+                overdueInvoices,
+                totalRevenue,
+                totalDebt
         );
     }
 }
