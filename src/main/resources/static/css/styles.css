@@ -216,9 +216,10 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 
 .sidebar-footer {
-    padding: 1.25rem 1rem;
+    padding: 1rem;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     background: rgba(255, 255, 255, 0.02);
+    flex-shrink: 0;
 }
 
 /* ===================== TOPBAR ===================== */
@@ -878,3 +879,66 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
 }
+
+/* ========================================================
+   PRINT STYLES FOR PHIẾU THU TIỀN KÝ TÚC XÁ
+   ======================================================== */
+@media print {
+    body {
+        background: #fff !important;
+        color: #000 !important;
+        font-size: 13pt;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    #sidebar, #topbar, .btn, .modal-footer, .modal-header .btn-close,
+    .nav-tabs, .filter-card, .toast-container, .no-print {
+        display: none !important;
+    }
+
+    #content {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+    }
+
+    .modal {
+        position: static !important;
+        display: block !important;
+        padding: 0 !important;
+        background: none !important;
+    }
+
+    .modal-dialog {
+        max-width: 100% !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+    }
+
+    .modal-content {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+    }
+
+    .modal-body {
+        padding: 0 !important;
+    }
+
+    .phieu-thu-container {
+        border: 2px solid #000 !important;
+        padding: 24px !important;
+        margin: 10px auto !important;
+        max-width: 780px !important;
+        page-break-inside: avoid;
+        box-shadow: none !important;
+        background: #fff !important;
+    }
+
+    .phieu-thu-table th, .phieu-thu-table td {
+        border: 1px solid #000 !important;
+        color: #000 !important;
+    }
+}
+
