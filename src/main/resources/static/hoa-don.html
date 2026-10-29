@@ -788,13 +788,17 @@
                                             <span class="text-muted" style="font-size: 0.72rem;">Sinh viên:</span>
                                             <div class="fw-bold text-dark text-truncate" id="pay-student-name">-</div>
                                         </div>
-                                        <div class="col-6 pt-1 border-top mt-1">
-                                            <span class="text-muted" style="font-size: 0.72rem;">Tổng hóa đơn:</span>
-                                            <div class="fw-bold text-secondary" id="pay-total-amount">0 ₫</div>
+                                        <div class="col-4 pt-1 border-top mt-1">
+                                            <span class="text-muted" style="font-size: 0.70rem;">Tổng tiền:</span>
+                                            <div class="fw-bold text-secondary small" id="pay-total-amount">0 ₫</div>
                                         </div>
-                                        <div class="col-6 pt-1 border-top mt-1">
-                                            <span class="text-danger fw-semibold" style="font-size: 0.72rem;">Số tiền còn nợ:</span>
-                                            <div class="fw-bold text-danger fs-6" id="pay-remain-amount">0 ₫</div>
+                                        <div class="col-4 pt-1 border-top mt-1">
+                                            <span class="text-success fw-semibold" style="font-size: 0.70rem;">Đã trả:</span>
+                                            <div class="fw-bold text-success small" id="pay-paid-amount">0 ₫</div>
+                                        </div>
+                                        <div class="col-4 pt-1 border-top mt-1">
+                                            <span class="text-danger fw-semibold" style="font-size: 0.70rem;">Còn nợ:</span>
+                                            <div class="fw-bold text-danger small" id="pay-remain-amount">0 ₫</div>
                                         </div>
                                     </div>
                                 </div>
@@ -1648,27 +1652,49 @@
         // ================= GHI NHẬN THANH TOÁN =================
         function openPaymentModal(id) {
             const invoice = allInvoices.find(k => k.id === id);
-            if (!invoice) return;
+            if (!invoice) {
+                App.toast('Không tìm thấy thông tin hóa đơn #' + id, 'warning');
+                return;
+            }
 
-            document.getElementById('pay-inv-id').value = invoice.id;
-            document.getElementById('pay-inv-code').textContent = invoice.maHoaDon || ('HD-' + invoice.id);
-            document.getElementById('pay-student-name').textContent = invoice.sinhVien && invoice.sinhVien.nguoiDung ? invoice.sinhVien.nguoiDung.hoTen : 'Sinh viên';
-            document.getElementById('pay-total-amount').textContent = App.formatMoney(invoice.soTien);
-            document.getElementById('pay-paid-amount').textContent = App.formatMoney(invoice.daThanhToan);
-            document.getElementById('pay-remain-amount').textContent = App.formatMoney(invoice.conLai);
+            const setVal = (elId, val) => { const el = document.getElementById(elId); if (el) el.value = val; };
+            const setTxt = (elId, txt) => { const el = document.getElementById(elId); if (el) el.textContent = txt; };
+
+            setVal('pay-inv-id', invoice.id);
+            setTxt('pay-inv-code', invoice.maHoaDon || ('HD-' + invoice.id));
+            setTxt('pay-student-name', invoice.sinhVien && invoice.sinhVien.nguoiDung ? invoice.sinhVien.nguoiDung.hoTen : 'Sinh viên');
+            setTxt('pay-total-amount', App.formatMoney(invoice.soTien));
+            setTxt('pay-paid-amount', App.formatMoney(invoice.daThanhToan));
+            setTxt('pay-remain-amount', App.formatMoney(invoice.conLai));
 
             // Default amount: remaining debt
-            document.getElementById('pay-amount').value = invoice.conLai;
-            document.getElementById('pay-amount').oninput = updateVietQr;
-            document.getElementById('pay-amount').max = invoice.conLai;
-            document.getElementById('pay-tx-code').value = '';
-            document.getElementById('pay-note').value = 'Thanh toán tiền KTX kỳ ' + (invoice.thang || '');
+            const payAmountEl = document.getElementById('pay-amount');
+            if (payAmountEl) {
+                payAmountEl.value = invoice.conLai;
+                payAmountEl.oninput = updateVietQr;
+                payAmountEl.max = invoice.conLai;
+            }
+            setVal('pay-tx-code', '');
+            setVal('pay-note', 'Thanh toán tiền KTX kỳ ' + (invoice.thang || ''));
 
             // Initialize VietQR mode
-            document.getElementById('pay-method').value = 'vietqr';
+            setVal('pay-method', 'vietqr');
             handlePaymentMethodChange();
 
-            paymentModal.show();
+            try {
+                if (!paymentModal) {
+                    paymentModal = new bootstrap.Modal(document.getElementById('payment-modal'));
+                }
+                paymentModal.show();
+            } catch (err) {
+                console.error('Error showing paymentModal:', err);
+                // Fallback direct show
+                const mEl = document.getElementById('payment-modal');
+                if (mEl) {
+                    const bsM = bootstrap.Modal.getOrCreateInstance(mEl);
+                    bsM.show();
+                }
+            }
         }
 
         function fillFullPayment() {
