@@ -848,12 +848,12 @@
                                 </div>
                             </div>
 
-                            <!-- CỘT PHẢI: KHUNG THANH TOÁN ONLINE ĐA KÊNH (MBBANK & MOMO) -->
+                            <!-- CỘT PHẢI: KHUNG THANH TOÁN ONLINE ĐA KÊNH PHÓNG TO ĐẦY KHUNG (MBBANK & MOMO) -->
                             <div class="col-12 col-lg-6" id="vietqr-col">
                                 <div id="vietqr-container" class="h-100 p-2.5 rounded-3 border d-flex flex-column justify-content-between transition-all" style="background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%); border-color: #BAE6FD !important;">
                                     <div>
                                         <!-- Header chọn kênh thanh toán & chế độ QR -->
-                                        <div class="d-flex align-items-center justify-content-between mb-2 pb-1.5 border-bottom border-sky-200">
+                                        <div class="d-flex align-items-center justify-content-between mb-1.5 pb-1 border-bottom border-sky-200">
                                             <!-- Chọn kênh MBBank hoặc MoMo -->
                                             <div class="btn-group btn-group-sm" role="group">
                                                 <button type="button" class="btn btn-xs btn-primary fw-semibold active py-0.5 px-2" style="font-size: 0.70rem;" id="btn-chan-mb" onclick="setPaymentChannel('mb')">
@@ -872,7 +872,7 @@
                                         </div>
 
                                         <!-- Badge kênh hiển thị -->
-                                        <div class="d-flex align-items-center justify-content-between mb-1.5">
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
                                             <div class="d-flex align-items-center gap-1.5">
                                                 <span class="badge bg-primary px-1.5 py-0.5" style="font-size: 0.68rem;" id="vqr-badge-system">
                                                     <i class="bi bi-qr-code-scan me-1"></i> VietQR 24/7
@@ -884,46 +884,46 @@
                                             <span class="text-muted fw-semibold" style="font-size: 0.64rem;" id="vqr-app-hint">Quét bằng mọi App</span>
                                         </div>
 
-                                        <div class="d-flex gap-2.5 align-items-center">
-                                            <!-- QR Code Box -->
-                                            <div class="text-center flex-shrink-0">
-                                                <div class="p-1.5 bg-white rounded-3 shadow-sm border border-sky-100 d-inline-block">
-                                                    <img id="vietqr-image" src="" alt="Mã QR Thanh Toán" class="img-fluid rounded" style="width: 120px; height: 120px; object-fit: contain;" onerror="handleVietQrImgError(this)">
-                                                    <div class="small text-muted mt-0.5 fw-bold" style="font-size: 0.62rem;" id="vqr-scan-label">Quét mã nhận diện 24/7</div>
+                                        <!-- Vùng QR Code phóng to trung tâm đầy khung -->
+                                        <div class="text-center my-1.5">
+                                            <div class="p-2 bg-white rounded-3 shadow-sm border border-sky-200 d-inline-block position-relative" style="box-shadow: 0 4px 14px rgba(0,0,0,0.06) !important;">
+                                                <img id="vietqr-image" src="" alt="Mã QR Thanh Toán" class="rounded d-block mx-auto" style="width: 185px; height: 185px; object-fit: contain;" onerror="handleVietQrImgError(this)">
+                                                <div class="small text-muted mt-1 fw-bold text-center" style="font-size: 0.66rem;" id="vqr-scan-label">
+                                                    <i class="bi bi-qr-code me-1 text-primary"></i> Quét mã nhận diện tự động 24/7
                                                 </div>
                                             </div>
+                                        </div>
 
-                                            <!-- Bank Info Details -->
-                                            <div class="flex-grow-1 small">
-                                                <div class="mb-1">
-                                                    <span class="text-muted d-block" style="font-size: 0.68rem;" id="vqr-acc-label">Số TK MBBank:</span>
-                                                    <div class="d-flex align-items-center gap-1">
-                                                        <strong class="font-monospace text-dark" id="vqr-acc-num" style="font-size: 0.85rem;">0374442247</strong>
-                                                        <button type="button" class="btn btn-outline-primary btn-sm py-0 px-1" style="font-size: 0.65rem;" onclick="copyVqrAccount()">
-                                                            <i class="bi bi-clipboard"></i>
-                                                        </button>
-                                                    </div>
+                                        <!-- Thông tin tài khoản & Cú pháp chuyển tiền phủ kín hàng ngang -->
+                                        <div class="bg-white bg-opacity-90 p-2 rounded-2 border border-sky-200 mb-1.5 small shadow-xs">
+                                            <div class="d-flex justify-content-between align-items-center mb-1 pb-1 border-bottom border-sky-100">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <span class="text-muted" style="font-size: 0.70rem;" id="vqr-acc-label">Số TK MBBank:</span>
+                                                    <strong class="font-monospace text-dark fw-bold" id="vqr-acc-num" style="font-size: 0.85rem;">0374442247</strong>
+                                                    <button type="button" class="btn btn-outline-primary btn-xs py-0 px-1 border-0" onclick="copyVqrAccount()" title="Sao chép số tài khoản">
+                                                        <i class="bi bi-clipboard"></i>
+                                                    </button>
                                                 </div>
-                                                <div class="mb-1">
-                                                    <span class="text-muted d-block" style="font-size: 0.68rem;">Chủ tài khoản:</span>
-                                                    <strong class="text-dark d-block text-truncate" id="vqr-acc-name" style="font-size: 0.76rem;">TA VAN THANG</strong>
+                                                <div class="text-truncate ps-1">
+                                                    <span class="text-muted" style="font-size: 0.68rem;">Chủ TK:</span>
+                                                    <strong class="text-dark fw-bold" id="vqr-acc-name" style="font-size: 0.74rem;">TA VAN THANG</strong>
                                                 </div>
-                                                <div class="mb-0">
-                                                    <span class="text-muted d-block" style="font-size: 0.68rem;">Nội dung chuyển khoản:</span>
-                                                    <div class="d-flex align-items-center gap-1">
-                                                        <code class="px-1.5 py-0.5 bg-white border border-sky-200 rounded text-primary fw-bold text-truncate" id="vqr-content" style="font-size: 0.72rem; max-width: 130px;">KTX HD01</code>
-                                                        <button type="button" class="btn btn-outline-primary btn-sm py-0 px-1" style="font-size: 0.65rem;" onclick="copyVqrContent()">
-                                                            <i class="bi bi-clipboard"></i>
-                                                        </button>
-                                                    </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span class="text-muted text-nowrap me-1" style="font-size: 0.70rem;">Nội dung CK:</span>
+                                                <div class="d-flex align-items-center gap-1 overflow-hidden flex-grow-1 justify-content-end">
+                                                    <code class="px-1.5 py-0.5 bg-sky-50 border border-sky-200 rounded text-primary fw-bold text-truncate" id="vqr-content" style="font-size: 0.72rem; max-width: 210px;">KTX HD01 SV01</code>
+                                                    <button type="button" class="btn btn-outline-primary btn-xs py-0 px-1 border-0 flex-shrink-0" onclick="copyVqrContent()" title="Sao chép nội dung">
+                                                        <i class="bi bi-clipboard"></i>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
                                     <!-- Nút Webhook tự động -->
-                                    <div class="mt-2 pt-1.5 border-top border-sky-200">
-                                        <button type="button" class="btn btn-primary btn-sm w-100 fw-bold shadow-sm py-1" id="btn-simulate-webhook" onclick="simulateVietQrWebhook()" style="font-size: 0.74rem;">
+                                    <div class="pt-1 border-top border-sky-200">
+                                        <button type="button" class="btn btn-primary btn-sm w-100 fw-bold shadow-sm py-1.5" id="btn-simulate-webhook" onclick="simulateVietQrWebhook()" style="font-size: 0.76rem;">
                                             <i class="bi bi-lightning-charge-fill me-1"></i> Giả Lập Webhook Nhận Tiền
                                         </button>
                                     </div>
@@ -2104,23 +2104,23 @@
             if (currentChannel === 'mb') {
                 const bankId = 'MB'; // MBBank
                 const accountNo = '0374442247';
-                const qrUrl = `https://img.vietqr.io/image/${bankId}-${accountNo}-compact2.png?amount=${amount}&addInfo=${encodeURIComponent(contentStr)}&accountName=${accountName}`;
-                qrImg.src = (currentQrMode === 'static') ? '/assets/images/vietqr-crop.png' : qrUrl;
+                const qrUrl = `https://img.vietqr.io/image/${bankId}-${accountNo}-qr_only.png?amount=${amount}&addInfo=${encodeURIComponent(contentStr)}&accountName=${accountName}`;
+                qrImg.src = (currentQrMode === 'static') ? '/assets/images/vietqr-square.png' : qrUrl;
             } else {
                 // Kênh Ví MoMo
                 const bankId = 'MOMO'; // MoMo Napas 24/7
                 const accountNo = 'PSP2602019300000514';
-                const qrUrl = `https://img.vietqr.io/image/${bankId}-${accountNo}-compact2.png?amount=${amount}&addInfo=${encodeURIComponent(contentStr)}&accountName=${accountName}`;
-                qrImg.src = (currentQrMode === 'static') ? '/assets/images/momo-crop.png' : qrUrl;
+                const qrUrl = `https://img.vietqr.io/image/${bankId}-${accountNo}-qr_only.png?amount=${amount}&addInfo=${encodeURIComponent(contentStr)}&accountName=${accountName}`;
+                qrImg.src = (currentQrMode === 'static') ? '/assets/images/momo-square.png' : qrUrl;
             }
         }
 
         function handleVietQrImgError(img) {
             img.onerror = null;
             if (currentChannel === 'mb') {
-                img.src = '/assets/images/vietqr-crop.png';
+                img.src = '/assets/images/vietqr-square.png';
             } else {
-                img.src = '/assets/images/momo-crop.png';
+                img.src = '/assets/images/momo-square.png';
             }
         }
 
