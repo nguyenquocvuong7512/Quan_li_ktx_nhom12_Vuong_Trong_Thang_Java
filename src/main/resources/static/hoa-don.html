@@ -757,135 +757,165 @@
 
     <!-- ===================== MODAL GHI NHẬN THANH TOÁN ===================== -->
     <div class="modal fade" id="payment-modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg rounded-4">
-                <div class="modal-header border-bottom py-3 px-4 bg-light">
-                    <h5 class="modal-title fs-6 fw-bold text-dark">
-                        <i class="bi bi-cash-stack text-success me-1"></i> Ghi Nhận Thu Tiền / Thanh Toán
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="modal-header border-bottom py-2.5 px-4 bg-light">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle p-1.5 rounded-3">
+                            <i class="bi bi-credit-card-2-front-fill fs-6"></i>
+                        </span>
+                        <h5 class="modal-title fs-6 fw-bold text-dark mb-0">
+                            Ghi Nhận Thu Tiền & Thanh Toán Hóa Đơn
+                        </h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body p-3 p-lg-4">
                     <form id="payment-form" onsubmit="savePayment(event)">
                         <input type="hidden" id="pay-inv-id">
 
-                        <div class="p-3 bg-light rounded-3 mb-3 border">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span class="text-muted small">Mã hóa đơn:</span>
-                                <strong class="text-dark" id="pay-inv-code">-</strong>
-                            </div>
-                            <div class="d-flex justify-content-between mb-1">
-                                <span class="text-muted small">Sinh viên:</span>
-                                <strong class="text-dark" id="pay-student-name">-</strong>
-                            </div>
-                            <div class="d-flex justify-content-between mb-1">
-                                <span class="text-muted small">Tổng tiền hóa đơn:</span>
-                                <strong class="text-dark" id="pay-total-amount">0 ₫</strong>
-                            </div>
-                            <div class="d-flex justify-content-between mb-1">
-                                <span class="text-muted small">Đã trả:</span>
-                                <span class="text-success fw-bold" id="pay-paid-amount">0 ₫</span>
-                            </div>
-                            <div class="d-flex justify-content-between pt-1 border-top">
-                                <span class="text-danger small fw-semibold">Số tiền còn nợ:</span>
-                                <strong class="text-danger fs-6" id="pay-remain-amount">0 ₫</strong>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <label class="form-label small fw-semibold mb-0">Số tiền thanh toán lần này <span class="text-danger">*</span></label>
-                                <a href="javascript:void(0)" class="small text-primary text-decoration-none fw-semibold" onclick="fillFullPayment()">
-                                    <i class="bi bi-check-all"></i> Trả hết nợ
-                                </a>
-                            </div>
-                            <div class="input-group">
-                                <input type="number" class="form-control fw-bold fs-6" id="pay-amount" min="1000" step="1000" required>
-                                <span class="input-group-text fw-bold">₫</span>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label small fw-semibold">Phương thức thanh toán <span class="text-danger">*</span></label>
-                            <select class="form-select form-select-sm" id="pay-method" onchange="handlePaymentMethodChange()" required>
-                                <option value="vietqr">⚡ Quét mã VietQR Online (Tự động đối soát 24/7)</option>
-                                <option value="chuyen_khoan">🏦 Chuyển khoản ngân hàng</option>
-                                <option value="tien_mat">💵 Tiền mặt tại quầy</option>
-                                <option value="vi_dien_tu">📱 Ví điện tử (VNPay / MoMo)</option>
-                                <option value="the">💳 Quẹt thẻ ATM / POS</option>
-                            </select>
-                        </div>
-
-                        <!-- Khung Thanh Toán Online VietQR Napas 24/7 -->
-                        <div id="vietqr-container" class="p-3 mb-3 rounded-3 border bg-gradient text-dark" style="background: linear-gradient(135deg, #F0F9FF, #E0F2FE); border-color: #BAE6FD !important;">
-                            <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom border-sky-200">
-                                <div class="d-flex align-items-center gap-1.5">
-                                    <span class="badge bg-primary px-2.5 py-1.5"><i class="bi bi-qr-code-scan me-1"></i> VietQR Napas 24/7</span>
-                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1 small fw-bold"><i class="bi bi-star-fill me-1"></i>MBBank</span>
-                                </div>
-                                <div class="btn-group btn-group-sm" role="group">
-                                    <button type="button" class="btn btn-xs btn-primary fw-semibold active" id="btn-qr-dynamic" onclick="setQrMode('dynamic')">QR Tự Điền Tiền</button>
-                                    <button type="button" class="btn btn-xs btn-outline-primary fw-semibold" id="btn-qr-static" onclick="setQrMode('static')">QR Gốc MB</button>
-                                </div>
-                            </div>
-
-                            <div class="row g-3 align-items-center">
-                                <div class="col-sm-5 text-center">
-                                    <div class="p-2 bg-white rounded-3 shadow-sm border border-sky-100 d-inline-block">
-                                        <img id="vietqr-image" src="" alt="Mã VietQR" class="img-fluid rounded" style="max-width: 145px; height: auto;" onerror="handleVietQrImgError(this)">
-                                        <div class="small text-muted mt-1 fw-bold" style="font-size: 0.65rem;">Quét bằng app ngân hàng</div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-7">
-                                    <div class="small mb-1.5">
-                                        <span class="text-muted d-block" style="font-size: 0.72rem;">Số tài khoản thụ hưởng:</span>
-                                        <div class="d-flex align-items-center gap-1">
-                                            <strong class="font-monospace text-dark fs-6" id="vqr-acc-num">0374442247</strong>
-                                            <button type="button" class="btn btn-outline-primary btn-sm py-0 px-1.5" style="font-size: 0.7rem;" onclick="copyVqrText('0374442247', 'số tài khoản')">
-                                                <i class="bi bi-clipboard"></i>
-                                            </button>
+                        <div class="row g-3">
+                            <!-- CỘT TRÁI: THÔNG TIN HÓA ĐƠN & NHẬP LIỆU -->
+                            <div class="col-12 col-lg-6" id="pay-left-col">
+                                <!-- Card Tóm tắt hóa đơn thu gọn -->
+                                <div class="p-2.5 rounded-3 mb-2.5 border" style="background: #F8FAFC;">
+                                    <div class="row g-1 small">
+                                        <div class="col-6">
+                                            <span class="text-muted" style="font-size: 0.72rem;">Mã hóa đơn:</span>
+                                            <div class="fw-bold text-dark text-truncate" id="pay-inv-code">-</div>
+                                        </div>
+                                        <div class="col-6">
+                                            <span class="text-muted" style="font-size: 0.72rem;">Sinh viên:</span>
+                                            <div class="fw-bold text-dark text-truncate" id="pay-student-name">-</div>
+                                        </div>
+                                        <div class="col-6 pt-1 border-top mt-1">
+                                            <span class="text-muted" style="font-size: 0.72rem;">Tổng hóa đơn:</span>
+                                            <div class="fw-bold text-secondary" id="pay-total-amount">0 ₫</div>
+                                        </div>
+                                        <div class="col-6 pt-1 border-top mt-1">
+                                            <span class="text-danger fw-semibold" style="font-size: 0.72rem;">Số tiền còn nợ:</span>
+                                            <div class="fw-bold text-danger fs-6" id="pay-remain-amount">0 ₫</div>
                                         </div>
                                     </div>
-                                    <div class="small mb-1.5">
-                                        <span class="text-muted d-block" style="font-size: 0.72rem;">Chủ tài khoản:</span>
-                                        <strong class="text-dark" style="font-size: 0.78rem;">TA VAN THANG</strong>
+                                </div>
+
+                                <!-- Số tiền thanh toán -->
+                                <div class="mb-2.5">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <label class="form-label small fw-semibold mb-0" style="font-size: 0.78rem;">Số tiền thanh toán lần này <span class="text-danger">*</span></label>
+                                        <a href="javascript:void(0)" class="small text-primary text-decoration-none fw-semibold" style="font-size: 0.72rem;" onclick="fillFullPayment()">
+                                            <i class="bi bi-check-all"></i> Trả hết nợ
+                                        </a>
                                     </div>
-                                    <div class="small mb-2">
-                                        <span class="text-muted d-block" style="font-size: 0.72rem;">Nội dung chuyển khoản (Bắt buộc):</span>
-                                        <div class="d-flex align-items-center gap-1">
-                                            <code class="px-2 py-0.5 bg-white border border-sky-200 rounded text-primary fw-bold" id="vqr-content" style="font-size: 0.76rem;">KTX HD01</code>
-                                            <button type="button" class="btn btn-outline-primary btn-sm py-0 px-1.5" style="font-size: 0.7rem;" onclick="copyVqrContent()">
-                                                <i class="bi bi-clipboard"></i>
-                                            </button>
+                                    <div class="input-group input-group-sm">
+                                        <input type="number" class="form-control fw-bold fs-6" id="pay-amount" min="1000" step="1000" required>
+                                        <span class="input-group-text fw-bold">₫</span>
+                                    </div>
+                                </div>
+
+                                <!-- Phương thức thanh toán -->
+                                <div class="mb-2.5">
+                                    <label class="form-label small fw-semibold mb-1" style="font-size: 0.78rem;">Phương thức thanh toán <span class="text-danger">*</span></label>
+                                    <select class="form-select form-select-sm" id="pay-method" onchange="handlePaymentMethodChange()" required>
+                                        <option value="vietqr">⚡ Quét mã VietQR Online (Tự động đối soát 24/7)</option>
+                                        <option value="chuyen_khoan">🏦 Chuyển khoản ngân hàng</option>
+                                        <option value="tien_mat">💵 Tiền mặt tại quầy</option>
+                                        <option value="vi_dien_tu">📱 Ví điện tử (VNPay / MoMo)</option>
+                                        <option value="the">💳 Quẹt thẻ ATM / POS</option>
+                                    </select>
+                                </div>
+
+                                <!-- Thông tin phụ: 2 trường gọn 1 hàng -->
+                                <div class="row g-2 mb-2">
+                                    <div class="col-6">
+                                        <label class="form-label small fw-semibold mb-1" style="font-size: 0.72rem;">Mã GD / Tham chiếu</label>
+                                        <input type="text" class="form-control form-control-sm" id="pay-tx-code" placeholder="Tự sinh nếu trống" style="font-size: 0.75rem;">
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label small fw-semibold mb-1" style="font-size: 0.72rem;">Người thu tiền</label>
+                                        <input type="text" class="form-control form-control-sm" id="pay-collector" placeholder="Thu ngân" style="font-size: 0.75rem;">
+                                    </div>
+                                </div>
+
+                                <div class="mb-1">
+                                    <label class="form-label small fw-semibold mb-1" style="font-size: 0.72rem;">Ghi chú giao dịch</label>
+                                    <input type="text" class="form-control form-control-sm" id="pay-note" placeholder="VD: Nộp tiền KTX..." style="font-size: 0.75rem;">
+                                </div>
+                            </div>
+
+                            <!-- CỘT PHẢI: KHUNG VIETQR ONLINE GỌN ĐẸP -->
+                            <div class="col-12 col-lg-6" id="vietqr-col">
+                                <div id="vietqr-container" class="h-100 p-2.5 rounded-3 border d-flex flex-column justify-content-between" style="background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%); border-color: #BAE6FD !important;">
+                                    <div>
+                                        <div class="d-flex align-items-center justify-content-between mb-2 pb-1.5 border-bottom border-sky-200">
+                                            <div class="d-flex align-items-center gap-1.5">
+                                                <span class="badge bg-primary px-2 py-1" style="font-size: 0.7rem;"><i class="bi bi-qr-code-scan me-1"></i> VietQR 24/7</span>
+                                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-1.5 py-0.5 small fw-bold" style="font-size: 0.68rem;"><i class="bi bi-star-fill me-1"></i>MBBank</span>
+                                            </div>
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <button type="button" class="btn btn-xs btn-primary fw-semibold active py-0.5 px-2" style="font-size: 0.68rem;" id="btn-qr-dynamic" onclick="setQrMode('dynamic')">QR Tự Điền</button>
+                                                <button type="button" class="btn btn-xs btn-outline-primary fw-semibold py-0.5 px-2" style="font-size: 0.68rem;" id="btn-qr-static" onclick="setQrMode('static')">QR Gốc MB</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex gap-2.5 align-items-center">
+                                            <!-- QR Code Box -->
+                                            <div class="text-center flex-shrink-0">
+                                                <div class="p-1.5 bg-white rounded-3 shadow-sm border border-sky-100 d-inline-block">
+                                                    <img id="vietqr-image" src="" alt="Mã VietQR" class="img-fluid rounded" style="width: 120px; height: 120px; object-fit: contain;" onerror="handleVietQrImgError(this)">
+                                                    <div class="small text-muted mt-0.5 fw-bold" style="font-size: 0.62rem;">Quét app ngân hàng</div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Bank Info Details -->
+                                            <div class="flex-grow-1 small">
+                                                <div class="mb-1">
+                                                    <span class="text-muted d-block" style="font-size: 0.68rem;">Số TK MBBank:</span>
+                                                    <div class="d-flex align-items-center gap-1">
+                                                        <strong class="font-monospace text-dark" id="vqr-acc-num" style="font-size: 0.88rem;">0374442247</strong>
+                                                        <button type="button" class="btn btn-outline-primary btn-sm py-0 px-1" style="font-size: 0.65rem;" onclick="copyVqrText('0374442247', 'số tài khoản')">
+                                                            <i class="bi bi-clipboard"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-1">
+                                                    <span class="text-muted d-block" style="font-size: 0.68rem;">Chủ tài khoản:</span>
+                                                    <strong class="text-dark d-block text-truncate" style="font-size: 0.76rem;">TA VAN THANG</strong>
+                                                </div>
+                                                <div class="mb-0">
+                                                    <span class="text-muted d-block" style="font-size: 0.68rem;">Nội dung chuyển khoản:</span>
+                                                    <div class="d-flex align-items-center gap-1">
+                                                        <code class="px-1.5 py-0.5 bg-white border border-sky-200 rounded text-primary fw-bold text-truncate" id="vqr-content" style="font-size: 0.72rem; max-width: 130px;">KTX HD01</code>
+                                                        <button type="button" class="btn btn-outline-primary btn-sm py-0 px-1" style="font-size: 0.65rem;" onclick="copyVqrContent()">
+                                                            <i class="bi bi-clipboard"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-primary btn-sm w-100 fw-bold shadow-sm py-1.5" onclick="simulateVietQrWebhook()" style="font-size: 0.76rem;">
-                                        <i class="bi bi-lightning-charge-fill me-1"></i> Giả lập Webhook Đã Nhận Tiền
-                                    </button>
+
+                                    <!-- Nút Webhook tự động -->
+                                    <div class="mt-2 pt-1.5 border-top border-sky-200">
+                                        <button type="button" class="btn btn-primary btn-sm w-100 fw-bold shadow-sm py-1" onclick="simulateVietQrWebhook()" style="font-size: 0.74rem;">
+                                            <i class="bi bi-lightning-charge-fill me-1"></i> Giả Lập Webhook Nhận Tiền
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label small fw-semibold">Mã giao dịch / Số hóa đơn ngân hàng</label>
-                            <input type="text" class="form-control form-control-sm" id="pay-tx-code" placeholder="Tự sinh nếu để trống">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label small fw-semibold">Người thu tiền</label>
-                            <input type="text" class="form-control form-control-sm" id="pay-collector">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label small fw-semibold">Ghi chú giao dịch</label>
-                            <input type="text" class="form-control form-control-sm" id="pay-note" placeholder="VD: Sinh viên nộp đợt 1...">
-                        </div>
-
-                        <div class="modal-footer border-0 px-0 pb-0">
-                            <button type="button" class="btn btn-sm btn-light border" data-bs-dismiss="modal">Hủy</button>
-                            <button type="submit" class="btn btn-sm btn-success px-4 fw-semibold" id="pay-submit-btn">
-                                <i class="bi bi-check-circle-fill me-1"></i> Xác Nhận Đã Thu Tiền
-                            </button>
+                        <!-- Footer nút bấm -->
+                        <div class="modal-footer border-0 px-0 pb-0 pt-2.5 mt-2.5 border-top d-flex justify-content-between align-items-center">
+                            <span class="text-muted small" style="font-size: 0.72rem;">
+                                <i class="bi bi-shield-check text-success me-1"></i> Đối soát tự động 24/7 &bull; Biên lai điện tử
+                            </span>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-sm btn-light border px-3" data-bs-dismiss="modal">Đóng</button>
+                                <button type="submit" class="btn btn-sm btn-success px-3.5 fw-semibold" id="pay-submit-btn">
+                                    <i class="bi bi-check-circle-fill me-1"></i> Xác Nhận Thu Tiền
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -1899,12 +1929,22 @@
         // ================= THANH TOÁN ONLINE VIETQR NAPAS 24/7 =================
         function handlePaymentMethodChange() {
             const method = document.getElementById('pay-method').value;
-            const container = document.getElementById('vietqr-container');
-            if (method === 'vietqr' || method === 'chuyen_khoan') {
-                container.style.display = 'block';
+            const vqrCol = document.getElementById('vietqr-col');
+            const leftCol = document.getElementById('pay-left-col');
+            const isOnline = (method === 'vietqr' || method === 'chuyen_khoan');
+
+            if (vqrCol) {
+                vqrCol.style.display = isOnline ? 'block' : 'none';
+            }
+            if (leftCol) {
+                if (isOnline) {
+                    leftCol.className = 'col-12 col-lg-6';
+                } else {
+                    leftCol.className = 'col-12';
+                }
+            }
+            if (isOnline) {
                 updateVietQr();
-            } else {
-                container.style.display = 'none';
             }
         }
 
