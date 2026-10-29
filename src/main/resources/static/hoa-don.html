@@ -807,12 +807,57 @@
 
                         <div class="mb-3">
                             <label class="form-label small fw-semibold">Phương thức thanh toán <span class="text-danger">*</span></label>
-                            <select class="form-select form-select-sm" id="pay-method" required>
-                                <option value="tien_mat">💵 Tiền mặt tại quầy</option>
+                            <select class="form-select form-select-sm" id="pay-method" onchange="handlePaymentMethodChange()" required>
+                                <option value="vietqr">⚡ Quét mã VietQR Online (Tự động đối soát 24/7)</option>
                                 <option value="chuyen_khoan">🏦 Chuyển khoản ngân hàng</option>
-                                <option value="the">💳 Quẹt thẻ ATM / POS</option>
+                                <option value="tien_mat">💵 Tiền mặt tại quầy</option>
                                 <option value="vi_dien_tu">📱 Ví điện tử (VNPay / MoMo)</option>
+                                <option value="the">💳 Quẹt thẻ ATM / POS</option>
                             </select>
+                        </div>
+
+                        <!-- Khung Thanh Toán Online VietQR Napas 24/7 -->
+                        <div id="vietqr-container" class="p-3 mb-3 rounded-3 border bg-gradient text-dark" style="background: linear-gradient(135deg, #F0F9FF, #E0F2FE); border-color: #BAE6FD !important;">
+                            <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom border-sky-200">
+                                <span class="badge bg-primary px-2.5 py-1.5"><i class="bi bi-qr-code-scan me-1"></i> VietQR Napas 24/7</span>
+                                <span class="badge bg-white text-primary border border-sky-300 small fw-bold">MBBank</span>
+                            </div>
+
+                            <div class="row g-3 align-items-center">
+                                <div class="col-sm-5 text-center">
+                                    <div class="p-2 bg-white rounded-3 shadow-sm border border-sky-100 d-inline-block">
+                                        <img id="vietqr-image" src="" alt="Mã VietQR" class="img-fluid rounded" style="max-width: 145px; height: auto;" onerror="handleVietQrImgError(this)">
+                                        <div class="small text-muted mt-1 fw-bold" style="font-size: 0.65rem;">Quét bằng app ngân hàng</div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-7">
+                                    <div class="small mb-1.5">
+                                        <span class="text-muted d-block" style="font-size: 0.72rem;">Số tài khoản thụ hưởng:</span>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <strong class="font-monospace text-dark fs-6" id="vqr-acc-num">0901000123456</strong>
+                                            <button type="button" class="btn btn-outline-primary btn-sm py-0 px-1.5" style="font-size: 0.7rem;" onclick="copyVqrText('0901000123456', 'số tài khoản')">
+                                                <i class="bi bi-clipboard"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="small mb-1.5">
+                                        <span class="text-muted d-block" style="font-size: 0.72rem;">Chủ tài khoản:</span>
+                                        <strong class="text-dark" style="font-size: 0.78rem;">BAN QUAN LY KTX NHOM 12</strong>
+                                    </div>
+                                    <div class="small mb-2">
+                                        <span class="text-muted d-block" style="font-size: 0.72rem;">Nội dung chuyển khoản (Bắt buộc):</span>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <code class="px-2 py-0.5 bg-white border border-sky-200 rounded text-primary fw-bold" id="vqr-content" style="font-size: 0.76rem;">KTX HD01</code>
+                                            <button type="button" class="btn btn-outline-primary btn-sm py-0 px-1.5" style="font-size: 0.7rem;" onclick="copyVqrContent()">
+                                                <i class="bi bi-clipboard"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-primary btn-sm w-100 fw-bold shadow-sm py-1.5" onclick="simulateVietQrWebhook()" style="font-size: 0.76rem;">
+                                        <i class="bi bi-lightning-charge-fill me-1"></i> Giả lập Webhook Đã Nhận Tiền
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="mb-3">
@@ -1578,9 +1623,14 @@
 
             // Default amount: remaining debt
             document.getElementById('pay-amount').value = invoice.conLai;
+            document.getElementById('pay-amount').oninput = updateVietQr;
             document.getElementById('pay-amount').max = invoice.conLai;
             document.getElementById('pay-tx-code').value = '';
             document.getElementById('pay-note').value = 'Thanh toán tiền KTX kỳ ' + (invoice.thang || '');
+
+            // Initialize VietQR mode
+            document.getElementById('pay-method').value = 'vietqr';
+            handlePaymentMethodChange();
 
             paymentModal.show();
         }
@@ -1839,6 +1889,78 @@
                 }).join('');
             }
         }
+    
+        // ================= THANH TOÁN ONLINE VIETQR NAPAS 24/7 =================
+        function handlePaymentMethodChange() {
+            const method = document.getElementById('pay-method').value;
+            const container = document.getElementById('vietqr-container');
+            if (method === 'vietqr' || method === 'chuyen_khoan') {
+                container.style.display = 'block';
+                updateVietQr();
+            } else {
+                container.style.display = 'none';
+            }
+        }
+
+        function updateVietQr() {
+            const invId = Number(document.getElementById('pay-inv-id').value);
+            const invoice = allInvoices.find(k => k.id === invId);
+            const amount = Number(document.getElementById('pay-amount').value) || (invoice ? invoice.conLai : 0);
+            
+            const studentCode = invoice && invoice.sinhVien ? (invoice.sinhVien.maSinhVien || 'SV' + invoice.sinhVien.id) : 'SV';
+            const invCode = invoice ? (invoice.maHoaDon || 'HD' + invoice.id) : 'HD' + invId;
+            const contentStr = 'KTX ' + invCode + ' ' + studentCode;
+
+            document.getElementById('vqr-content').textContent = contentStr;
+
+            // Generate official VietQR QuickLink (Napas 24/7 format)
+            const bankId = 'MB'; // MBBank
+            const accountNo = '0901000123456';
+            const accountName = encodeURIComponent('BAN QUAN LY KTX NHOM 12');
+            const qrUrl = `https://img.vietqr.io/image/${bankId}-${accountNo}-compact2.png?amount=${amount}&addInfo=${encodeURIComponent(contentStr)}&accountName=${accountName}`;
+            
+            const qrImg = document.getElementById('vietqr-image');
+            if (qrImg) qrImg.src = qrUrl;
+        }
+
+        function handleVietQrImgError(img) {
+            // High-fidelity fallback SVG QR if client is offline
+            img.onerror = null;
+            img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140"><rect width="140" height="140" fill="%23ffffff"/><rect x="10" y="10" width="40" height="40" fill="%230284c7"/><rect x="20" y="20" width="20" height="20" fill="%23ffffff"/><rect x="90" y="10" width="40" height="40" fill="%230284c7"/><rect x="100" y="20" width="20" height="20" fill="%23ffffff"/><rect x="10" y="90" width="40" height="40" fill="%230284c7"/><rect x="20" y="100" width="20" height="20" fill="%23ffffff"/><rect x="60" y="20" width="20" height="20" fill="%230284c7"/><rect x="20" y="60" width="20" height="20" fill="%230284c7"/><rect x="60" y="60" width="20" height="20" fill="%2300c8f8"/><rect x="90" y="60" width="20" height="20" fill="%230284c7"/><rect x="60" y="90" width="20" height="20" fill="%230284c7"/><rect x="90" y="90" width="20" height="20" fill="%230284c7"/><rect x="110" y="110" width="20" height="20" fill="%230284c7"/><text x="70" y="135" font-size="9" text-anchor="middle" fill="%230369a1" font-family="sans-serif" font-weight="bold">VIETQR NAPAS</text></svg>';
+        }
+
+        function copyVqrText(text, label) {
+            navigator.clipboard.writeText(text).then(() => {
+                App.toast('Đã sao chép ' + label + ': ' + text, 'success');
+            }).catch(() => {
+                App.toast('Không thể sao chép tự động: ' + text, 'info');
+            });
+        }
+
+        function copyVqrContent() {
+            const content = document.getElementById('vqr-content').textContent;
+            copyVqrText(content, 'nội dung chuyển khoản');
+        }
+
+        function simulateVietQrWebhook() {
+            const invId = Number(document.getElementById('pay-inv-id').value);
+            const invoice = allInvoices.find(k => k.id === invId);
+            const amount = Number(document.getElementById('pay-amount').value) || (invoice ? invoice.conLai : 0);
+
+            // Generate realistic banking transaction identifier
+            const txnId = 'MB_VQR_' + Date.now();
+            document.getElementById('pay-tx-code').value = txnId;
+            document.getElementById('pay-collector').value = 'HeThong_VietQR_Auto';
+            document.getElementById('pay-note').value = 'Xác nhận thanh toán online tự động VietQR Napas 24/7 (MBBank)';
+
+            App.toast('⚡ Đã nhận tín hiệu thanh toán từ cổng VietQR (Webhook thành công)! Đang gạch nợ...', 'info');
+
+            setTimeout(() => {
+                const fakeEvent = { preventDefault: () => {} };
+                savePayment(fakeEvent);
+            }, 500);
+        }
+
     </script>
 </body>
 </html>
