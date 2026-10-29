@@ -112,3 +112,4 @@ public class LoginAttemptService {
         return key != null ? key.trim().toLowerCase() : "anonymous";
     }
 }
+

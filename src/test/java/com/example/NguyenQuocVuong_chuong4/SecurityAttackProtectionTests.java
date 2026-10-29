@@ -147,3 +147,4 @@ class SecurityAttackProtectionTests {
         verify(chain).doFilter(request, response);
     }
 }
+

@@ -42,3 +42,4 @@ public final class XssProtectionUtil {
                 .replace("'", "&#x27;");
     }
 }
+

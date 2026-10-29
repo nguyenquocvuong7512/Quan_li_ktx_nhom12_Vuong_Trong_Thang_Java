@@ -819,8 +819,14 @@
                         <!-- Khung Thanh Toán Online VietQR Napas 24/7 -->
                         <div id="vietqr-container" class="p-3 mb-3 rounded-3 border bg-gradient text-dark" style="background: linear-gradient(135deg, #F0F9FF, #E0F2FE); border-color: #BAE6FD !important;">
                             <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom border-sky-200">
-                                <span class="badge bg-primary px-2.5 py-1.5"><i class="bi bi-qr-code-scan me-1"></i> VietQR Napas 24/7</span>
-                                <span class="badge bg-white text-primary border border-sky-300 small fw-bold">MBBank</span>
+                                <div class="d-flex align-items-center gap-1.5">
+                                    <span class="badge bg-primary px-2.5 py-1.5"><i class="bi bi-qr-code-scan me-1"></i> VietQR Napas 24/7</span>
+                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1 small fw-bold"><i class="bi bi-star-fill me-1"></i>MBBank</span>
+                                </div>
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <button type="button" class="btn btn-xs btn-primary fw-semibold active" id="btn-qr-dynamic" onclick="setQrMode('dynamic')">QR Tự Điền Tiền</button>
+                                    <button type="button" class="btn btn-xs btn-outline-primary fw-semibold" id="btn-qr-static" onclick="setQrMode('static')">QR Gốc MB</button>
+                                </div>
                             </div>
 
                             <div class="row g-3 align-items-center">
@@ -834,15 +840,15 @@
                                     <div class="small mb-1.5">
                                         <span class="text-muted d-block" style="font-size: 0.72rem;">Số tài khoản thụ hưởng:</span>
                                         <div class="d-flex align-items-center gap-1">
-                                            <strong class="font-monospace text-dark fs-6" id="vqr-acc-num">0901000123456</strong>
-                                            <button type="button" class="btn btn-outline-primary btn-sm py-0 px-1.5" style="font-size: 0.7rem;" onclick="copyVqrText('0901000123456', 'số tài khoản')">
+                                            <strong class="font-monospace text-dark fs-6" id="vqr-acc-num">0374442247</strong>
+                                            <button type="button" class="btn btn-outline-primary btn-sm py-0 px-1.5" style="font-size: 0.7rem;" onclick="copyVqrText('0374442247', 'số tài khoản')">
                                                 <i class="bi bi-clipboard"></i>
                                             </button>
                                         </div>
                                     </div>
                                     <div class="small mb-1.5">
                                         <span class="text-muted d-block" style="font-size: 0.72rem;">Chủ tài khoản:</span>
-                                        <strong class="text-dark" style="font-size: 0.78rem;">BAN QUAN LY KTX NHOM 12</strong>
+                                        <strong class="text-dark" style="font-size: 0.78rem;">TA VAN THANG</strong>
                                     </div>
                                     <div class="small mb-2">
                                         <span class="text-muted d-block" style="font-size: 0.72rem;">Nội dung chuyển khoản (Bắt buộc):</span>
@@ -1902,6 +1908,22 @@
             }
         }
 
+        
+        let currentQrMode = 'dynamic';
+        function setQrMode(mode) {
+            currentQrMode = mode;
+            const btnDyn = document.getElementById('btn-qr-dynamic');
+            const btnSta = document.getElementById('btn-qr-static');
+            if (mode === 'dynamic') {
+                if (btnDyn) { btnDyn.classList.add('btn-primary'); btnDyn.classList.remove('btn-outline-primary'); }
+                if (btnSta) { btnSta.classList.remove('btn-primary'); btnSta.classList.add('btn-outline-primary'); }
+            } else {
+                if (btnDyn) { btnDyn.classList.remove('btn-primary'); btnDyn.classList.add('btn-outline-primary'); }
+                if (btnSta) { btnSta.classList.add('btn-primary'); btnSta.classList.remove('btn-outline-primary'); }
+            }
+            updateVietQr();
+        }
+
         function updateVietQr() {
             const invId = Number(document.getElementById('pay-inv-id').value);
             const invoice = allInvoices.find(k => k.id === invId);
@@ -1915,18 +1937,20 @@
 
             // Generate official VietQR QuickLink (Napas 24/7 format)
             const bankId = 'MB'; // MBBank
-            const accountNo = '0901000123456';
-            const accountName = encodeURIComponent('BAN QUAN LY KTX NHOM 12');
+            const accountNo = '0374442247';
+            const accountName = encodeURIComponent('TA VAN THANG');
             const qrUrl = `https://img.vietqr.io/image/${bankId}-${accountNo}-compact2.png?amount=${amount}&addInfo=${encodeURIComponent(contentStr)}&accountName=${accountName}`;
             
             const qrImg = document.getElementById('vietqr-image');
-            if (qrImg) qrImg.src = qrUrl;
+            if (qrImg) {
+                qrImg.src = (currentQrMode === 'static') ? '/assets/images/vietqr-thang.jpg' : qrUrl;
+            }
         }
 
         function handleVietQrImgError(img) {
-            // High-fidelity fallback SVG QR if client is offline
+            // Fallback trực tiếp về ảnh QR gốc chính chủ của Tạ Văn Thắng
             img.onerror = null;
-            img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140"><rect width="140" height="140" fill="%23ffffff"/><rect x="10" y="10" width="40" height="40" fill="%230284c7"/><rect x="20" y="20" width="20" height="20" fill="%23ffffff"/><rect x="90" y="10" width="40" height="40" fill="%230284c7"/><rect x="100" y="20" width="20" height="20" fill="%23ffffff"/><rect x="10" y="90" width="40" height="40" fill="%230284c7"/><rect x="20" y="100" width="20" height="20" fill="%23ffffff"/><rect x="60" y="20" width="20" height="20" fill="%230284c7"/><rect x="20" y="60" width="20" height="20" fill="%230284c7"/><rect x="60" y="60" width="20" height="20" fill="%2300c8f8"/><rect x="90" y="60" width="20" height="20" fill="%230284c7"/><rect x="60" y="90" width="20" height="20" fill="%230284c7"/><rect x="90" y="90" width="20" height="20" fill="%230284c7"/><rect x="110" y="110" width="20" height="20" fill="%230284c7"/><text x="70" y="135" font-size="9" text-anchor="middle" fill="%230369a1" font-family="sans-serif" font-weight="bold">VIETQR NAPAS</text></svg>';
+            img.src = '/assets/images/vietqr-thang.jpg';
         }
 
         function copyVqrText(text, label) {
