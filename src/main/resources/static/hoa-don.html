@@ -757,84 +757,191 @@
 
     <!-- ===================== MODAL GHI NHẬN THANH TOÁN ===================== -->
     <div class="modal fade" id="payment-modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg rounded-4">
-                <div class="modal-header border-bottom py-3 px-4 bg-light">
-                    <h5 class="modal-title fs-6 fw-bold text-dark">
-                        <i class="bi bi-cash-stack text-success me-1"></i> Ghi Nhận Thu Tiền / Thanh Toán
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="modal-header border-bottom py-2.5 px-4 bg-light">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle p-1.5 rounded-3">
+                            <i class="bi bi-credit-card-2-front-fill fs-6"></i>
+                        </span>
+                        <h5 class="modal-title fs-6 fw-bold text-dark mb-0">
+                            Ghi Nhận Thu Tiền & Thanh Toán Hóa Đơn
+                        </h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4">
+                <div class="modal-body p-3 p-lg-4">
                     <form id="payment-form" onsubmit="savePayment(event)">
                         <input type="hidden" id="pay-inv-id">
 
-                        <div class="p-3 bg-light rounded-3 mb-3 border">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span class="text-muted small">Mã hóa đơn:</span>
-                                <strong class="text-dark" id="pay-inv-code">-</strong>
+                        <div class="row g-3">
+                            <!-- CỘT TRÁI: THÔNG TIN HÓA ĐƠN & NHẬP LIỆU -->
+                            <div class="col-12 col-lg-6" id="pay-left-col">
+                                <!-- Card Tóm tắt hóa đơn thu gọn -->
+                                <div class="p-2.5 rounded-3 mb-2.5 border" style="background: #F8FAFC;">
+                                    <div class="row g-1 small">
+                                        <div class="col-6">
+                                            <span class="text-muted" style="font-size: 0.72rem;">Mã hóa đơn:</span>
+                                            <div class="fw-bold text-dark text-truncate" id="pay-inv-code">-</div>
+                                        </div>
+                                        <div class="col-6">
+                                            <span class="text-muted" style="font-size: 0.72rem;">Sinh viên:</span>
+                                            <div class="fw-bold text-dark text-truncate" id="pay-student-name">-</div>
+                                        </div>
+                                        <div class="col-4 pt-1 border-top mt-1">
+                                            <span class="text-muted" style="font-size: 0.70rem;">Tổng tiền:</span>
+                                            <div class="fw-bold text-secondary small" id="pay-total-amount">0 ₫</div>
+                                        </div>
+                                        <div class="col-4 pt-1 border-top mt-1">
+                                            <span class="text-success fw-semibold" style="font-size: 0.70rem;">Đã trả:</span>
+                                            <div class="fw-bold text-success small" id="pay-paid-amount">0 ₫</div>
+                                        </div>
+                                        <div class="col-4 pt-1 border-top mt-1">
+                                            <span class="text-danger fw-semibold" style="font-size: 0.70rem;">Còn nợ:</span>
+                                            <div class="fw-bold text-danger small" id="pay-remain-amount">0 ₫</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Số tiền thanh toán -->
+                                <div class="mb-2.5">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <label class="form-label small fw-semibold mb-0" style="font-size: 0.78rem;">Số tiền thanh toán lần này <span class="text-danger">*</span></label>
+                                        <a href="javascript:void(0)" class="small text-primary text-decoration-none fw-semibold" style="font-size: 0.72rem;" onclick="fillFullPayment()">
+                                            <i class="bi bi-check-all"></i> Trả hết nợ
+                                        </a>
+                                    </div>
+                                    <div class="input-group input-group-sm">
+                                        <input type="number" class="form-control fw-bold fs-6" id="pay-amount" min="1000" step="1000" required>
+                                        <span class="input-group-text fw-bold">₫</span>
+                                    </div>
+                                </div>
+
+                                <!-- Phương thức thanh toán -->
+                                <div class="mb-2.5">
+                                    <label class="form-label small fw-semibold mb-1" style="font-size: 0.78rem;">Phương thức thanh toán <span class="text-danger">*</span></label>
+                                    <select class="form-select form-select-sm" id="pay-method" onchange="handlePaymentMethodChange()" required>
+                                        <option value="vietqr">⚡ Quét mã VietQR Online (MBBank 24/7)</option>
+                                        <option value="momo">🟣 Ví MoMo Online (Napas 24/7 & App MoMo)</option>
+                                        <option value="chuyen_khoan">🏦 Chuyển khoản ngân hàng</option>
+                                        <option value="tien_mat">💵 Tiền mặt tại quầy</option>
+                                        <option value="vi_dien_tu">📱 Ví điện tử khác (VNPay, ZaloPay...)</option>
+                                        <option value="the">💳 Quẹt thẻ ATM / POS</option>
+                                    </select>
+                                </div>
+
+                                <!-- Thông tin phụ: 2 trường gọn 1 hàng -->
+                                <div class="row g-2 mb-2">
+                                    <div class="col-6">
+                                        <label class="form-label small fw-semibold mb-1" style="font-size: 0.72rem;">Mã GD / Tham chiếu</label>
+                                        <input type="text" class="form-control form-control-sm" id="pay-tx-code" placeholder="Tự sinh nếu trống" style="font-size: 0.75rem;">
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label small fw-semibold mb-1" style="font-size: 0.72rem;">Người thu tiền</label>
+                                        <input type="text" class="form-control form-control-sm" id="pay-collector" placeholder="Thu ngân" style="font-size: 0.75rem;">
+                                    </div>
+                                </div>
+
+                                <div class="mb-1">
+                                    <label class="form-label small fw-semibold mb-1" style="font-size: 0.72rem;">Ghi chú giao dịch</label>
+                                    <input type="text" class="form-control form-control-sm" id="pay-note" placeholder="VD: Nộp tiền KTX..." style="font-size: 0.75rem;">
+                                </div>
                             </div>
-                            <div class="d-flex justify-content-between mb-1">
-                                <span class="text-muted small">Sinh viên:</span>
-                                <strong class="text-dark" id="pay-student-name">-</strong>
-                            </div>
-                            <div class="d-flex justify-content-between mb-1">
-                                <span class="text-muted small">Tổng tiền hóa đơn:</span>
-                                <strong class="text-dark" id="pay-total-amount">0 ₫</strong>
-                            </div>
-                            <div class="d-flex justify-content-between mb-1">
-                                <span class="text-muted small">Đã trả:</span>
-                                <span class="text-success fw-bold" id="pay-paid-amount">0 ₫</span>
-                            </div>
-                            <div class="d-flex justify-content-between pt-1 border-top">
-                                <span class="text-danger small fw-semibold">Số tiền còn nợ:</span>
-                                <strong class="text-danger fs-6" id="pay-remain-amount">0 ₫</strong>
+
+                            <!-- CỘT PHẢI: KHUNG THANH TOÁN ONLINE ĐA KÊNH PHÓNG TO ĐẦY KHUNG (MBBANK & MOMO) -->
+                            <div class="col-12 col-lg-6" id="vietqr-col">
+                                <div id="vietqr-container" class="h-100 p-2.5 rounded-3 border d-flex flex-column justify-content-between transition-all" style="background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%); border-color: #BAE6FD !important;">
+                                    <div>
+                                        <!-- Header chọn kênh thanh toán & chế độ QR -->
+                                        <div class="d-flex align-items-center justify-content-between mb-1.5 pb-1 border-bottom border-sky-200">
+                                            <!-- Chọn kênh MBBank hoặc MoMo -->
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <button type="button" class="btn btn-xs btn-primary fw-semibold active py-0.5 px-2" style="font-size: 0.70rem;" id="btn-chan-mb" onclick="setPaymentChannel('mb')">
+                                                    <i class="bi bi-bank2 me-1"></i> MBBank
+                                                </button>
+                                                <button type="button" class="btn btn-xs btn-outline-danger fw-semibold py-0.5 px-2" style="font-size: 0.70rem; border-color: #d82d8b; color: #a50064;" id="btn-chan-momo" onclick="setPaymentChannel('momo')">
+                                                    <i class="bi bi-wallet2 me-1"></i> Ví MoMo
+                                                </button>
+                                            </div>
+
+                                            <!-- Chọn chế độ QR -->
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <button type="button" class="btn btn-xs btn-primary fw-semibold active py-0.5 px-1.5" style="font-size: 0.66rem;" id="btn-qr-dynamic" onclick="setQrMode('dynamic')">Tự Điền</button>
+                                                <button type="button" class="btn btn-xs btn-outline-primary fw-semibold py-0.5 px-1.5" style="font-size: 0.66rem;" id="btn-qr-static" onclick="setQrMode('static')">QR Gốc App</button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Badge kênh hiển thị -->
+                                        <div class="d-flex align-items-center justify-content-between mb-1">
+                                            <div class="d-flex align-items-center gap-1.5">
+                                                <span class="badge bg-primary px-1.5 py-0.5" style="font-size: 0.68rem;" id="vqr-badge-system">
+                                                    <i class="bi bi-qr-code-scan me-1"></i> VietQR 24/7
+                                                </span>
+                                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-1.5 py-0.5 small fw-bold" style="font-size: 0.68rem;" id="vqr-badge-bank">
+                                                    <i class="bi bi-star-fill me-1"></i>MBBank Quân Đội
+                                                </span>
+                                            </div>
+                                            <span class="text-muted fw-semibold" style="font-size: 0.64rem;" id="vqr-app-hint">Quét bằng mọi App</span>
+                                        </div>
+
+                                        <!-- Vùng QR Code phóng to trung tâm đầy khung -->
+                                        <div class="text-center my-1.5">
+                                            <div class="p-2 bg-white rounded-3 shadow-sm border border-sky-200 d-inline-block position-relative" style="box-shadow: 0 4px 14px rgba(0,0,0,0.06) !important;">
+                                                <img id="vietqr-image" src="" alt="Mã QR Thanh Toán" class="rounded d-block mx-auto" style="width: 185px; height: 185px; object-fit: contain;" onerror="handleVietQrImgError(this)">
+                                                <div class="small text-muted mt-1 fw-bold text-center" style="font-size: 0.66rem;" id="vqr-scan-label">
+                                                    <i class="bi bi-qr-code me-1 text-primary"></i> Quét mã nhận diện tự động 24/7
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Thông tin tài khoản & Cú pháp chuyển tiền phủ kín hàng ngang -->
+                                        <div class="bg-white bg-opacity-90 p-2 rounded-2 border border-sky-200 mb-1.5 small shadow-xs">
+                                            <div class="d-flex justify-content-between align-items-center mb-1 pb-1 border-bottom border-sky-100">
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <span class="text-muted" style="font-size: 0.70rem;" id="vqr-acc-label">Số TK MBBank:</span>
+                                                    <strong class="font-monospace text-dark fw-bold" id="vqr-acc-num" style="font-size: 0.85rem;">0374442247</strong>
+                                                    <button type="button" class="btn btn-outline-primary btn-xs py-0 px-1 border-0" onclick="copyVqrAccount()" title="Sao chép số tài khoản">
+                                                        <i class="bi bi-clipboard"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="text-truncate ps-1">
+                                                    <span class="text-muted" style="font-size: 0.68rem;">Chủ TK:</span>
+                                                    <strong class="text-dark fw-bold" id="vqr-acc-name" style="font-size: 0.74rem;">TA VAN THANG</strong>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span class="text-muted text-nowrap me-1" style="font-size: 0.70rem;">Nội dung CK:</span>
+                                                <div class="d-flex align-items-center gap-1 overflow-hidden flex-grow-1 justify-content-end">
+                                                    <code class="px-1.5 py-0.5 bg-sky-50 border border-sky-200 rounded text-primary fw-bold text-truncate" id="vqr-content" style="font-size: 0.72rem; max-width: 210px;">KTX HD01 SV01</code>
+                                                    <button type="button" class="btn btn-outline-primary btn-xs py-0 px-1 border-0 flex-shrink-0" onclick="copyVqrContent()" title="Sao chép nội dung">
+                                                        <i class="bi bi-clipboard"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Nút Webhook tự động -->
+                                    <div class="pt-1 border-top border-sky-200">
+                                        <button type="button" class="btn btn-primary btn-sm w-100 fw-bold shadow-sm py-1.5" id="btn-simulate-webhook" onclick="simulateVietQrWebhook()" style="font-size: 0.76rem;">
+                                            <i class="bi bi-lightning-charge-fill me-1"></i> Giả Lập Webhook Nhận Tiền
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <label class="form-label small fw-semibold mb-0">Số tiền thanh toán lần này <span class="text-danger">*</span></label>
-                                <a href="javascript:void(0)" class="small text-primary text-decoration-none fw-semibold" onclick="fillFullPayment()">
-                                    <i class="bi bi-check-all"></i> Trả hết nợ
-                                </a>
+                        <!-- Footer nút bấm -->
+                        <div class="modal-footer border-0 px-0 pb-0 pt-2.5 mt-2.5 border-top d-flex justify-content-between align-items-center">
+                            <span class="text-muted small" style="font-size: 0.72rem;">
+                                <i class="bi bi-shield-check text-success me-1"></i> Đối soát tự động 24/7 &bull; Biên lai điện tử
+                            </span>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-sm btn-light border px-3" data-bs-dismiss="modal">Đóng</button>
+                                <button type="submit" class="btn btn-sm btn-success px-3.5 fw-semibold" id="pay-submit-btn">
+                                    <i class="bi bi-check-circle-fill me-1"></i> Xác Nhận Thu Tiền
+                                </button>
                             </div>
-                            <div class="input-group">
-                                <input type="number" class="form-control fw-bold fs-6" id="pay-amount" min="1000" step="1000" required>
-                                <span class="input-group-text fw-bold">₫</span>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label small fw-semibold">Phương thức thanh toán <span class="text-danger">*</span></label>
-                            <select class="form-select form-select-sm" id="pay-method" required>
-                                <option value="tien_mat">💵 Tiền mặt tại quầy</option>
-                                <option value="chuyen_khoan">🏦 Chuyển khoản ngân hàng</option>
-                                <option value="the">💳 Quẹt thẻ ATM / POS</option>
-                                <option value="vi_dien_tu">📱 Ví điện tử (VNPay / MoMo)</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label small fw-semibold">Mã giao dịch / Số hóa đơn ngân hàng</label>
-                            <input type="text" class="form-control form-control-sm" id="pay-tx-code" placeholder="Tự sinh nếu để trống">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label small fw-semibold">Người thu tiền</label>
-                            <input type="text" class="form-control form-control-sm" id="pay-collector">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label small fw-semibold">Ghi chú giao dịch</label>
-                            <input type="text" class="form-control form-control-sm" id="pay-note" placeholder="VD: Sinh viên nộp đợt 1...">
-                        </div>
-
-                        <div class="modal-footer border-0 px-0 pb-0">
-                            <button type="button" class="btn btn-sm btn-light border" data-bs-dismiss="modal">Hủy</button>
-                            <button type="submit" class="btn btn-sm btn-success px-4 fw-semibold" id="pay-submit-btn">
-                                <i class="bi bi-check-circle-fill me-1"></i> Xác Nhận Đã Thu Tiền
-                            </button>
                         </div>
                     </form>
                 </div>
@@ -1567,22 +1674,49 @@
         // ================= GHI NHẬN THANH TOÁN =================
         function openPaymentModal(id) {
             const invoice = allInvoices.find(k => k.id === id);
-            if (!invoice) return;
+            if (!invoice) {
+                App.toast('Không tìm thấy thông tin hóa đơn #' + id, 'warning');
+                return;
+            }
 
-            document.getElementById('pay-inv-id').value = invoice.id;
-            document.getElementById('pay-inv-code').textContent = invoice.maHoaDon || ('HD-' + invoice.id);
-            document.getElementById('pay-student-name').textContent = invoice.sinhVien && invoice.sinhVien.nguoiDung ? invoice.sinhVien.nguoiDung.hoTen : 'Sinh viên';
-            document.getElementById('pay-total-amount').textContent = App.formatMoney(invoice.soTien);
-            document.getElementById('pay-paid-amount').textContent = App.formatMoney(invoice.daThanhToan);
-            document.getElementById('pay-remain-amount').textContent = App.formatMoney(invoice.conLai);
+            const setVal = (elId, val) => { const el = document.getElementById(elId); if (el) el.value = val; };
+            const setTxt = (elId, txt) => { const el = document.getElementById(elId); if (el) el.textContent = txt; };
+
+            setVal('pay-inv-id', invoice.id);
+            setTxt('pay-inv-code', invoice.maHoaDon || ('HD-' + invoice.id));
+            setTxt('pay-student-name', invoice.sinhVien && invoice.sinhVien.nguoiDung ? invoice.sinhVien.nguoiDung.hoTen : 'Sinh viên');
+            setTxt('pay-total-amount', App.formatMoney(invoice.soTien));
+            setTxt('pay-paid-amount', App.formatMoney(invoice.daThanhToan));
+            setTxt('pay-remain-amount', App.formatMoney(invoice.conLai));
 
             // Default amount: remaining debt
-            document.getElementById('pay-amount').value = invoice.conLai;
-            document.getElementById('pay-amount').max = invoice.conLai;
-            document.getElementById('pay-tx-code').value = '';
-            document.getElementById('pay-note').value = 'Thanh toán tiền KTX kỳ ' + (invoice.thang || '');
+            const payAmountEl = document.getElementById('pay-amount');
+            if (payAmountEl) {
+                payAmountEl.value = invoice.conLai;
+                payAmountEl.oninput = updateVietQr;
+                payAmountEl.max = invoice.conLai;
+            }
+            setVal('pay-tx-code', '');
+            setVal('pay-note', 'Thanh toán tiền KTX kỳ ' + (invoice.thang || ''));
 
-            paymentModal.show();
+            // Initialize VietQR mode
+            setVal('pay-method', 'vietqr');
+            handlePaymentMethodChange();
+
+            try {
+                if (!paymentModal) {
+                    paymentModal = new bootstrap.Modal(document.getElementById('payment-modal'));
+                }
+                paymentModal.show();
+            } catch (err) {
+                console.error('Error showing paymentModal:', err);
+                // Fallback direct show
+                const mEl = document.getElementById('payment-modal');
+                if (mEl) {
+                    const bsM = bootstrap.Modal.getOrCreateInstance(mEl);
+                    bsM.show();
+                }
+            }
         }
 
         function fillFullPayment() {
@@ -1656,7 +1790,9 @@
                 } else {
                     tbody.innerHTML = res.data.map(t => {
                         let methodText = 'Tiền mặt';
-                        if (t.phuongThuc === 'chuyen_khoan') methodText = 'Chuyển khoản';
+                        if (t.phuongThuc === 'vietqr') methodText = 'VietQR MBBank';
+                        else if (t.phuongThuc === 'momo') methodText = 'Ví MoMo';
+                        else if (t.phuongThuc === 'chuyen_khoan') methodText = 'Chuyển khoản';
                         else if (t.phuongThuc === 'the') methodText = 'Quẹt thẻ ATM/POS';
                         else if (t.phuongThuc === 'vi_dien_tu') methodText = 'Ví điện tử';
 
@@ -1839,6 +1975,203 @@
                 }).join('');
             }
         }
+    
+// ================= THANH TOÁN ONLINE ĐA KÊNH VIETQR & VÍ MOMO =================
+        let currentChannel = 'mb'; // 'mb' hoặc 'momo'
+        let currentQrMode = 'dynamic'; // 'dynamic' hoặc 'static'
+
+        function setPaymentChannel(channel) {
+            currentChannel = channel;
+            const btnMb = document.getElementById('btn-chan-mb');
+            const btnMomo = document.getElementById('btn-chan-momo');
+            const badgeBank = document.getElementById('vqr-badge-bank');
+            const badgeSystem = document.getElementById('vqr-badge-system');
+            const accLabel = document.getElementById('vqr-acc-label');
+            const accNum = document.getElementById('vqr-acc-num');
+            const webhookBtn = document.getElementById('btn-simulate-webhook');
+            const container = document.getElementById('vietqr-container');
+            const appHint = document.getElementById('vqr-app-hint');
+
+            if (channel === 'mb') {
+                if (btnMb) { btnMb.className = 'btn btn-xs btn-primary fw-semibold active py-0.5 px-2'; }
+                if (btnMomo) { btnMomo.className = 'btn btn-xs btn-outline-danger fw-semibold py-0.5 px-2'; btnMomo.style.borderColor = '#d82d8b'; btnMomo.style.color = '#a50064'; btnMomo.style.backgroundColor = 'transparent'; }
+                if (badgeBank) {
+                    badgeBank.className = 'badge bg-danger-subtle text-danger border border-danger-subtle px-1.5 py-0.5 small fw-bold';
+                    badgeBank.innerHTML = '<i class="bi bi-star-fill me-1"></i>MBBank Quân Đội';
+                }
+                if (badgeSystem) {
+                    badgeSystem.className = 'badge bg-primary px-1.5 py-0.5';
+                    badgeSystem.style.backgroundColor = '';
+                    badgeSystem.innerHTML = '<i class="bi bi-qr-code-scan me-1"></i> VietQR 24/7';
+                }
+                if (accLabel) accLabel.textContent = 'Số TK MBBank:';
+                if (accNum) accNum.textContent = '0374442247';
+                if (appHint) appHint.textContent = 'Quét bằng mọi App';
+                if (webhookBtn) {
+                    webhookBtn.className = 'btn btn-primary btn-sm w-100 fw-bold shadow-sm py-1';
+                    webhookBtn.style.backgroundColor = '';
+                    webhookBtn.innerHTML = '<i class="bi bi-lightning-charge-fill me-1"></i> Giả Lập Webhook Nhận Tiền (MBBank)';
+                }
+                if (container) {
+                    container.style.background = 'linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%)';
+                    container.style.borderColor = '#BAE6FD';
+                }
+            } else {
+                // Ví MoMo
+                if (btnMb) { btnMb.className = 'btn btn-xs btn-outline-primary fw-semibold py-0.5 px-2'; }
+                if (btnMomo) { btnMomo.className = 'btn btn-xs btn-danger fw-semibold active py-0.5 px-2'; btnMomo.style.backgroundColor = '#a50064'; btnMomo.style.borderColor = '#a50064'; btnMomo.style.color = '#fff'; }
+                if (badgeBank) {
+                    badgeBank.className = 'badge bg-danger-subtle text-danger border border-danger-subtle px-1.5 py-0.5 small fw-bold';
+                    badgeBank.innerHTML = '<i class="bi bi-wallet2 me-1"></i>Ví MoMo Napas';
+                }
+                if (badgeSystem) {
+                    badgeSystem.className = 'badge px-1.5 py-0.5 text-white';
+                    badgeSystem.style.backgroundColor = '#a50064';
+                    badgeSystem.innerHTML = '<i class="bi bi-qr-code me-1"></i> MoMo QR';
+                }
+                if (accLabel) accLabel.textContent = 'Số TK / MoMo ID:';
+                if (accNum) accNum.textContent = 'PSP2602019300000514';
+                if (appHint) appHint.textContent = 'Quét bằng MoMo & Bank';
+                if (webhookBtn) {
+                    webhookBtn.className = 'btn btn-sm w-100 fw-bold shadow-sm py-1 text-white';
+                    webhookBtn.style.backgroundColor = '#a50064';
+                    webhookBtn.innerHTML = '<i class="bi bi-lightning-charge-fill me-1"></i> Giả Lập Webhook Nhận Tiền (Ví MoMo)';
+                }
+                if (container) {
+                    container.style.background = 'linear-gradient(135deg, #FFF0F5 0%, #FCE7F3 100%)';
+                    container.style.borderColor = '#FBCFE8';
+                }
+            }
+            updateVietQr();
+        }
+
+        function handlePaymentMethodChange() {
+            const method = document.getElementById('pay-method').value;
+            const vqrCol = document.getElementById('vietqr-col');
+            const leftCol = document.getElementById('pay-left-col');
+            const isOnline = (method === 'vietqr' || method === 'chuyen_khoan' || method === 'momo' || method === 'vi_dien_tu');
+
+            if (vqrCol) {
+                vqrCol.style.display = isOnline ? 'block' : 'none';
+            }
+            if (leftCol) {
+                if (isOnline) {
+                    leftCol.className = 'col-12 col-lg-6';
+                } else {
+                    leftCol.className = 'col-12';
+                }
+            }
+            if (isOnline) {
+                if (method === 'momo' || method === 'vi_dien_tu') {
+                    setPaymentChannel('momo');
+                } else {
+                    setPaymentChannel('mb');
+                }
+            }
+        }
+
+        function setQrMode(mode) {
+            currentQrMode = mode;
+            const btnDyn = document.getElementById('btn-qr-dynamic');
+            const btnSta = document.getElementById('btn-qr-static');
+            if (mode === 'dynamic') {
+                if (btnDyn) { btnDyn.classList.add('btn-primary'); btnDyn.classList.remove('btn-outline-primary'); }
+                if (btnSta) { btnSta.classList.remove('btn-primary'); btnSta.classList.add('btn-outline-primary'); }
+            } else {
+                if (btnDyn) { btnDyn.classList.remove('btn-primary'); btnDyn.classList.add('btn-outline-primary'); }
+                if (btnSta) { btnSta.classList.add('btn-primary'); btnSta.classList.remove('btn-outline-primary'); }
+            }
+            updateVietQr();
+        }
+
+        function updateVietQr() {
+            const invId = Number(document.getElementById('pay-inv-id').value);
+            const invoice = allInvoices.find(k => k.id === invId);
+            const amount = Number(document.getElementById('pay-amount').value) || (invoice ? invoice.conLai : 0);
+            
+            const studentCode = invoice && invoice.sinhVien ? (invoice.sinhVien.maSinhVien || 'SV' + invoice.sinhVien.id) : 'SV';
+            const invCode = invoice ? (invoice.maHoaDon || 'HD' + invoice.id) : 'HD' + invId;
+            const contentStr = 'KTX ' + invCode + ' ' + studentCode;
+
+            const contentEl = document.getElementById('vqr-content');
+            if (contentEl) contentEl.textContent = contentStr;
+
+            const qrImg = document.getElementById('vietqr-image');
+            if (!qrImg) return;
+
+            const accountName = encodeURIComponent('TA VAN THANG');
+
+            if (currentChannel === 'mb') {
+                const bankId = 'MB'; // MBBank
+                const accountNo = '0374442247';
+                const qrUrl = `https://img.vietqr.io/image/${bankId}-${accountNo}-qr_only.png?amount=${amount}&addInfo=${encodeURIComponent(contentStr)}&accountName=${accountName}`;
+                qrImg.src = (currentQrMode === 'static') ? '/assets/images/vietqr-square.png' : qrUrl;
+            } else {
+                // Kênh Ví MoMo
+                const bankId = 'MOMO'; // MoMo Napas 24/7
+                const accountNo = 'PSP2602019300000514';
+                const qrUrl = `https://img.vietqr.io/image/${bankId}-${accountNo}-qr_only.png?amount=${amount}&addInfo=${encodeURIComponent(contentStr)}&accountName=${accountName}`;
+                qrImg.src = (currentQrMode === 'static') ? '/assets/images/momo-square.png' : qrUrl;
+            }
+        }
+
+        function handleVietQrImgError(img) {
+            img.onerror = null;
+            if (currentChannel === 'mb') {
+                img.src = '/assets/images/vietqr-square.png';
+            } else {
+                img.src = '/assets/images/momo-square.png';
+            }
+        }
+
+        function copyVqrText(text, label) {
+            navigator.clipboard.writeText(text).then(() => {
+                App.toast('Đã sao chép ' + label + ': ' + text, 'success');
+            }).catch(() => {
+                App.toast('Không thể sao chép tự động: ' + text, 'info');
+            });
+        }
+
+        function copyVqrAccount() {
+            const acc = (currentChannel === 'mb') ? '0374442247' : 'PSP2602019300000514';
+            const label = (currentChannel === 'mb') ? 'Số tài khoản MBBank' : 'Số tài khoản / ID MoMo';
+            copyVqrText(acc, label);
+        }
+
+        function copyVqrContent() {
+            const content = document.getElementById('vqr-content').textContent;
+            copyVqrText(content, 'nội dung chuyển khoản');
+        }
+
+        function simulateVietQrWebhook() {
+            const invId = Number(document.getElementById('pay-inv-id').value);
+            const invoice = allInvoices.find(k => k.id === invId);
+            const amount = Number(document.getElementById('pay-amount').value) || (invoice ? invoice.conLai : 0);
+
+            const isMb = (currentChannel === 'mb');
+            const txnPrefix = isMb ? 'MB_VQR_' : 'MOMO_PAY_';
+            const txnId = txnPrefix + Date.now();
+
+            document.getElementById('pay-tx-code').value = txnId;
+            document.getElementById('pay-collector').value = isMb ? 'HeThong_VietQR_MB' : 'HeThong_MoMo_Auto';
+            document.getElementById('pay-note').value = isMb ? 
+                'Xác nhận thanh toán online tự động VietQR Napas 24/7 (MBBank)' : 
+                'Xác nhận thanh toán online qua Ví điện tử MoMo (Napas 24/7)';
+
+            if (isMb) {
+                document.getElementById('pay-method').value = 'vietqr';
+                App.toast('⚡ Đã nhận tín hiệu thanh toán từ MBBank VietQR (Webhook thành công)! Đang gạch nợ...', 'info');
+            } else {
+                document.getElementById('pay-method').value = 'momo';
+                App.toast('⚡ Đã nhận tín hiệu thanh toán từ Ví MoMo (Webhook thành công)! Đang gạch nợ...', 'info');
+            }
+
+            setTimeout(() => {
+                const fakeEvent = { preventDefault: () => {} };
+                savePayment(fakeEvent);
+            }, 500);
+        }
+
     </script>
 </body>
 </html>

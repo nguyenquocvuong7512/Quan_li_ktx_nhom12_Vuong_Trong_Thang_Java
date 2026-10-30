@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KTX SMART HUB – AURORA GLASS 3D | Hệ Thống Quản Lý Ký Túc Xá Thông Minh</title>
+    
+    <!-- Google Fonts: Be Vietnam Pro & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS & Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    
+    <!-- Tailwind Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            corePlugins: { preflight: false },
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Be Vietnam Pro"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Bespoke Aurora Glass Stylesheet -->
+    <link rel="stylesheet" href="/css/landing.css">
+</head>
+<body>
+
+    <!-- 1. NAVBAR -->
+    <header class="holo-navbar">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            <a href="/" class="nav-brand-container">
+                <div class="brand-icon-box">
+                    <i class="bi bi-buildings"></i>
+                </div>
+                <div>
+                    <div class="brand-title">KTX SMART HUB</div>
+                    <div class="brand-subtitle">AURORA GLASS 3D</div>
+                </div>
+            </a>
+
+            <nav class="d-none d-lg-block">
+                <ul class="nav-links-list">
+                    <li><a href="#hero-section" class="nav-link-item">Khám phá 3D</a></li>
+                    <li><a href="#overview-stats" class="nav-link-item">Số liệu KPI</a></li>
+                    <li><a href="#hierarchy-section" class="nav-link-item">Cấu trúc Digital Twin</a></li>
+                    <li><a href="#features-section" class="nav-link-item">Tính năng</a></li>
+                    <li><a href="#workflow-section" class="nav-link-item">Quy trình</a></li>
+                    <li><a href="#portal-section" class="nav-link-item">Cổng phân hệ</a></li>
+                </ul>
+            </nav>
+
+            <div class="d-flex align-items-center gap-3">
+                <div id="api-status-badge" class="api-status-pill">
+                    <span class="live-dot pulse-cyan"></span>
+                    <span class="text-sky-800 fw-bold">KHỞI ĐỘNG HỆ THỐNG...</span>
+                </div>
+                <a href="/index.html" class="btn-holo-primary d-none d-sm-inline-flex" style="padding: 0.55rem 1.35rem; font-size: 0.85rem;">
+                    <i class="bi bi-speedometer2 me-1.5"></i> Vào Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. HERO SECTION 3D (40% CONTENT / 60% 3D VIEWPORT) -->
+    <section class="hero-section" id="hero-section">
+        <div class="container-fluid px-lg-5">
+            <div class="row align-items-center g-4">
+                
+                <!-- Left 40%: Typography & Value Proposition -->
+                <div class="col-lg-5 hero-content">
+                    <div class="hero-tag">
+                        <i class="bi bi-cpu-fill text-sky-500"></i>
+                        <span>SMART DORMITORY ECOSYSTEM &bull; DIGITAL TWIN</span>
+                    </div>
+
+                    <h1 class="hero-title">
+                        Quản lý ký túc xá trong <span class="text-gradient-cyan">không gian 3D</span>
+                    </h1>
+
+                    <p class="hero-description">
+                        Nền tảng Holographic Digital Twin mô phỏng trực quan cấu trúc khuôn viên 
+                        <strong>Khu &rarr; Tòa Nhà &rarr; Tầng &rarr; Phòng</strong>. Giám sát tỷ lệ lấp đầy, 
+                        điện nước, thiết bị và hợp đồng lưu trú theo thời gian thực.
+                    </p>
+
+                    <div class="hero-cta-group">
+                        <a href="#scene3d-viewport" class="btn-holo-primary">
+                            <i class="bi bi-badge-3d-fill me-1.5 fs-5"></i>
+                            <span>Khám phá KTX 3D</span>
+                        </a>
+                        <a href="/index.html" class="btn-holo-secondary">
+                            <i class="bi bi-grid-fill me-1.5 text-primary"></i>
+                            <span>Vào Dashboard quản lý</span>
+                        </a>
+                    </div>
+
+                    <!-- Mini KPI Summary Strip -->
+                    <div class="d-flex align-items-center gap-4 pt-2.5 border-top border-slate-200">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="w-8 h-8 rounded-circle bg-sky-100 text-sky-600 d-flex align-items-center justify-content-center">
+                                <i class="bi bi-layers-fill"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold text-dark" style="font-size: 0.88rem;">Tách tầng 3D</div>
+                                <div class="text-muted" style="font-size: 0.72rem;">Khảo sát từng phòng trực quan</div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="w-8 h-8 rounded-circle bg-emerald-100 text-emerald-600 d-flex align-items-center justify-content-center">
+                                <i class="bi bi-database-check"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold text-dark" style="font-size: 0.88rem;">MySQL Backend</div>
+                                <div class="text-muted" style="font-size: 0.72rem;">Đồng bộ Spring Boot REST API</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right 60%: High-Tech 3D Viewport with Reference Floating HUD Overlays -->
+                <div class="col-lg-7">
+                    <div class="viewport-3d-wrapper">
+                        <!-- Three.js Canvas Container -->
+                        <div id="scene3d-viewport"></div>
+
+                        <!-- Top HUD Action Buttons -->
+                        <div class="viewport-hud-controls">
+                            <button class="hud-btn" id="btn-reset-camera" title="Góc nhìn toàn cảnh">
+                                <i class="bi bi-arrows-angle-contract"></i>
+                                <span>Toàn cảnh</span>
+                            </button>
+                            <button class="hud-btn" id="btn-explode-all" title="Tách các tầng toàn bộ tòa nhà">
+                                <i class="bi bi-box-arrow-up-right"></i>
+                                <span>Tách tầng</span>
+                            </button>
+                            <button class="hud-btn" id="btn-reconnect-api" title="Đồng bộ lại từ MySQL Backend">
+                                <i class="bi bi-arrow-clockwise"></i>
+                                <span>Làm mới</span>
+                            </button>
+                        </div>
+
+                        <!-- Reference-Style Floating HUD Card (Similar to Reference Image) -->
+                        <div class="viewport-floating-hud-card d-none d-md-block">
+                            <div class="hud-card-header">
+                                <span><i class="bi bi-radar me-1 text-cyan"></i>GIÁM SÁT KTX 3D</span>
+                                <span class="badge bg-sky-100 text-sky-700" style="font-size: 0.6rem;">LIVE</span>
+                            </div>
+                            <div class="hud-metrics-mini-grid">
+                                <div class="hud-mini-stat">
+                                    <div class="hud-stat-num" id="hud-students-val">1,250</div>
+                                    <div class="hud-stat-lbl">Sinh viên</div>
+                                </div>
+                                <div class="hud-mini-stat">
+                                    <div class="hud-stat-num" id="hud-buildings-val">5</div>
+                                    <div class="hud-stat-lbl">Tòa nhà</div>
+                                </div>
+                            </div>
+                            <div class="hud-sparkline-row">
+                                <span class="text-muted" style="font-size: 0.68rem;">Tỷ lệ lấp đầy</span>
+                                <strong class="text-primary font-monospace" id="hud-occupancy-val">88%</strong>
+                            </div>
+                        </div>
+
+                        <!-- Bottom HUD Hint -->
+                        <div class="viewport-hud-hint d-none d-lg-block">
+                            <i class="bi bi-hand-index-thumb me-1 text-sky-500"></i>
+                            <span>Xoay 360&deg; &bull; Cuộn thu phóng &bull; Nhấp tòa nhà để kiểm tra tầng</span>
+                        </div>
+
+                        <!-- Quick Building Jump Strip -->
+                        <div class="quick-jump-strip d-none d-sm-flex" id="quick-building-pills"></div>
+
+                        <!-- Floating Building Inspection Panel -->
+                        <div class="building-inspection-panel" id="building-inspection-panel"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. OVERVIEW STATS (5 KPI CARDS IN 1 ROW - NO EXCESSIVE GAPS) -->
+    <section class="section-wrapper compact-top" id="overview-stats">
+        <div class="container-fluid px-lg-5">
+            <div class="kpi-row-grid">
+                <!-- KPI 1 -->
+                <div class="kpi-card">
+                    <div>
+                        <div class="kpi-card-header">
+                            <div class="kpi-icon"><i class="bi bi-people-fill"></i></div>
+                            <span class="kpi-badge">SINH VIÊN</span>
+                        </div>
+                        <div class="kpi-number" id="stat-total-students">0</div>
+                        <div class="kpi-label">Tổng sinh viên</div>
+                    </div>
+                    <div>
+                        <div class="kpi-subtext">Cư dân đăng ký lưu trú</div>
+                    </div>
+                </div>
+
+                <!-- KPI 2 -->
+                <div class="kpi-card">
+                    <div>
+                        <div class="kpi-card-header">
+                            <div class="kpi-icon"><i class="bi bi-buildings-fill"></i></div>
+                            <span class="kpi-badge">CAMPUS</span>
+                        </div>
+                        <div class="kpi-number" id="stat-total-buildings">0</div>
+                        <div class="kpi-label">Tòa nhà KTX</div>
+                    </div>
+                    <div>
+                        <div class="kpi-subtext">Mô phỏng 3D Digital Twin</div>
+                    </div>
+                </div>
+
+                <!-- KPI 3 -->
+                <div class="kpi-card">
+                    <div>
+                        <div class="kpi-card-header">
+                            <div class="kpi-icon"><i class="bi bi-door-open-fill"></i></div>
+                            <span class="kpi-badge">PHÒNG Ở</span>
+                        </div>
+                        <div class="kpi-number" id="stat-total-rooms">0</div>
+                        <div class="kpi-label">Tổng số phòng</div>
+                    </div>
+                    <div>
+                        <div class="kpi-subtext">Phân bố trên tất cả các tầng</div>
+                    </div>
+                </div>
+
+                <!-- KPI 4 -->
+                <div class="kpi-card">
+                    <div>
+                        <div class="kpi-card-header">
+                            <div class="kpi-icon text-emerald-600 bg-emerald-50"><i class="bi bi-check-circle-fill"></i></div>
+                            <span class="kpi-badge text-emerald-700 bg-emerald-100">KHẢ DỤNG</span>
+                        </div>
+                        <div class="kpi-number text-sky-600" id="stat-available-rooms">0</div>
+                        <div class="kpi-label">Phòng còn chỗ</div>
+                    </div>
+                    <div>
+                        <div class="kpi-subtext">Sẵn sàng tiếp nhận đăng ký</div>
+                    </div>
+                </div>
+
+                <!-- KPI 5 -->
+                <div class="kpi-card">
+                    <div>
+                        <div class="kpi-card-header">
+                            <div class="kpi-icon text-primary bg-sky-50"><i class="bi bi-pie-chart-fill"></i></div>
+                            <span class="kpi-badge">TỶ LỆ</span>
+                        </div>
+                        <div class="kpi-number text-primary" id="stat-occupancy-rate">0%</div>
+                        <div class="kpi-label">Tỷ lệ lấp đầy</div>
+                    </div>
+                    <div>
+                        <div class="kpi-progress-bar">
+                            <div class="kpi-progress-fill" id="stat-occupancy-fill" style="width: 88%;"></div>
+                        </div>
+                        <div class="kpi-subtext">Hiệu suất sử dụng phòng</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. INTERACTIVE HIERARCHY CHAIN (KHU -> TOA -> TANG -> PHONG) -->
+    <section class="section-wrapper" id="hierarchy-section">
+        <div class="container-fluid px-lg-5">
+            <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
+                <div>
+                    <div class="section-tag">
+                        <i class="bi bi-diagram-3-fill text-sky-500"></i>
+                        <span>CẤU TRÚC DỮ LIỆU ĐA TẦNG DIGITAL TWIN</span>
+                    </div>
+                    <h2 class="section-heading">Sơ đồ quan hệ KHU &rarr; TÒA &rarr; TẦNG &rarr; PHÒNG</h2>
+                    <p class="section-subtext mb-0">
+                        Nhấp vào từng khối bên dưới để khám phá ý nghĩa và kích hoạt góc nhìn tương ứng trên mô hình 3D.
+                    </p>
+                </div>
+                <div class="d-none d-md-block">
+                    <span class="badge bg-sky-100 text-sky-800 border border-sky-200 px-3 py-1.5 rounded-pill font-monospace" style="font-size: 0.76rem;">
+                        <i class="bi bi-link-45deg me-1"></i> Liên kết thực thể Database
+                    </span>
+                </div>
+            </div>
+
+            <!-- 4 Interactive Connected Cards -->
+            <div class="hierarchy-chain-grid">
+                <div class="hierarchy-step-card active" data-step="khu">
+                    <span class="chain-num-badge">01 &bull; KHU</span>
+                    <h4 class="chain-title">Campus / Khuôn viên</h4>
+                    <p class="chain-desc">Định vị địa lý phân khu, diện tích, hạ tầng nội bộ và các tiện ích công cộng.</p>
+                </div>
+
+                <div class="hierarchy-step-card" data-step="toa">
+                    <span class="chain-num-badge">02 &bull; TÒA NHÀ</span>
+                    <h4 class="chain-title">Tòa nhà 3D</h4>
+                    <p class="chain-desc">Khối hình học kiến trúc với số tầng được sinh động từ trường <code>soTang</code>.</p>
+                </div>
+
+                <div class="hierarchy-step-card" data-step="tang">
+                    <span class="chain-num-badge">03 &bull; TẦNG LẦU</span>
+                    <h4 class="chain-title">Tầng tách lớp</h4>
+                    <p class="chain-desc">Tính năng Explode Floors cho phép nhấc các tầng lên để quan sát cấu trúc phòng.</p>
+                </div>
+
+                <div class="hierarchy-step-card" data-step="phong">
+                    <span class="chain-num-badge">04 &bull; PHÒNG Ở</span>
+                    <h4 class="chain-title">Phòng lưu trú</h4>
+                    <p class="chain-desc">Hiển thị sức chứa, số sinh viên đang ở, loại phòng, đơn giá và trạng thái còn chỗ.</p>
+                </div>
+            </div>
+
+            <!-- Dynamic Preview Box -->
+            <div class="hierarchy-dynamic-preview">
+                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2">
+                    <h5 class="fw-bold text-dark mb-0" id="hierarchy-preview-title">Cấp Phân Khu (Campus / Zone)</h5>
+                    <button class="btn btn-sm btn-link text-primary text-decoration-none fw-bold p-0" type="button" data-bs-toggle="collapse" data-bs-target="#technical-schema-collapse">
+                        <i class="bi bi-code-slash me-1"></i> Xem chi tiết kỹ thuật Database &rarr;
+                    </button>
+                </div>
+                <p class="text-secondary small mb-2" id="hierarchy-preview-desc">
+                    Phân định địa lý khuôn viên ký túc xá, quản lý hạ tầng giao thông nội bộ, khuôn viên cây xanh, tiện ích căng-tin và an ninh cổng.
+                </p>
+                <div class="small text-muted font-monospace border-top pt-2" id="hierarchy-preview-meta">
+                    Bảng Database: <code>khu</code> &bull; Khóa: <code>id, ma_khu, ten_khu</code> &bull; Thể hiện 3D: Bệ Hologram bọc LED viền.
+                </div>
+
+                <!-- Collapsible Technical Database Schema -->
+                <div class="collapse mt-3" id="technical-schema-collapse">
+                    <div class="table-responsive border rounded-xl bg-white p-2">
+                        <table class="table table-sm table-hover align-middle mb-0 font-sans" style="font-size: 0.82rem;">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Cấp độ</th>
+                                    <th>Bảng MySQL</th>
+                                    <th>Khóa chính / Phụ</th>
+                                    <th>Thuộc tính kinh doanh</th>
+                                    <th>Thể hiện Mesh Three.js</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong class="text-primary">1. Khu</strong></td>
+                                    <td><code>khu</code></td>
+                                    <td><code>id</code></td>
+                                    <td><code>ma_khu, ten_khu, dia_chi</code></td>
+                                    <td>Bệ Hologram Cylinder, Radar Scan Plane</td>
+                                </tr>
+                                <tr>
+                                    <td><strong class="text-primary">2. Tòa nhà</strong></td>
+                                    <td><code>toa_nha</code></td>
+                                    <td><code>id, khu_id (FK)</code></td>
+                                    <td><code>ma_toa, ten_toa, so_tang</code></td>
+                                    <td>Group Tòa nhà, chiều cao = <code>soTang * 2.4</code></td>
+                                </tr>
+                                <tr>
+                                    <td><strong class="text-primary">3. Tầng</strong></td>
+                                    <td><code>tang</code></td>
+                                    <td><code>id, toa_nha_id (FK)</code></td>
+                                    <td><code>so_tang</code></td>
+                                    <td>Group Tầng phân lớp (hỗ trợ Explode GSAP)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong class="text-primary">4. Phòng</strong></td>
+                                    <td><code>phong</code></td>
+                                    <td><code>id, tang_id (FK)</code></td>
+                                    <td><code>suc_chua, so_nguoi_hien_tai, gia_phong</code></td>
+                                    <td>Chip phòng tương tác với badge màu trạng thái</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. BENTO GRID FEATURES SECTION (ASYMMETRIC CARDS) -->
+    <section class="section-wrapper" id="features-section">
+        <div class="container-fluid px-lg-5">
+            <div class="text-center mb-4">
+                <div class="section-tag">
+                    <i class="bi bi-grid-3x3-gap-fill text-sky-500"></i>
+                    <span>TÍNH NĂNG TOÀN DIỆN</span>
+                </div>
+                <h2 class="section-heading">Bento Grid Chức Năng Quản Trị Chuyên Nghiệp</h2>
+                <p class="section-subtext mx-auto">
+                    Thiết kế bố cục bất đối xứng hiện đại, tích hợp đầy đủ công cụ quản lý cơ sở vật chất, hồ sơ cư dân và tài chính.
+                </p>
+            </div>
+
+            <!-- Bento Asymmetric Grid Layout -->
+            <div class="bento-features-grid">
+                
+                <!-- Bento 1: Large Featured Card (Spans 7 columns) -->
+                <div class="bento-card bento-card-large">
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="bento-icon-wrapper mb-0">
+                                <i class="bi bi-building"></i>
+                            </div>
+                            <span class="badge bg-sky-100 text-sky-700 font-monospace px-2.5 py-1">PHÂN HỆ TRỌNG TÂM</span>
+                        </div>
+                        <h3 class="bento-title">Quản lý Cơ sở vật chất & Tòa nhà, Phòng</h3>
+                        <p class="bento-desc">
+                            Thiết lập danh mục tòa nhà, tầng lầu, loại phòng và sức chứa chuẩn. 
+                            Giám sát tỷ lệ lấp đầy trực quan với bản đồ phòng 3D cập nhật liên tục từ cơ sở dữ liệu.
+                        </p>
+                        <div class="bento-visual-preview">
+                            <div class="d-flex justify-content-between align-items-center small mb-1.5">
+                                <span class="fw-bold text-dark"><i class="bi bi-door-open text-primary me-1"></i>Trạng thái phòng KTX mẫu</span>
+                                <span class="text-muted" style="font-size: 0.72rem;">Đang vận hành</span>
+                            </div>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <span class="badge bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-1 font-monospace">A1-101: 3/4 chỗ</span>
+                                <span class="badge bg-amber-50 text-amber-700 border border-amber-200 px-2 py-1 font-monospace">A1-102: Đã đầy</span>
+                                <span class="badge bg-sky-50 text-sky-700 border border-sky-200 px-2 py-1 font-monospace">A1-201: Còn trống</span>
+                                <span class="badge bg-slate-50 text-slate-700 border border-slate-200 px-2 py-1 font-monospace">A1-202: 2/4 chỗ</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <a href="/toa-nha.html" class="bento-action-link">
+                            <span>Quản lý Tòa nhà & Phòng</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Bento 2: Medium Card (Spans 5 columns) -->
+                <div class="bento-card bento-card-medium-right">
+                    <div>
+                        <div class="bento-icon-wrapper">
+                            <i class="bi bi-person-lines-fill"></i>
+                        </div>
+                        <h3 class="bento-title">Hồ sơ Sinh viên & Phân quyền</h3>
+                        <p class="bento-desc">
+                            Quản lý thông tin cư dân, tra cứu nhanh mã sinh viên, lớp, ngành học và cấp quyền xác thực tài khoản quản trị KTX.
+                        </p>
+                        <div class="bento-visual-preview">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="w-8 h-8 rounded-circle bg-sky-100 text-sky-600 d-flex align-items-center justify-content-center fw-bold small">A</div>
+                                <div class="small">
+                                    <strong class="text-dark d-block">Nguyễn Văn An &bull; SV24001</strong>
+                                    <span class="text-muted">Khoa CNTT - Phòng A1-101</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <a href="/sinh-vien.html" class="bento-action-link">
+                            <span>Xem danh sách sinh viên</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Bento 3: Col 4 -->
+                <div class="bento-card bento-card-col-4">
+                    <div>
+                        <div class="bento-icon-wrapper">
+                            <i class="bi bi-clipboard2-check-fill"></i>
+                        </div>
+                        <h3 class="bento-title">Đăng ký & Phân phòng</h3>
+                        <p class="bento-desc">
+                            Tiếp nhận hồ sơ xin nội trú online, tự động kiểm tra số chỗ khả dụng và điều phối sinh viên vào phòng phù hợp.
+                        </p>
+                    </div>
+                    <div>
+                        <a href="/dang-ky-phong.html" class="bento-action-link">
+                            <span>Mở duyệt đăng ký</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Bento 4: Col 4 -->
+                <div class="bento-card bento-card-col-4">
+                    <div>
+                        <div class="bento-icon-wrapper">
+                            <i class="bi bi-file-earmark-ruled-fill"></i>
+                        </div>
+                        <h3 class="bento-title">Hợp đồng & Lưu trú</h3>
+                        <p class="bento-desc">
+                            Quản lý toàn bộ vòng đời hợp đồng nội trú từ khởi tạo, duyệt hiệu lực, chuyển phòng đến thanh lý hoàn tất.
+                        </p>
+                    </div>
+                    <div>
+                        <a href="/hop-dong.html" class="bento-action-link">
+                            <span>Xem hợp đồng KTX</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Bento 5: Col 4 -->
+                <div class="bento-card bento-card-col-4">
+                    <div>
+                        <div class="bento-icon-wrapper">
+                            <i class="bi bi-tools"></i>
+                        </div>
+                        <h3 class="bento-title">Tài sản, Thiết bị & Bảo trì</h3>
+                        <p class="bento-desc">
+                            Quản lý định mức thiết bị phòng (giường, bàn học, quạt, điều hòa), ghi nhận báo hỏng và lịch sử bàn giao tài sản.
+                        </p>
+                    </div>
+                    <div>
+                        <a href="/thiet-bi.html" class="bento-action-link">
+                            <span>Kiểm kê thiết bị</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Bento 6: Col 12 Wide Card -->
+                <div class="bento-card col-span-12" style="background: linear-gradient(135deg, #FFFFFF 70%, #F0F9FF 100%);">
+                    <div class="row align-items-center g-4">
+                        <div class="col-md-7">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <div class="bento-icon-wrapper mb-0" style="width: 42px; height: 42px; font-size: 1.25rem;">
+                                    <i class="bi bi-receipt-cutoff"></i>
+                                </div>
+                                <h3 class="bento-title mb-0">Hóa đơn điện nước & Thu phí tự động</h3>
+                            </div>
+                            <p class="bento-desc mb-0">
+                                Tự động chốt số công tơ điện nước theo định mức lũy tiến, tính toán tiền phòng, phát hành hóa đơn điện tử hàng tháng và đối soát công nợ tức thì.
+                            </p>
+                        </div>
+                        <div class="col-md-5 d-flex justify-content-md-end align-items-center gap-3">
+                            <div class="text-end d-none d-sm-block">
+                                <span class="badge bg-emerald-100 text-emerald-800 font-monospace px-3 py-1.5 rounded-pill mb-1 d-inline-block">QR Thanh toán tự động</span>
+                                <div class="text-muted small">Hỗ trợ đối soát chuyển khoản ngân hàng</div>
+                            </div>
+                            <a href="/hoa-don.html" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">
+                                <i class="bi bi-cash-stack me-1"></i> Mở phân hệ Hóa đơn
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. HORIZONTAL TIMELINE WORKFLOW (4 STEPS) -->
+    <section class="section-wrapper bg-sky-50/40" id="workflow-section" style="border-top: 1px solid rgba(0, 200, 248, 0.15); border-bottom: 1px solid rgba(0, 200, 248, 0.15);">
+        <div class="container-fluid px-lg-5">
+            <div class="text-center mb-4">
+                <div class="section-tag">
+                    <i class="bi bi-arrow-repeat text-sky-500"></i>
+                    <span>QUY TRÌNH NỘI TRÚ KHÉP KÍN</span>
+                </div>
+                <h2 class="section-heading">4 Bước Tiếp Nhận & Quản Lý Lưu Trú</h2>
+                <p class="section-subtext mx-auto">
+                    Quy trình trực tuyến kết nối sinh viên và ban quản lý ký túc xá, minh bạch hóa từng giai đoạn.
+                </p>
+            </div>
+
+            <!-- Horizontal Connected Timeline -->
+            <div class="timeline-horizontal-container">
+                <!-- Step 1 -->
+                <div class="timeline-step-card">
+                    <div class="timeline-step-circle">01</div>
+                    <h4 class="timeline-step-title">Đăng ký phòng</h4>
+                    <p class="timeline-step-desc">
+                        Sinh viên tra cứu khuôn viên 3D, chọn tòa nhà, tầng lầu và gửi đơn xin nội trú trực tuyến.
+                    </p>
+                    <a href="/dang-ky-phong.html" class="btn btn-sm btn-outline-primary rounded-pill mt-2 fw-bold px-3">
+                        Đăng ký ngay &rarr;
+                    </a>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="timeline-step-card">
+                    <div class="timeline-step-circle">02</div>
+                    <h4 class="timeline-step-title">Xét duyệt & Phân bổ</h4>
+                    <p class="timeline-step-desc">
+                        Ban quản lý duyệt hồ sơ ưu tiên, hệ thống tự động kiểm tra sức chứa và điều phối phòng.
+                    </p>
+                    <a href="/dang-ky-phong.html" class="btn btn-sm btn-light border rounded-pill mt-2 fw-bold px-3">
+                        Xem danh sách
+                    </a>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="timeline-step-card">
+                    <div class="timeline-step-circle">03</div>
+                    <h4 class="timeline-step-title">Hợp đồng & Bàn giao</h4>
+                    <p class="timeline-step-desc">
+                        Ký kết hợp đồng điện tử có hiệu lực pháp lý và kiểm kê danh mục trang thiết bị phòng ban đầu.
+                    </p>
+                    <a href="/hop-dong.html" class="btn btn-sm btn-light border rounded-pill mt-2 fw-bold px-3">
+                        Xem hợp đồng
+                    </a>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="timeline-step-card">
+                    <div class="timeline-step-circle">04</div>
+                    <h4 class="timeline-step-title">Thu phí & Đối soát</h4>
+                    <p class="timeline-step-desc">
+                        Phát hành hóa đơn điện nước hàng tháng, thu tiền qua mã QR và tự động tổng hợp báo cáo công nợ.
+                    </p>
+                    <a href="/hoa-don.html" class="btn btn-sm btn-light border rounded-pill mt-2 fw-bold px-3">
+                        Xem hóa đơn
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. COMPACT QUICK ACCESS PORTAL -->
+    <section class="section-wrapper" id="portal-section">
+        <div class="container-fluid px-lg-5">
+            <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
+                <div>
+                    <div class="section-tag">
+                        <i class="bi bi-door-open-fill text-sky-500"></i>
+                        <span>CỔNG TRUY CẬP NHANH</span>
+                    </div>
+                    <h2 class="section-heading">Điều hướng trực tiếp các phân hệ</h2>
+                    <p class="section-subtext mb-0">
+                        Nhấp vào phân hệ bên dưới để mở ngay màn hình làm việc tương ứng.
+                    </p>
+                </div>
+                <div class="d-none d-sm-block">
+                    <a href="/index.html" class="btn btn-outline-primary rounded-pill px-4 fw-bold">
+                        <i class="bi bi-speedometer2 me-1"></i> Bảng điều khiển chính
+                    </a>
+                </div>
+            </div>
+
+            <div class="portal-compact-grid">
+                <!-- 1. Dashboard -->
+                <a href="/index.html" class="portal-compact-card">
+                    <div class="portal-compact-icon"><i class="bi bi-grid-1x2-fill"></i></div>
+                    <div>
+                        <div class="portal-compact-title">Bảng điều khiển</div>
+                        <div class="portal-compact-sub">Chỉ số tổng quan KTX</div>
+                    </div>
+                </a>
+
+                <!-- 2. Sinh viên -->
+                <a href="/sinh-vien.html" class="portal-compact-card">
+                    <div class="portal-compact-icon"><i class="bi bi-people-fill"></i></div>
+                    <div>
+                        <div class="portal-compact-title">Hồ sơ Sinh viên</div>
+                        <div class="portal-compact-sub">Cư dân nội trú KTX</div>
+                    </div>
+                </a>
+
+                <!-- 3. Tòa nhà -->
+                <a href="/toa-nha.html" class="portal-compact-card">
+                    <div class="portal-compact-icon"><i class="bi bi-buildings"></i></div>
+                    <div>
+                        <div class="portal-compact-title">Tòa nhà & Tầng</div>
+                        <div class="portal-compact-sub">Cơ sở vật chất KTX</div>
+                    </div>
+                </a>
+
+                <!-- 4. Phòng -->
+                <a href="/phong.html" class="portal-compact-card">
+                    <div class="portal-compact-icon"><i class="bi bi-door-closed"></i></div>
+                    <div>
+                        <div class="portal-compact-title">Quản lý Phòng</div>
+                        <div class="portal-compact-sub">Sức chứa & Giá phòng</div>
+                    </div>
+                </a>
+
+                <!-- 5. Đăng ký -->
+                <a href="/dang-ky-phong.html" class="portal-compact-card">
+                    <div class="portal-compact-icon"><i class="bi bi-clipboard2-check"></i></div>
+                    <div>
+                        <div class="portal-compact-title">Đăng ký phòng</div>
+                        <div class="portal-compact-sub">Xét duyệt & Phân chỗ</div>
+                    </div>
+                </a>
+
+                <!-- 6. Hợp đồng -->
+                <a href="/hop-dong.html" class="portal-compact-card">
+                    <div class="portal-compact-icon"><i class="bi bi-file-earmark-ruled"></i></div>
+                    <div>
+                        <div class="portal-compact-title">Hợp đồng KTX</div>
+                        <div class="portal-compact-sub">Duyệt & Chuyển phòng</div>
+                    </div>
+                </a>
+
+                <!-- 7. Thiết bị -->
+                <a href="/thiet-bi.html" class="portal-compact-card">
+                    <div class="portal-compact-icon"><i class="bi bi-tools"></i></div>
+                    <div>
+                        <div class="portal-compact-title">Tài sản & Thiết bị</div>
+                        <div class="portal-compact-sub">Cấp phát & Báo hỏng</div>
+                    </div>
+                </a>
+
+                <!-- 8. Hóa đơn -->
+                <a href="/hoa-don.html" class="portal-compact-card">
+                    <div class="portal-compact-icon"><i class="bi bi-cash-stack"></i></div>
+                    <div>
+                        <div class="portal-compact-title">Hóa đơn & Thu phí</div>
+                        <div class="portal-compact-sub">Điện nước & Công nợ</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. FOOTER -->
+    <footer class="holo-footer">
+        <div class="container-fluid px-lg-5">
+            <div class="row g-4 justify-content-between">
+                <div class="col-lg-5">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <div class="brand-icon-box" style="width: 34px; height: 34px; font-size: 1.1rem;">
+                            <i class="bi bi-buildings"></i>
+                        </div>
+                        <span class="footer-brand-title">KTX SMART HUB</span>
+                    </div>
+                    <p class="footer-desc">
+                        Hệ sinh thái Quản lý Ký túc xá thông minh tích hợp mô hình 3D Holographic Digital Twin. 
+                        Đề tài bài tập lớn môn Lập trình ứng dụng Java & Quản lý dự án phần mềm.
+                    </p>
+                    <span class="badge bg-sky-100 text-sky-800 border border-sky-200 px-3 py-1.5 rounded-pill font-monospace" style="font-size: 0.76rem;">
+                        Nhóm 12: Vương - Trọng - Thắng
+                    </span>
+                </div>
+
+                <div class="col-6 col-lg-2">
+                    <div class="footer-col-title">ĐIỀU HƯỚNG 3D</div>
+                    <ul class="footer-link-list">
+                        <li><a href="#hero-section" class="footer-link">Toàn cảnh 3D</a></li>
+                        <li><a href="#overview-stats" class="footer-link">Số liệu KPI</a></li>
+                        <li><a href="#hierarchy-section" class="footer-link">Cấu trúc Digital Twin</a></li>
+                        <li><a href="#features-section" class="footer-link">Tính năng Bento</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-lg-2">
+                    <div class="footer-col-title">PHÂN HỆ QUẢN TRỊ</div>
+                    <ul class="footer-link-list">
+                        <li><a href="/index.html" class="footer-link">Dashboard chính</a></li>
+                        <li><a href="/sinh-vien.html" class="footer-link">Quản lý sinh viên</a></li>
+                        <li><a href="/toa-nha.html" class="footer-link">Quản lý tòa nhà</a></li>
+                        <li><a href="/dang-ky-phong.html" class="footer-link">Đăng ký phòng</a></li>
+                        <li><a href="/hoa-don.html" class="footer-link">Hóa đơn thu phí</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="footer-col-title">LIÊN HỆ & BẢO HÀNH</div>
+                    <div class="d-flex flex-column gap-1.5 small text-muted">
+                        <div><i class="bi bi-envelope me-1.5 text-primary"></i>ktx.nhom12@example.com</div>
+                        <div><i class="bi bi-telephone me-1.5 text-primary"></i>0901 000 001 - Hotline KTX</div>
+                        <div><i class="bi bi-geo-alt me-1.5 text-primary"></i>Cơ sở chính, Hà Nội</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div>&copy; 2026 KTX SMART HUB &bull; Nhóm 12 Java Spring Boot. Toàn quyền bảo lưu.</div>
+                <div class="d-flex gap-3">
+                    <a href="/index.html" class="text-decoration-none text-muted">Dashboard</a>
+                    <span>&bull;</span>
+                    <a href="/login.html" class="text-decoration-none text-muted">Đăng nhập</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Room Detail Modal -->
+    <div class="modal fade" id="room-detail-modal" tabindex="-1" aria-hidden="true"></div>
+
+    <!-- Scripts: Three.js, Controls, GSAP, App Modules -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom Digital Twin 3D App Modules -->
+    <script src="/js/ktx-api.js"></script>
+    <script src="/js/scene3d.js"></script>
+    <script src="/js/campus3d.js"></script>
+    <script src="/js/animations3d.js"></script>
+    <script src="/js/interactions3d.js"></script>
+    <script src="/js/landing.js"></script>
+
+</body>
+</html>

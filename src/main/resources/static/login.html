@@ -158,8 +158,12 @@
                 }, 600);
             } else {
                 // Check if backend unreachable or credentials invalid
-                if (result.status === 401) {
-                    alertMsg.textContent = 'Tài khoản hoặc mật khẩu không chính xác hoặc tài khoản đã bị khóa!';
+                if (result.status === 429) {
+                    alertBox.className = 'alert alert-warning py-2 small';
+                    alertMsg.innerHTML = '<i class="bi bi-shield-slash-fill me-1 text-danger"></i><strong>CHỐNG BRUTE-FORCE:</strong> ' + (result.error || 'Tài khoản bị tạm khóa do nhập sai mật khẩu quá 5 lần!');
+                } else if (result.status === 401) {
+                    alertBox.className = 'alert alert-danger py-2 small';
+                    alertMsg.textContent = result.error || 'Tài khoản hoặc mật khẩu không chính xác hoặc tài khoản đã bị khóa!';
                 } else if (result.status === 0) {
                     alertMsg.textContent = result.error + ' (Đang ở chế độ xem giao diện, bạn có thể đăng nhập demo)';
                     // Provide convenient quick demo login if backend is not currently connected to MySQL

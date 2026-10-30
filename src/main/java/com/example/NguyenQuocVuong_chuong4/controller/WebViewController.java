@@ -6,7 +6,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class WebViewController {
 
-    @GetMapping({"/", "/dashboard"})
+    @GetMapping({"/", "/landing"})
+    public String landing() {
+        return "forward:/landing.html";
+    }
+
+    @GetMapping({"/dashboard", "/index"})
     public String index() {
         return "forward:/index.html";
     }
