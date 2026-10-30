@@ -471,7 +471,7 @@
                                     placeholder="Tìm kiếm mã hoặc tên thiết bị..." oninput="filterCatalog()">
                             </div>
                         </div>
-                       
+
                     </div>
                 </div>
 
@@ -562,7 +562,7 @@
                                 0 loại
                             </span>
                         </div>
-                         <div class="col-md-4 text-end">
+                        <div class="col-md-4 text-end">
                             <button class="btn btn-outline-secondary btn-sm rounded-pill px-3 py-1.5"
                                 onclick="openLoaiModal()">
                                 <i class="bi bi-tags me-1"></i> Quản lý Loại Tài Sản
@@ -577,6 +577,7 @@
                                     <th class="ps-4">Mã loại</th>
                                     <th>Tên loại tài sản</th>
                                     <th>Mô tả</th>
+                                    <th class="text-center">Thao tác</th>
                                 </tr>
                             </thead>
 
@@ -893,7 +894,7 @@
         let thuHoiModalInstance = null;
         let catalogModalInstance = null;
         let loaiModalInstance = null;
-
+        let editLoaiModalInstance = null;
         document.addEventListener('DOMContentLoaded', () => {
             try {
                 App.initLayout('thiet-bi');
@@ -919,6 +920,11 @@
 
                 const loaiEl = document.getElementById('modal-loai');
                 if (loaiEl) loaiModalInstance = new bootstrap.Modal(loaiEl);
+
+                const editLoaiEl = document.getElementById('editLoaiModal');
+                if (editLoaiEl) {
+                    editLoaiModalInstance = new bootstrap.Modal(editLoaiEl);
+                }
             } catch (e) {
                 console.warn("Modal init warning:", e);
             }
@@ -1741,22 +1747,34 @@
             }
 
             tbody.innerHTML = data.map(item => `
-        <tr>
-            <td class="ps-4 font-mono fw-semibold text-sky-700">
-                #${item.id}
-            </td>
+    <tr>
+        <td class="ps-4 font-mono fw-semibold text-sky-700">
+            #${item.id}
+        </td>
 
-            <td class="fw-semibold text-slate-800">
-                ${escapeCategoryHtml(item.tenLoai || '')}
-            </td>
+        <td class="fw-semibold text-slate-800">
+            ${escapeCategoryHtml(item.tenLoai || '')}
+        </td>
 
-            <td class="text-slate-600">
-                ${item.moTa
+        <td class="text-slate-600">
+            ${item.moTa
                     ? escapeCategoryHtml(item.moTa)
                     : '<span class="text-muted fst-italic">Chưa có mô tả</span>'}
-            </td>
-        </tr>
-    `).join('');
+        </td>
+
+        <td class="text-center">
+            <button class="btn btn-outline-primary btn-sm rounded-pill me-1"
+                onclick="openEditLoaiModal(${item.id})">
+                <i class="bi bi-pencil-square"></i> Sửa
+            </button>
+
+            <button class="btn btn-outline-danger btn-sm rounded-pill"
+                onclick="deleteLoai(${item.id})">
+                <i class="bi bi-trash"></i> Xóa
+            </button>
+        </td>
+    </tr>
+`).join('');
         }
 
         function escapeCategoryHtml(value) {
@@ -1772,6 +1790,69 @@
         function openLoaiModal() {
             document.getElementById('form-loai').reset();
             loaiModalInstance.show();
+        }
+
+        // Mở modal sửa loại tài sản
+        function openEditLoaiModal(id) {
+            const item = allCategories.find(x => x.id === id);
+
+            if (!item) {
+                App.toast('Không tìm thấy loại tài sản!', 'danger');
+                return;
+            }
+
+            document.getElementById('edit-loai-id').value = item.id;
+            document.getElementById('edit-loai-name').value = item.tenLoai || '';
+            document.getElementById('edit-loai-desc').value = item.moTa || '';
+
+            editLoaiModalInstance.show();
+        }
+
+        // Lưu thông tin loại tài sản sau khi sửa
+        async function handleEditLoaiSubmit(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('edit-loai-id').value;
+            const tenLoai = document.getElementById('edit-loai-name').value.trim();
+            const moTa = document.getElementById('edit-loai-desc').value.trim();
+
+            if (!tenLoai) {
+                App.toast('Vui lòng nhập tên loại tài sản!', 'warning');
+                return;
+            }
+
+            const res = await App.api(`/api/thiet-bi/loai/${id}`, {
+                method: 'PUT',
+                body: { tenLoai, moTa }
+            });
+            console.log("Dữ liệu gửi lên:", { id, tenLoai, moTa });
+            console.log("Phản hồi từ API:", res);
+            if (res.success) {
+                App.toast('Cập nhật loại tài sản thành công!', 'success');
+                editLoaiModalInstance.hide();
+                await loadAssetCategories();
+            } else {
+                App.toast('Lỗi: ' + (res.error || 'Không thể cập nhật loại tài sản'), 'danger');
+            }
+        }
+        async function deleteLoai(id) {
+            if (!confirm('Bạn có chắc chắn muốn xóa loại tài sản này không?')) {
+                return;
+            }
+
+            const res = await App.api(`/api/thiet-bi/loai/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (res.success) {
+                App.toast('Xóa loại tài sản thành công!', 'success');
+                await loadAssetCategories();
+            } else {
+                App.toast(
+                    'Lỗi: ' + (res.error || 'Không thể xóa loại tài sản'),
+                    'danger'
+                );
+            }
         }
 
         async function handleLoaiSubmit(e) {
@@ -1798,6 +1879,51 @@
             }
         }
     </script>
+    <!-- Modal chỉnh sửa loại tài sản -->
+    <div class="modal fade" id="editLoaiModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow">
+
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fw-bold">
+                        <i class="bi bi-pencil-square text-primary me-2"></i>
+                        Chỉnh sửa loại tài sản
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <form id="form-edit-loai" onsubmit="handleEditLoaiSubmit(event)">
+                    <div class="modal-body p-4">
+                        <input type="hidden" id="edit-loai-id">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                Tên loại tài sản <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="edit-loai-name"
+                                placeholder="Ví dụ: Giường, Bàn học, Quạt điện" required maxlength="100">
+                        </div>
+
+                        <div class="mb-2">
+                            <label class="form-label fw-semibold">Mô tả</label>
+                            <textarea class="form-control" id="edit-loai-desc" rows="3"
+                                placeholder="Nhập mô tả loại tài sản..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer bg-light border-0">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                            Hủy
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save me-1"></i> Lưu thay đổi
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
