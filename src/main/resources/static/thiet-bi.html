@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,9 @@
     <!-- Google Fonts: Be Vietnam Pro & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <!-- Bootstrap 5 CSS & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
@@ -47,31 +50,37 @@
             gap: 0.35rem;
             white-space: nowrap;
         }
+
         .badge-active {
             background-color: #dcfce7;
             color: #15803d;
             border: 1px solid #bbf7d0;
         }
+
         .badge-damaged {
             background-color: #fee2e2;
             color: #b91c1c;
             border: 1px solid #fecaca;
         }
+
         .badge-maint {
             background-color: #fef9c3;
             color: #854d0e;
             border: 1px solid #fef08a;
         }
+
         .badge-repairing {
             background-color: #e0f2fe;
             color: #0369a1;
             border: 1px solid #bae6fd;
         }
+
         .badge-revoked {
             background-color: #f1f5f9;
             color: #64748b;
             border: 1px solid #e2e8f0;
         }
+
         .tab-btn {
             font-weight: 600;
             padding: 0.6rem 1.25rem;
@@ -81,11 +90,13 @@
             background: transparent;
             transition: all 0.2s ease;
         }
+
         .tab-btn.active {
             background: #0284c7;
             color: #fff !important;
             box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
         }
+
         .device-icon-box {
             width: 38px;
             height: 38px;
@@ -95,11 +106,13 @@
             justify-content: center;
             font-size: 1.15rem;
         }
+
         .timeline-item {
             position: relative;
             padding-left: 28px;
             padding-bottom: 20px;
         }
+
         .timeline-item::before {
             content: '';
             position: absolute;
@@ -109,9 +122,11 @@
             width: 2px;
             background: #e2e8f0;
         }
+
         .timeline-item:last-child::before {
             display: none;
         }
+
         .timeline-dot {
             position: absolute;
             left: 0;
@@ -124,6 +139,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <!-- ===================== SIDEBAR ===================== -->
@@ -135,7 +151,8 @@
                 </div>
                 <div>
                     <div class="fw-bold fs-6 tracking-wide">KTX DORMITORY</div>
-                    <div class="text-sky-300" style="font-size: 0.68rem; font-weight: normal;">Hệ Thống Quản Lý KTX</div>
+                    <div class="text-sky-300" style="font-size: 0.68rem; font-weight: normal;">Hệ Thống Quản Lý KTX
+                    </div>
                 </div>
             </a>
         </div>
@@ -197,7 +214,9 @@
         </div>
 
         <div class="sidebar-footer">
-            <button class="btn btn-outline-light btn-sm w-100 d-flex align-items-center justify-content-center gap-2 rounded-pill" onclick="App.auth.logout()">
+            <button
+                class="btn btn-outline-light btn-sm w-100 d-flex align-items-center justify-content-center gap-2 rounded-pill"
+                onclick="App.auth.logout()">
                 <i class="bi bi-box-arrow-left"></i>
                 <span>Đăng xuất</span>
             </button>
@@ -212,13 +231,15 @@
             </button>
             <div>
                 <h6 class="mb-0 fw-bold text-dark">Quản Lý Thiết Bị Phòng & Tài Sản</h6>
-                <small class="text-muted" style="font-size: 0.75rem;">Cơ sở vật chất &rsaquo; Cấp phát, kiểm kê, báo hỏng & sửa chữa thiết bị ký túc xá</small>
+                <small class="text-muted" style="font-size: 0.75rem;">Cơ sở vật chất &rsaquo; Cấp phát, kiểm kê, báo
+                    hỏng & sửa chữa thiết bị ký túc xá</small>
             </div>
         </div>
 
         <div class="topbar-right">
             <div class="user-badge dropdown">
-                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle gap-2 text-dark" data-bs-toggle="dropdown">
+                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle gap-2 text-dark"
+                    data-bs-toggle="dropdown">
                     <div class="user-avatar" id="topbar-user-avatar">A</div>
                     <div class="d-none d-md-block text-start">
                         <div class="fw-semibold text-dark small" id="topbar-user-name">Quản trị viên</div>
@@ -226,9 +247,13 @@
                     </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                    <li><a class="dropdown-item small" href="/tai-khoan.html"><i class="bi bi-person me-2"></i>Tài khoản</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item small text-danger" href="javascript:void(0)" onclick="App.auth.logout()"><i class="bi bi-box-arrow-right me-2"></i>Đăng xuất</a></li>
+                    <li><a class="dropdown-item small" href="/tai-khoan.html"><i class="bi bi-person me-2"></i>Tài
+                            khoản</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item small text-danger" href="javascript:void(0)"
+                            onclick="App.auth.logout()"><i class="bi bi-box-arrow-right me-2"></i>Đăng xuất</a></li>
                 </ul>
             </div>
         </div>
@@ -242,18 +267,25 @@
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 animate-fade-in-up">
                 <div>
                     <h4 class="fw-bold mb-1 text-dark">Quản Lý Trang Thiết Bị Trong Phòng</h4>
-                    <p class="text-muted small mb-0">Theo dõi phân bổ tài sản, tình trạng sử dụng, tiếp nhận báo hỏng và lịch sử giao dịch thiết bị KTX.</p>
+                    <p class="text-muted small mb-0">Theo dõi phân bổ tài sản, tình trạng sử dụng, tiếp nhận báo hỏng và
+                        lịch sử giao dịch thiết bị KTX.</p>
                 </div>
                 <div class="d-flex gap-2">
-                    <button class="btn btn-outline-secondary btn-sm rounded-pill px-3 py-1.5 shadow-sm d-flex align-items-center gap-1.5 fw-semibold" onclick="refreshCurrentTab()">
+                    <button
+                        class="btn btn-outline-secondary btn-sm rounded-pill px-3 py-1.5 shadow-sm d-flex align-items-center gap-1.5 fw-semibold"
+                        onclick="refreshCurrentTab()">
                         <i class="bi bi-arrow-clockwise"></i>
                         <span>Làm mới</span>
                     </button>
-                    <button class="btn btn-outline-primary btn-sm rounded-pill px-3 py-1.5 shadow-sm d-flex align-items-center gap-1.5 fw-semibold" onclick="openAddCatalogModal()">
+                    <button
+                        class="btn btn-outline-primary btn-sm rounded-pill px-3 py-1.5 shadow-sm d-flex align-items-center gap-1.5 fw-semibold"
+                        onclick="openAddCatalogModal()">
                         <i class="bi bi-plus-lg"></i>
                         <span>+ Thêm Thiết Bị Vào Kho</span>
                     </button>
-                    <button class="btn btn-primary btn-sm rounded-pill px-3.5 py-1.5 shadow-sm d-flex align-items-center gap-1.5 fw-semibold" onclick="openCapPhatModal()">
+                    <button
+                        class="btn btn-primary btn-sm rounded-pill px-3.5 py-1.5 shadow-sm d-flex align-items-center gap-1.5 fw-semibold"
+                        onclick="openCapPhatModal()">
                         <i class="bi bi-box-arrow-in-right"></i>
                         <span>+ Cấp Phát Cho Phòng</span>
                     </button>
@@ -266,7 +298,8 @@
                     <div class="stat-card">
                         <div>
                             <div class="d-flex align-items-center gap-2 mb-1">
-                                <span class="badge bg-sky-50 text-sky-700 border border-sky-200 font-semibold text-xs px-2 py-0.5 rounded-full">
+                                <span
+                                    class="badge bg-sky-50 text-sky-700 border border-sky-200 font-semibold text-xs px-2 py-0.5 rounded-full">
                                     <i class="bi bi-box-seam"></i> Danh mục kho
                                 </span>
                             </div>
@@ -283,7 +316,8 @@
                     <div class="stat-card">
                         <div>
                             <div class="d-flex align-items-center gap-2 mb-1">
-                                <span class="badge bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold text-xs px-2 py-0.5 rounded-full">
+                                <span
+                                    class="badge bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold text-xs px-2 py-0.5 rounded-full">
                                     <i class="bi bi-check-circle"></i> Đang sử dụng tốt
                                 </span>
                             </div>
@@ -300,7 +334,8 @@
                     <div class="stat-card">
                         <div>
                             <div class="d-flex align-items-center gap-2 mb-1">
-                                <span class="badge bg-amber-50 text-amber-700 border border-amber-200 font-semibold text-xs px-2 py-0.5 rounded-full">
+                                <span
+                                    class="badge bg-amber-50 text-amber-700 border border-amber-200 font-semibold text-xs px-2 py-0.5 rounded-full">
                                     <i class="bi bi-wrench"></i> Cần sửa / bảo trì
                                 </span>
                             </div>
@@ -317,7 +352,8 @@
                     <div class="stat-card">
                         <div>
                             <div class="d-flex align-items-center gap-2 mb-1">
-                                <span class="badge bg-rose-50 text-rose-700 border border-rose-200 font-semibold text-xs px-2 py-0.5 rounded-full">
+                                <span
+                                    class="badge bg-rose-50 text-rose-700 border border-rose-200 font-semibold text-xs px-2 py-0.5 rounded-full">
                                     <i class="bi bi-exclamation-triangle"></i> Hỏng hóc
                                 </span>
                             </div>
@@ -332,16 +368,21 @@
             </div>
 
             <!-- Navigation Tabs -->
-            <div class="d-flex gap-2 p-1.5 bg-slate-100 rounded-xl mb-4 w-fit border border-slate-200/80 animate-fade-in-up delay-2">
+            <div
+                class="d-flex gap-2 p-1.5 bg-slate-100 rounded-xl mb-4 w-fit border border-slate-200/80 animate-fade-in-up delay-2">
                 <button class="tab-btn active" id="tab-btn-room-devices" onclick="switchTab('room-devices')">
                     <i class="bi bi-door-open me-1.5"></i> Thiết Bị Trong Phòng
                 </button>
                 <button class="tab-btn" id="tab-btn-catalog" onclick="switchTab('catalog')">
                     <i class="bi bi-boxes me-1.5"></i> Kho & Danh Mục Thiết Bị
                 </button>
+                <button class="tab-btn" id="tab-btn-asset-categories" onclick="switchTab('asset-categories')">
+                    <i class="bi bi-folder2-open me-1.5"></i> Danh Mục Tài Sản
+                </button>
                 <button class="tab-btn" id="tab-btn-history" onclick="switchTab('history')">
                     <i class="bi bi-clock-history me-1.5"></i> Lịch Sử Giao Dịch & Biến Động
                 </button>
+
             </div>
 
             <!-- ================= TAB 1: THIẾT BỊ TRONG PHÒNG ================= -->
@@ -351,9 +392,10 @@
                     <div class="row g-2 align-items-center">
                         <div class="col-md-3">
                             <div class="input-group">
-                                <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search text-sky-600"></i></span>
-                                <input type="text" id="filter-search" class="form-control border-start-0" 
-                                       placeholder="Tìm phòng, tên thiết bị..." oninput="filterRoomDevices()">
+                                <span class="input-group-text bg-white border-end-0 text-muted"><i
+                                        class="bi bi-search text-sky-600"></i></span>
+                                <input type="text" id="filter-search" class="form-control border-start-0"
+                                    placeholder="Tìm phòng, tên thiết bị..." oninput="filterRoomDevices()">
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -381,11 +423,13 @@
 
                 <!-- Table Card -->
                 <div class="ktx-card animate-fade-in-up delay-3 overflow-hidden">
-                    <div class="card-header-clean d-flex justify-content-between align-items-center px-4 py-3 border-b border-slate-100">
+                    <div
+                        class="card-header-clean d-flex justify-content-between align-items-center px-4 py-3 border-b border-slate-100">
                         <div class="fw-bold text-slate-800 d-flex align-items-center gap-2">
                             <i class="bi bi-list-check text-sky-600 fs-5"></i>
                             <span>Danh sách trang bị theo phòng</span>
-                            <span class="badge bg-sky-100 text-sky-700 rounded-pill ms-2 font-normal" id="room-device-count">0 mục</span>
+                            <span class="badge bg-sky-100 text-sky-700 rounded-pill ms-2 font-normal"
+                                id="room-device-count">0 mục</span>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -405,7 +449,8 @@
                             <tbody id="room-device-tbody">
                                 <tr>
                                     <td colspan="8" class="text-center py-5 text-muted">
-                                        <div class="spinner-border spinner-border-sm text-primary me-2"></div> Đang tải danh sách thiết bị...
+                                        <div class="spinner-border spinner-border-sm text-primary me-2"></div> Đang tải
+                                        danh sách thiết bị...
                                     </td>
                                 </tr>
                             </tbody>
@@ -420,25 +465,24 @@
                     <div class="row g-2 align-items-center justify-content-between">
                         <div class="col-md-5">
                             <div class="input-group">
-                                <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search text-sky-600"></i></span>
-                                <input type="text" id="catalog-search" class="form-control border-start-0" 
-                                       placeholder="Tìm kiếm mã hoặc tên thiết bị..." oninput="filterCatalog()">
+                                <span class="input-group-text bg-white border-end-0 text-muted"><i
+                                        class="bi bi-search text-sky-600"></i></span>
+                                <input type="text" id="catalog-search" class="form-control border-start-0"
+                                    placeholder="Tìm kiếm mã hoặc tên thiết bị..." oninput="filterCatalog()">
                             </div>
                         </div>
-                        <div class="col-md-4 text-end">
-                            <button class="btn btn-outline-secondary btn-sm rounded-pill px-3 py-1.5" onclick="openLoaiModal()">
-                                <i class="bi bi-tags me-1"></i> Quản lý Loại Tài Sản
-                            </button>
-                        </div>
+                       
                     </div>
                 </div>
 
                 <div class="ktx-card overflow-hidden">
-                    <div class="card-header-clean d-flex justify-content-between align-items-center px-4 py-3 border-b border-slate-100">
+                    <div
+                        class="card-header-clean d-flex justify-content-between align-items-center px-4 py-3 border-b border-slate-100">
                         <div class="fw-bold text-slate-800 d-flex align-items-center gap-2">
                             <i class="bi bi-boxes text-sky-600 fs-5"></i>
                             <span>Danh mục thiết bị & tài sản hệ thống</span>
-                            <span class="badge bg-sky-100 text-sky-700 rounded-pill ms-2 font-normal" id="catalog-count">0 thiết bị</span>
+                            <span class="badge bg-sky-100 text-sky-700 rounded-pill ms-2 font-normal"
+                                id="catalog-count">0 thiết bị</span>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -457,7 +501,8 @@
                             <tbody id="catalog-tbody">
                                 <tr>
                                     <td colspan="7" class="text-center py-5 text-muted">
-                                        <div class="spinner-border spinner-border-sm text-primary me-2"></div> Đang tải kho thiết bị...
+                                        <div class="spinner-border spinner-border-sm text-primary me-2"></div> Đang tải
+                                        kho thiết bị...
                                     </td>
                                 </tr>
                             </tbody>
@@ -469,7 +514,8 @@
             <!-- ================= TAB 3: LỊCH SỬ GIAO DỊCH ================= -->
             <div id="tab-content-history" class="tab-pane-content d-none">
                 <div class="ktx-card overflow-hidden">
-                    <div class="card-header-clean d-flex justify-content-between align-items-center px-4 py-3 border-b border-slate-100">
+                    <div
+                        class="card-header-clean d-flex justify-content-between align-items-center px-4 py-3 border-b border-slate-100">
                         <div class="fw-bold text-slate-800 d-flex align-items-center gap-2">
                             <i class="bi bi-journal-text text-sky-600 fs-5"></i>
                             <span>Nhật ký giao dịch cấp phát & bảo dưỡng thiết bị</span>
@@ -494,7 +540,8 @@
                             <tbody id="history-tbody">
                                 <tr>
                                     <td colspan="7" class="text-center py-5 text-muted">
-                                        <div class="spinner-border spinner-border-sm text-primary me-2"></div> Đang tải nhật ký...
+                                        <div class="spinner-border spinner-border-sm text-primary me-2"></div> Đang tải
+                                        nhật ký...
                                     </td>
                                 </tr>
                             </tbody>
@@ -502,7 +549,49 @@
                     </div>
                 </div>
             </div>
+            <!-- ================= TAB 4: DANH MỤC TÀI SẢN ================== -->
+            <div id="tab-content-asset-categories" class="tab-pane-content d-none">
 
+                <div class="ktx-card overflow-hidden">
+                    <div
+                        class="card-header-clean d-flex justify-content-between align-items-center px-4 py-3 border-b border-slate-100">
+                        <div class="fw-bold text-slate-800 d-flex align-items-center gap-2">
+                            <i class="bi bi-folder2-open text-sky-600 fs-5"></i>
+                            <span>Danh sách loại tài sản</span>
+                            <span id="asset-category-count" class="badge bg-sky-100 text-sky-700 rounded-pill">
+                                0 loại
+                            </span>
+                        </div>
+                         <div class="col-md-4 text-end">
+                            <button class="btn btn-outline-secondary btn-sm rounded-pill px-3 py-1.5"
+                                onclick="openLoaiModal()">
+                                <i class="bi bi-tags me-1"></i> Quản lý Loại Tài Sản
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr class="text-xs uppercase text-slate-500 fw-semibold">
+                                    <th class="ps-4">Mã loại</th>
+                                    <th>Tên loại tài sản</th>
+                                    <th>Mô tả</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="asset-category-tbody">
+                                <tr>
+                                    <td colspan="3" class="text-center py-5 text-muted">
+                                        Đang tải danh mục tài sản...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
         </main>
     </div>
 
@@ -527,20 +616,24 @@
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold text-xs text-slate-600">Chọn Phòng <span class="text-danger">*</span></label>
+                                <label class="form-label fw-semibold text-xs text-slate-600">Chọn Phòng <span
+                                        class="text-danger">*</span></label>
                                 <select id="cp-room" class="form-select" required onchange="onCapPhatRoomChange()">
                                     <option value="">-- Chọn phòng --</option>
                                 </select>
                             </div>
                             <div class="col-12">
-                                <label class="form-label fw-semibold text-xs text-slate-600">Chọn Thiết Bị / Tài Sản <span class="text-danger">*</span></label>
+                                <label class="form-label fw-semibold text-xs text-slate-600">Chọn Thiết Bị / Tài Sản
+                                    <span class="text-danger">*</span></label>
                                 <select id="cp-device" class="form-select" required>
                                     <option value="">-- Chọn thiết bị từ kho --</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold text-xs text-slate-600">Số Lượng <span class="text-danger">*</span></label>
-                                <input type="number" id="cp-quantity" class="form-control" value="1" min="1" max="100" required>
+                                <label class="form-label fw-semibold text-xs text-slate-600">Số Lượng <span
+                                        class="text-danger">*</span></label>
+                                <input type="number" id="cp-quantity" class="form-control" value="1" min="1" max="100"
+                                    required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold text-xs text-slate-600">Ngày Cấp</label>
@@ -548,12 +641,15 @@
                             </div>
                             <div class="col-12">
                                 <label class="form-label fw-semibold text-xs text-slate-600">Ghi Chú Ban Đầu</label>
-                                <textarea id="cp-note" class="form-control" rows="2" placeholder="Ví dụ: Thiết bị mới 100%, bảo hành 12 tháng..."></textarea>
+                                <textarea id="cp-note" class="form-control" rows="2"
+                                    placeholder="Ví dụ: Thiết bị mới 100%, bảo hành 12 tháng..."></textarea>
                             </div>
                         </div>
                         <div class="modal-footer border-0 px-0 pb-0 pt-4">
-                            <button type="button" class="btn btn-light rounded-pill px-3" data-bs-dismiss="modal">Hủy bỏ</button>
-                            <button type="submit" class="btn btn-primary rounded-pill px-4 fw-semibold" id="btn-submit-cap-phat">
+                            <button type="button" class="btn btn-light rounded-pill px-3" data-bs-dismiss="modal">Hủy
+                                bỏ</button>
+                            <button type="submit" class="btn btn-primary rounded-pill px-4 fw-semibold"
+                                id="btn-submit-cap-phat">
                                 <i class="bi bi-check-lg me-1"></i> Xác Nhận Cấp Phát
                             </button>
                         </div>
@@ -582,7 +678,8 @@
                             <div class="text-slate-500 text-xs mt-1" id="bh-info-room">Phòng 101 - Tòa A</div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-semibold text-xs text-slate-600">Trạng Thái Chuyển Đến <span class="text-danger">*</span></label>
+                            <label class="form-label fw-semibold text-xs text-slate-600">Trạng Thái Chuyển Đến <span
+                                    class="text-danger">*</span></label>
                             <select id="bh-status" class="form-select" required>
                                 <option value="hong_hoc">Hỏng hóc (Không thể sử dụng)</option>
                                 <option value="can_bao_tri">Cần bảo trì định kỳ</option>
@@ -590,11 +687,14 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-semibold text-xs text-slate-600">Mô Tả Chi Tiết Hư Hỏng <span class="text-danger">*</span></label>
-                            <textarea id="bh-reason" class="form-control" rows="3" required placeholder="Ví dụ: Quạt kêu to, không quay, bóng đèn bị chập chờn..."></textarea>
+                            <label class="form-label fw-semibold text-xs text-slate-600">Mô Tả Chi Tiết Hư Hỏng <span
+                                    class="text-danger">*</span></label>
+                            <textarea id="bh-reason" class="form-control" rows="3" required
+                                placeholder="Ví dụ: Quạt kêu to, không quay, bóng đèn bị chập chờn..."></textarea>
                         </div>
                         <div class="modal-footer border-0 px-0 pb-0 pt-3">
-                            <button type="button" class="btn btn-light rounded-pill px-3" data-bs-dismiss="modal">Đóng</button>
+                            <button type="button" class="btn btn-light rounded-pill px-3"
+                                data-bs-dismiss="modal">Đóng</button>
                             <button type="submit" class="btn btn-danger rounded-pill px-4 fw-semibold">
                                 <i class="bi bi-send-fill me-1"></i> Lưu Báo Hỏng
                             </button>
@@ -624,11 +724,14 @@
                             <div class="text-slate-500 text-xs mt-1" id="sc-info-room">Phòng: 101</div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-semibold text-xs text-slate-600">Ghi Chú Kết Quả Sửa Chữa</label>
-                            <textarea id="sc-note" class="form-control" rows="3" placeholder="Đã thay tụ điện, đã kiểm tra thiết bị hoạt động tốt và bàn giao lại phòng."></textarea>
+                            <label class="form-label fw-semibold text-xs text-slate-600">Ghi Chú Kết Quả Sửa
+                                Chữa</label>
+                            <textarea id="sc-note" class="form-control" rows="3"
+                                placeholder="Đã thay tụ điện, đã kiểm tra thiết bị hoạt động tốt và bàn giao lại phòng."></textarea>
                         </div>
                         <div class="modal-footer border-0 px-0 pb-0 pt-3">
-                            <button type="button" class="btn btn-light rounded-pill px-3" data-bs-dismiss="modal">Hủy</button>
+                            <button type="button" class="btn btn-light rounded-pill px-3"
+                                data-bs-dismiss="modal">Hủy</button>
                             <button type="submit" class="btn btn-success rounded-pill px-4 fw-semibold">
                                 <i class="bi bi-check-circle-fill me-1"></i> Bàn Giao Sử Dụng Lại
                             </button>
@@ -659,10 +762,12 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold text-xs text-slate-600">Lý Do Thu Hồi</label>
-                            <textarea id="th-reason" class="form-control" rows="3" placeholder="Phòng đổi công năng, sinh viên trả phòng hoặc thanh lý tài sản."></textarea>
+                            <textarea id="th-reason" class="form-control" rows="3"
+                                placeholder="Phòng đổi công năng, sinh viên trả phòng hoặc thanh lý tài sản."></textarea>
                         </div>
                         <div class="modal-footer border-0 px-0 pb-0 pt-3">
-                            <button type="button" class="btn btn-light rounded-pill px-3" data-bs-dismiss="modal">Hủy</button>
+                            <button type="button" class="btn btn-light rounded-pill px-3"
+                                data-bs-dismiss="modal">Hủy</button>
                             <button type="submit" class="btn btn-secondary rounded-pill px-4 fw-semibold">
                                 <i class="bi bi-check-lg me-1"></i> Xác Nhận Thu Hồi
                             </button>
@@ -678,7 +783,8 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg rounded-2xl">
                 <div class="modal-header bg-slate-50 border-b border-slate-100 px-4 py-3">
-                    <h5 class="modal-title fw-bold text-slate-800 d-flex align-items-center gap-2" id="modal-catalog-title">
+                    <h5 class="modal-title fw-bold text-slate-800 d-flex align-items-center gap-2"
+                        id="modal-catalog-title">
                         <i class="bi bi-plus-circle text-sky-600"></i>
                         <span>Thêm Thiết Bị Vào Danh Mục Kho</span>
                     </h5>
@@ -689,21 +795,26 @@
                         <input type="hidden" id="cat-id">
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold text-xs text-slate-600">Mã Thiết Bị (Tự sinh nếu bỏ trống)</label>
+                                <label class="form-label fw-semibold text-xs text-slate-600">Mã Thiết Bị (Tự sinh nếu bỏ
+                                    trống)</label>
                                 <input type="text" id="cat-code" class="form-control" placeholder="TB-1001">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold text-xs text-slate-600">Loại Tài Sản <span class="text-danger">*</span></label>
+                                <label class="form-label fw-semibold text-xs text-slate-600">Loại Tài Sản <span
+                                        class="text-danger">*</span></label>
                                 <select id="cat-loai" class="form-select" required>
                                     <option value="">-- Chọn loại --</option>
                                 </select>
                             </div>
                             <div class="col-12">
-                                <label class="form-label fw-semibold text-xs text-slate-600">Tên Thiết Bị / Tài Sản <span class="text-danger">*</span></label>
-                                <input type="text" id="cat-name" class="form-control" required placeholder="Ví dụ: Giường tầng sắt 1m2, Quạt trần Vinawind...">
+                                <label class="form-label fw-semibold text-xs text-slate-600">Tên Thiết Bị / Tài Sản
+                                    <span class="text-danger">*</span></label>
+                                <input type="text" id="cat-name" class="form-control" required
+                                    placeholder="Ví dụ: Giường tầng sắt 1m2, Quạt trần Vinawind...">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold text-xs text-slate-600">Giá Trị Ước Tính (VNĐ)</label>
+                                <label class="form-label fw-semibold text-xs text-slate-600">Giá Trị Ước Tính
+                                    (VNĐ)</label>
                                 <input type="number" id="cat-price" class="form-control" placeholder="1500000" min="0">
                             </div>
                             <div class="col-md-6">
@@ -711,12 +822,15 @@
                                 <input type="date" id="cat-date" class="form-control">
                             </div>
                             <div class="col-12">
-                                <label class="form-label fw-semibold text-xs text-slate-600">Mô Tả / Thông Số Kỹ Thuật</label>
-                                <textarea id="cat-desc" class="form-control" rows="2" placeholder="Kích thước, bảo hành, ghi chú kỹ thuật..."></textarea>
+                                <label class="form-label fw-semibold text-xs text-slate-600">Mô Tả / Thông Số Kỹ
+                                    Thuật</label>
+                                <textarea id="cat-desc" class="form-control" rows="2"
+                                    placeholder="Kích thước, bảo hành, ghi chú kỹ thuật..."></textarea>
                             </div>
                         </div>
                         <div class="modal-footer border-0 px-0 pb-0 pt-4">
-                            <button type="button" class="btn btn-light rounded-pill px-3" data-bs-dismiss="modal">Hủy</button>
+                            <button type="button" class="btn btn-light rounded-pill px-3"
+                                data-bs-dismiss="modal">Hủy</button>
                             <button type="submit" class="btn btn-primary rounded-pill px-4 fw-semibold">
                                 <i class="bi bi-save me-1"></i> Lưu Thiết Bị
                             </button>
@@ -738,15 +852,19 @@
                 <div class="modal-body p-4">
                     <form id="form-loai" onsubmit="handleLoaiSubmit(event)">
                         <div class="mb-3">
-                            <label class="form-label fw-semibold text-xs text-slate-600">Tên Loại Tài Sản <span class="text-danger">*</span></label>
-                            <input type="text" id="loai-name" class="form-control" required placeholder="Đồ điện tử, Nội thất...">
+                            <label class="form-label fw-semibold text-xs text-slate-600">Tên Loại Tài Sản <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" id="loai-name" class="form-control" required
+                                placeholder="Đồ điện tử, Nội thất...">
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold text-xs text-slate-600">Mô tả</label>
-                            <textarea id="loai-desc" class="form-control" rows="2" placeholder="Ghi chú thêm..."></textarea>
+                            <textarea id="loai-desc" class="form-control" rows="2"
+                                placeholder="Ghi chú thêm..."></textarea>
                         </div>
                         <div class="d-flex justify-content-end gap-2">
-                            <button type="button" class="btn btn-light rounded-pill px-3" data-bs-dismiss="modal">Hủy</button>
+                            <button type="button" class="btn btn-light rounded-pill px-3"
+                                data-bs-dismiss="modal">Hủy</button>
                             <button type="submit" class="btn btn-primary rounded-pill px-3">Lưu Loại</button>
                         </div>
                     </form>
@@ -934,7 +1052,7 @@
             const buildingId = document.getElementById('cp-building').value;
             const cpRoom = document.getElementById('cp-room');
             let options = '<option value="">-- Chọn phòng --</option>';
-            
+
             let list = allRooms;
             if (buildingId) {
                 const filtered = allRooms.filter(r => r.toaNha && r.toaNha.id == buildingId);
@@ -987,6 +1105,10 @@
                 document.getElementById('tab-btn-history').classList.add('active');
                 document.getElementById('tab-content-history').classList.remove('d-none');
                 loadAuditHistory();
+            } else if (tab === 'asset-categories') {
+                document.getElementById('tab-btn-asset-categories').classList.add('active');
+                document.getElementById('tab-content-asset-categories').classList.remove('d-none');
+                loadAssetCategories();
             }
         }
 
@@ -995,6 +1117,7 @@
             if (currentTab === 'room-devices') loadRoomDevices();
             else if (currentTab === 'catalog') loadCatalog();
             else if (currentTab === 'history') loadAuditHistory();
+            else if (currentTab === 'asset-categories') loadAssetCategories();
         }
 
         // 4. Load & Render Room Devices (Tab 1)
@@ -1042,7 +1165,7 @@
         }
 
         function getStatusBadge(status) {
-            switch(status) {
+            switch (status) {
                 case 'dang_su_dung':
                     return `<span class="badge-status badge-active"><i class="bi bi-check-circle-fill"></i> Đang sử dụng</span>`;
                 case 'hong_hoc':
@@ -1569,8 +1692,83 @@
             });
             tbody.innerHTML = html;
         }
+        // ================= 11. DANH SÁCH DANH MỤC TÀI SẢN =================
 
-        // ================= 11. LOẠI TÀI SẢN MODAL =================
+        async function loadAssetCategories() {
+            const tbody = document.getElementById('asset-category-tbody');
+
+            tbody.innerHTML = `
+        <tr>
+            <td colspan="3" class="text-center py-5 text-muted">
+                <div class="spinner-border spinner-border-sm text-primary me-2"></div>
+                Đang tải danh mục tài sản...
+            </td>
+        </tr>
+    `;
+
+            const res = await App.api('/api/thiet-bi/loai');
+
+            if (res.success && Array.isArray(res.data)) {
+                allCategories = res.data;
+                renderAssetCategories(allCategories);
+                populateCategorySelects();
+            } else {
+                tbody.innerHTML = `
+            <tr>
+                <td colspan="3" class="text-center py-5 text-danger">
+                    Không thể tải danh sách danh mục tài sản.
+                </td>
+            </tr>
+        `;
+            }
+        }
+
+        function renderAssetCategories(data) {
+            const tbody = document.getElementById('asset-category-tbody');
+            const count = document.getElementById('asset-category-count');
+
+            count.textContent = `${data.length} loại`;
+
+            if (data.length === 0) {
+                tbody.innerHTML = `
+            <tr>
+                <td colspan="3" class="text-center py-5 text-muted">
+                    Chưa có danh mục tài sản nào.
+                </td>
+            </tr>
+        `;
+                return;
+            }
+
+            tbody.innerHTML = data.map(item => `
+        <tr>
+            <td class="ps-4 font-mono fw-semibold text-sky-700">
+                #${item.id}
+            </td>
+
+            <td class="fw-semibold text-slate-800">
+                ${escapeCategoryHtml(item.tenLoai || '')}
+            </td>
+
+            <td class="text-slate-600">
+                ${item.moTa
+                    ? escapeCategoryHtml(item.moTa)
+                    : '<span class="text-muted fst-italic">Chưa có mô tả</span>'}
+            </td>
+        </tr>
+    `).join('');
+        }
+
+        function escapeCategoryHtml(value) {
+            return String(value).replace(/[&<>"']/g, char => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[char]));
+        }
+        // ================= 12. LOẠI TÀI SẢN MODAL =================
         function openLoaiModal() {
             document.getElementById('form-loai').reset();
             loaiModalInstance.show();
@@ -1601,4 +1799,5 @@
         }
     </script>
 </body>
+
 </html>
