@@ -81,7 +81,8 @@ public class ThietBiController {
     }
 
     @PostMapping("/sua-chua/{id}")
-    public ResponseEntity<TaiSanPhong> suaChua(@PathVariable Long id, @RequestBody(required = false) Map<String, Object> payload) {
+    public ResponseEntity<TaiSanPhong> suaChua(@PathVariable Long id,
+            @RequestBody(required = false) Map<String, Object> payload) {
         String ghiChu = payload != null && payload.containsKey("ghiChu") ? (String) payload.get("ghiChu") : null;
         Long nguoiThucHienId = null;
         if (payload != null && payload.get("nguoiThucHienId") != null) {
@@ -91,7 +92,8 @@ public class ThietBiController {
     }
 
     @PostMapping("/thu-hoi/{id}")
-    public ResponseEntity<TaiSanPhong> thuHoi(@PathVariable Long id, @RequestBody(required = false) Map<String, Object> payload) {
+    public ResponseEntity<TaiSanPhong> thuHoi(@PathVariable Long id,
+            @RequestBody(required = false) Map<String, Object> payload) {
         String lyDo = payload != null && payload.containsKey("lyDo") ? (String) payload.get("lyDo") : null;
         Long nguoiThucHienId = null;
         if (payload != null && payload.get("nguoiThucHienId") != null) {
@@ -115,6 +117,21 @@ public class ThietBiController {
     @PostMapping("/loai")
     public ResponseEntity<LoaiTaiSan> createLoaiTaiSan(@RequestBody LoaiTaiSan loai) {
         return ResponseEntity.status(HttpStatus.CREATED).body(thietBiService.createLoaiTaiSan(loai));
+    }
+
+    // Cập nhật loại tài sản
+    @PutMapping("/loai/{id}")
+    public ResponseEntity<LoaiTaiSan> updateLoaiTaiSan(
+            @PathVariable Long id,
+            @RequestBody LoaiTaiSan loai) {
+        return ResponseEntity.ok(thietBiService.updateLoaiTaiSan(id, loai));
+    }
+
+    // Xóa loại tài sản
+    @DeleteMapping("/loai/{id}")
+    public ResponseEntity<Void> deleteLoaiTaiSan(@PathVariable Long id) {
+        thietBiService.deleteLoaiTaiSan(id);
+        return ResponseEntity.noContent().build();
     }
 
     // ================= 4. LỊCH SỬ GIAO DỊCH =================

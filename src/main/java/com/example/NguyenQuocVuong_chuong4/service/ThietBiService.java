@@ -35,11 +35,11 @@ public class ThietBiService {
     private final NguoiDungRepository nguoiDungRepository;
 
     public ThietBiService(TaiSanRepository taiSanRepository,
-                           TaiSanPhongRepository taiSanPhongRepository,
-                           LoaiTaiSanRepository loaiTaiSanRepository,
-                           LichSuTaiSanRepository lichSuTaiSanRepository,
-                           PhongRepository phongRepository,
-                           NguoiDungRepository nguoiDungRepository) {
+            TaiSanPhongRepository taiSanPhongRepository,
+            LoaiTaiSanRepository loaiTaiSanRepository,
+            LichSuTaiSanRepository lichSuTaiSanRepository,
+            PhongRepository phongRepository,
+            NguoiDungRepository nguoiDungRepository) {
         this.taiSanRepository = taiSanRepository;
         this.taiSanPhongRepository = taiSanPhongRepository;
         this.loaiTaiSanRepository = loaiTaiSanRepository;
@@ -55,7 +55,8 @@ public class ThietBiService {
 
     public TaiSan getTaiSanById(Long id) {
         return taiSanRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy thiết bị ID: " + id));
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy thiết bị ID: " + id));
     }
 
     @Transactional
@@ -91,7 +92,8 @@ public class ThietBiService {
         TaiSan existing = getTaiSanById(id);
         List<TaiSanPhong> allocations = taiSanPhongRepository.findByTaiSanId(id);
         if (!allocations.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Thiết bị này đang được cấp phát trong phòng, không thể xóa!");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Thiết bị này đang được cấp phát trong phòng, không thể xóa!");
         }
         taiSanRepository.delete(existing);
     }
@@ -103,7 +105,8 @@ public class ThietBiService {
 
     public TaiSanPhong getTaiSanPhongById(Long id) {
         return taiSanPhongRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy trang bị phòng ID: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Không tìm thấy trang bị phòng ID: " + id));
     }
 
     @Transactional
@@ -119,7 +122,8 @@ public class ThietBiService {
         }
 
         // Kiểm tra xem thiết bị này đã có trong phòng ở trạng thái đang sử dụng chưa
-        TaiSanPhong tsp = taiSanPhongRepository.findFirstByPhongIdAndTaiSanIdAndTrangThai(phong.getId(), taiSan.getId(), "dang_su_dung")
+        TaiSanPhong tsp = taiSanPhongRepository
+                .findFirstByPhongIdAndTaiSanIdAndTrangThai(phong.getId(), taiSan.getId(), "dang_su_dung")
                 .orElse(null);
 
         if (tsp != null) {
@@ -145,7 +149,8 @@ public class ThietBiService {
         ls.setPhong(phong);
         ls.setLoaiGiaoDich("cap_phat");
         ls.setSoLuong(dto.getSoLuong());
-        ls.setLyDo(dto.getGhiChu() != null && !dto.getGhiChu().isBlank() ? dto.getGhiChu() : "Cấp phát trang thiết bị cho phòng " + phong.getMaPhong());
+        ls.setLyDo(dto.getGhiChu() != null && !dto.getGhiChu().isBlank() ? dto.getGhiChu()
+                : "Cấp phát trang thiết bị cho phòng " + phong.getMaPhong());
         ls.setThoiGian(LocalDateTime.now());
         ls.setNguoiThucHien(nguoiThucHien);
         lichSuTaiSanRepository.save(ls);
@@ -244,16 +249,85 @@ public class ThietBiService {
     }
 
     // ================= 3. LOẠI TÀI SẢN =================
+
+    // Lấy danh sách loại tài sản
     public List<LoaiTaiSan> getAllLoaiTaiSan() {
         return loaiTaiSanRepository.findAll();
     }
 
+    // Thêm loại tài sản
     @Transactional
     public LoaiTaiSan createLoaiTaiSan(LoaiTaiSan loai) {
-        if (loaiTaiSanRepository.existsByTenLoai(loai.getTenLoai())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tên loại tài sản đã tồn tại");
+        if (loai.getTenLoai() == null || loai.getTenLoai().isBlank()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Tên loại tài sản không được để trống");
         }
+
+        loai.setTenLoai(loai.getTenLoai().trim());
+
+        if (loaiTaiSanRepository.existsByTenLoai(loai.getTenLoai())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Tên loại tài sản đã tồn tại");
+        }
+
         return loaiTaiSanRepository.save(loai);
+    }
+
+    // Cập nhật loại tài sản
+    @Transactional
+    public LoaiTaiSan updateLoaiTaiSan(Long id, LoaiTaiSan loai) {
+        LoaiTaiSan existing = loaiTaiSanRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Không tìm thấy loại tài sản ID: " + id));
+
+        if (loai.getTenLoai() == null || loai.getTenLoai().isBlank()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Tên loại tài sản không được để trống");
+        }
+
+        String tenLoaiMoi = loai.getTenLoai().trim();
+
+        // Kiểm tra tên mới có bị trùng với loại tài sản khác không
+        boolean trungTen = loaiTaiSanRepository.findAll().stream()
+                .anyMatch(item -> !item.getId().equals(id)
+                        && item.getTenLoai().equalsIgnoreCase(tenLoaiMoi));
+
+        if (trungTen) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Tên loại tài sản đã tồn tại");
+        }
+
+        existing.setTenLoai(tenLoaiMoi);
+        existing.setMoTa(loai.getMoTa());
+
+        return loaiTaiSanRepository.save(existing);
+    }
+
+    // Xóa loại tài sản
+    @Transactional
+    public void deleteLoaiTaiSan(Long id) {
+        LoaiTaiSan existing = loaiTaiSanRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Không tìm thấy loại tài sản ID: " + id));
+
+        // Không cho xóa loại tài sản đang được thiết bị sử dụng
+        boolean dangDuocSuDung = taiSanRepository.findAll().stream()
+                .anyMatch(taiSan -> taiSan.getLoaiTaiSan() != null
+                        && taiSan.getLoaiTaiSan().getId().equals(id));
+
+        if (dangDuocSuDung) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Không thể xóa loại tài sản này vì đang có thiết bị sử dụng!");
+        }
+
+        loaiTaiSanRepository.delete(existing);
     }
 
     // ================= 4. LỊCH SỬ THIẾT BỊ =================
@@ -273,7 +347,8 @@ public class ThietBiService {
         long tongTrangBiPhong = taiSanPhongRepository.count();
         long dangSuDung = taiSanPhongRepository.countByTrangThai("dang_su_dung");
         long hongHoc = taiSanPhongRepository.countByTrangThai("hong_hoc");
-        long canBaoTri = taiSanPhongRepository.countByTrangThai("can_bao_tri") + taiSanPhongRepository.countByTrangThai("dang_sua_chua");
+        long canBaoTri = taiSanPhongRepository.countByTrangThai("can_bao_tri")
+                + taiSanPhongRepository.countByTrangThai("dang_sua_chua");
         long daThuHoi = taiSanPhongRepository.countByTrangThai("da_thu_hoi");
 
         return new ThietBiStatsDTO(tongDanhMuc, tongTrangBiPhong, dangSuDung, hongHoc, canBaoTri, daThuHoi);
