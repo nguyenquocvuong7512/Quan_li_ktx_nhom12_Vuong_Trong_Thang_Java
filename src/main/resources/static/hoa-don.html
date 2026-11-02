@@ -391,22 +391,18 @@
                         <table class="table ktx-table align-middle mb-0">
                             <thead>
                                 <tr class="text-muted small uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">
-                                    <th class="ps-3.5">MÃ HĐ</th>
-                                    <th>SINH VIÊN</th>
-                                    <th>PHÒNG & TÒA</th>
-                                    <th>KỲ THÁNG</th>
-                                    <th>CHI TIẾT KHOẢN THU</th>
-                                    <th class="text-end">TỔNG TIỀN</th>
-                                    <th class="text-end">ĐÃ TRẢ</th>
-                                    <th class="text-end">CÒN NỢ</th>
-                                    <th>HẠN NỘP</th>
-                                    <th>TRẠNG THÁI</th>
-                                    <th class="text-center pe-3.5">THAO TÁC</th>
+                                    <th class="ps-3.5" style="width: 14%;">HÓA ĐƠN & KỲ</th>
+                                    <th style="width: 20%;">SINH VIÊN</th>
+                                    <th style="width: 13%;">PHÒNG & TÒA</th>
+                                    <th class="text-end" style="width: 16%;">TỔNG TIỀN</th>
+                                    <th class="text-end" style="width: 12%;">CÒN NỢ</th>
+                                    <th class="text-center" style="width: 13%;">TRẠNG THÁI</th>
+                                    <th class="text-center pe-3.5 text-nowrap" style="width: 12%;">THAO TÁC</th>
                                 </tr>
                             </thead>
                             <tbody id="invoice-tbody">
                                 <tr>
-                                    <td colspan="11" class="text-center py-5 text-muted">
+                                    <td colspan="7" class="text-center py-5 text-muted">
                                         <div class="spinner-border spinner-border-sm text-primary me-2"></div> Đang tải dữ liệu hóa đơn...
                                     </td>
                                 </tr>
@@ -1260,7 +1256,7 @@
         // Load invoice list from backend
         async function loadInvoices() {
             const tbody = document.getElementById('invoice-tbody');
-            tbody.innerHTML = `<tr><td colspan="11" class="text-center py-5 text-muted"><div class="spinner-border spinner-border-sm text-primary me-2"></div> Đang tải dữ liệu hóa đơn...</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="7" class="text-center py-5 text-muted"><div class="spinner-border spinner-border-sm text-primary me-2"></div> Đang tải dữ liệu hóa đơn...</td></tr>`;
 
             const thang = document.getElementById('filter-month').value;
             const trangThai = document.getElementById('filter-status').value;
@@ -1285,7 +1281,7 @@
                 renderInvoiceTable(filtered);
                 updateKPIs(allInvoices);
             } else {
-                tbody.innerHTML = `<tr><td colspan="11" class="text-center py-4 text-danger"><i class="bi bi-exclamation-triangle me-1"></i> ${res.error || 'Lỗi khi tải hóa đơn'}</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-danger"><i class="bi bi-exclamation-triangle me-1"></i> ${res.error || 'Lỗi khi tải hóa đơn'}</td></tr>`;
             }
         }
 
@@ -1297,7 +1293,7 @@
             if (list.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="11" class="text-center py-5">
+                        <td colspan="7" class="text-center py-5">
                             <div class="text-muted mb-2"><i class="bi bi-receipt-cutoff fs-1"></i></div>
                             <div class="fw-semibold text-secondary">Không có hóa đơn nào phù hợp với bộ lọc</div>
                             <small class="text-muted">Nhấn "+ Lập Hóa Đơn Mới" hoặc "Lập HĐ Tự Động" để tạo hóa đơn cho sinh viên</small>
@@ -1324,46 +1320,60 @@
                     statusBadge = `<span class="badge-status badge-unpaid"><i class="bi bi-clock-fill"></i> Chưa thanh toán</span>`;
                 }
 
-                // Fee breakdown pills
-                const feeDetails = `
-                    <div class="d-flex flex-wrap gap-1" style="max-width: 250px;">
-                        <span class="fee-pill" title="Tiền phòng">Phòng: ${App.formatMoney(k.tienPhong)}</span>
-                        ${k.tienDien > 0 ? `<span class="fee-pill text-amber-700 bg-amber-50" title="Điện: ${k.chiSoDienMoi - k.chiSoDienCu} kWh">Điện: ${App.formatMoney(k.tienDien)}</span>` : ''}
-                        ${k.tienNuoc > 0 ? `<span class="fee-pill text-cyan-700 bg-cyan-50" title="Nước: ${k.chiSoNuocMoi - k.chiSoNuocCu} m3">Nước: ${App.formatMoney(k.tienNuoc)}</span>` : ''}
-                        ${k.tienInternet > 0 ? `<span class="fee-pill text-indigo-700 bg-indigo-50" title="Internet">Net: ${App.formatMoney(k.tienInternet)}</span>` : ''}
-                        ${k.tienDichVu > 0 ? `<span class="fee-pill text-emerald-700 bg-emerald-50" title="Dịch vụ">DV: ${App.formatMoney(k.tienDichVu)}</span>` : ''}
-                    </div>
-                `;
+                // Tooltip chi tiết các khoản phí khi rê chuột vào Tổng Tiền
+                const feeDetailsList = [
+                    `• Tiền phòng: ${App.formatMoney(k.tienPhong)}`
+                ];
+                if (k.tienDien > 0) feeDetailsList.push(`• Tiền điện: ${App.formatMoney(k.tienDien)} (${(k.chiSoDienMoi || 0) - (k.chiSoDienCu || 0)} kWh)`);
+                if (k.tienNuoc > 0) feeDetailsList.push(`• Tiền nước: ${App.formatMoney(k.tienNuoc)} (${(k.chiSoNuocMoi || 0) - (k.chiSoNuocCu || 0)} m³)`);
+                if (k.tienInternet > 0) feeDetailsList.push(`• Internet: ${App.formatMoney(k.tienInternet)}`);
+                if (k.tienDichVu > 0) feeDetailsList.push(`• Dịch vụ: ${App.formatMoney(k.tienDichVu)}`);
+                const feeTooltip = feeDetailsList.join(' &#10;');
+
+                const overdue = isOverdue(k.hanThanhToan, k.trangThai);
+                const hanText = k.hanThanhToan ? App.formatDate(k.hanThanhToan) : '-';
 
                 return `
                     <tr>
                         <td class="ps-3.5">
-                            <a href="javascript:void(0)" class="fw-bold text-primary text-decoration-none" onclick="viewPrintReceipt(${k.id})" title="Xem phiếu thu">
+                            <a href="javascript:void(0)" class="fw-bold text-primary text-decoration-none" onclick="viewPrintReceipt(${k.id})" title="Xem & In phiếu thu">
                                 ${k.maHoaDon || ('HD-' + k.id)}
                             </a>
+                            <div class="text-muted" style="font-size: 0.75rem;">
+                                <i class="bi bi-calendar3 me-1 text-secondary"></i>Kỳ: <span class="fw-medium text-dark">${k.thang || '-'}</span>
+                            </div>
                         </td>
                         <td>
-                            <div class="fw-bold text-dark">${u.hoTen || 'Sinh viên'}</div>
+                            <div class="fw-bold text-dark text-truncate" style="max-width: 190px;" title="${u.hoTen || 'Sinh viên'}">${u.hoTen || 'Sinh viên'}</div>
                             <div class="text-muted" style="font-size: 0.75rem;">MSSV: ${sv.maSinhVien || '-'} | SĐT: ${u.soDienThoai || '-'}</div>
                         </td>
                         <td>
                             <div class="fw-semibold text-dark">${p.maPhong || '-'}</div>
                             <div class="text-muted" style="font-size: 0.72rem;">${tn}</div>
                         </td>
-                        <td>
-                            <span class="badge bg-light text-dark border px-2 py-1">${k.thang || '-'}</span>
+                        <td class="text-end">
+                            <div class="fw-bold text-dark d-inline-flex align-items-center gap-1" title="${feeTooltip}">
+                                <span>${App.formatMoney(k.soTien)}</span>
+                                <i class="bi bi-info-circle text-muted" style="font-size: 0.75rem; cursor: pointer;"></i>
+                            </div>
+                            <div class="text-muted" style="font-size: 0.72rem;">
+                                Đã trả: <span class="text-success fw-medium">${App.formatMoney(k.daThanhToan)}</span>
+                            </div>
                         </td>
-                        <td>${feeDetails}</td>
-                        <td class="text-end fw-bold text-dark">${App.formatMoney(k.soTien)}</td>
-                        <td class="text-end text-success fw-semibold">${App.formatMoney(k.daThanhToan)}</td>
-                        <td class="text-end ${k.conLai > 0 ? 'text-danger fw-bold' : 'text-muted'}">
-                            ${App.formatMoney(k.conLai)}
+                        <td class="text-end">
+                            ${k.conLai > 0 ? `
+                                <span class="text-danger fw-bold">${App.formatMoney(k.conLai)}</span>
+                            ` : `
+                                <span class="text-muted small">0 đ</span>
+                            `}
                         </td>
-                        <td class="small ${isOverdue(k.hanThanhToan, k.trangThai) ? 'text-danger fw-bold' : 'text-muted'}">
-                            ${App.formatDate(k.hanThanhToan)}
+                        <td class="text-center">
+                            <div>${statusBadge}</div>
+                            <div class="small mt-1 ${overdue ? 'text-danger fw-semibold' : 'text-muted'}" style="font-size: 0.72rem;">
+                                Hạn: ${hanText}
+                            </div>
                         </td>
-                        <td>${statusBadge}</td>
-                        <td class="text-center pe-3.5">
+                        <td class="text-center pe-3.5 text-nowrap">
                             <div class="btn-group btn-group-sm">
                                 ${k.conLai > 0 ? `
                                     <button class="btn btn-outline-success" onclick="openPaymentModal(${k.id})" title="Thu tiền / Thanh toán">
