@@ -2,6 +2,7 @@ package com.example.NguyenQuocVuong_chuong4.controller;
 
 import com.example.NguyenQuocVuong_chuong4.dto.BaoHongThietBiDTO;
 import com.example.NguyenQuocVuong_chuong4.dto.CapPhatThietBiDTO;
+import com.example.NguyenQuocVuong_chuong4.dto.PageResponse;
 import com.example.NguyenQuocVuong_chuong4.dto.ThietBiStatsDTO;
 import com.example.NguyenQuocVuong_chuong4.model.LichSuTaiSan;
 import com.example.NguyenQuocVuong_chuong4.model.LoaiTaiSan;
@@ -9,8 +10,12 @@ import com.example.NguyenQuocVuong_chuong4.model.TaiSan;
 import com.example.NguyenQuocVuong_chuong4.model.TaiSanPhong;
 import com.example.NguyenQuocVuong_chuong4.service.ThietBiService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,7 +33,22 @@ public class ThietBiController {
 
     // ================= 1. DANH MỤC THIẾT BỊ =================
     @GetMapping
-    public ResponseEntity<List<TaiSan>> getAllTaiSan() {
+    public ResponseEntity<?> getAllTaiSan(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Long loaiTaiSanId,
+            @RequestParam(required = false) String trangThai,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction) {
+
+        if (page != null) {
+            int pageSize = (size != null && size > 0) ? size : 10;
+            Sort.Direction dir = "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+            Pageable pageable = PageRequest.of(page, pageSize, Sort.by(dir, sortBy));
+            return ResponseEntity.ok(thietBiService.getPaginatedTaiSan(search, loaiTaiSanId, trangThai, pageable));
+        }
+
         return ResponseEntity.ok(thietBiService.getAllTaiSan());
     }
 
@@ -38,17 +58,20 @@ public class ThietBiController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'QUAN_LY')")
     public ResponseEntity<TaiSan> createTaiSan(@RequestBody TaiSan taiSan) {
         TaiSan saved = thietBiService.saveTaiSan(taiSan);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'QUAN_LY')")
     public ResponseEntity<TaiSan> updateTaiSan(@PathVariable Long id, @RequestBody TaiSan taiSan) {
         return ResponseEntity.ok(thietBiService.updateTaiSan(id, taiSan));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'QUAN_LY')")
     public ResponseEntity<Void> deleteTaiSan(@PathVariable Long id) {
         thietBiService.deleteTaiSan(id);
         return ResponseEntity.noContent().build();
@@ -69,6 +92,7 @@ public class ThietBiController {
     }
 
     @PostMapping("/cap-phat")
+    @PreAuthorize("hasAnyRole('ADMIN', 'QUAN_LY')")
     public ResponseEntity<TaiSanPhong> capPhatChoPhong(@Valid @RequestBody CapPhatThietBiDTO dto) {
         TaiSanPhong created = thietBiService.capPhatChoPhong(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
@@ -81,6 +105,7 @@ public class ThietBiController {
     }
 
     @PostMapping("/sua-chua/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'QUAN_LY')")
     public ResponseEntity<TaiSanPhong> suaChua(@PathVariable Long id,
             @RequestBody(required = false) Map<String, Object> payload) {
         String ghiChu = payload != null && payload.containsKey("ghiChu") ? (String) payload.get("ghiChu") : null;
@@ -92,6 +117,7 @@ public class ThietBiController {
     }
 
     @PostMapping("/thu-hoi/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'QUAN_LY')")
     public ResponseEntity<TaiSanPhong> thuHoi(@PathVariable Long id,
             @RequestBody(required = false) Map<String, Object> payload) {
         String lyDo = payload != null && payload.containsKey("lyDo") ? (String) payload.get("lyDo") : null;
@@ -103,6 +129,7 @@ public class ThietBiController {
     }
 
     @DeleteMapping("/phong/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'QUAN_LY')")
     public ResponseEntity<Void> xoaTrangBiPhong(@PathVariable Long id) {
         thietBiService.xoaTrangBiPhong(id);
         return ResponseEntity.noContent().build();
@@ -115,20 +142,21 @@ public class ThietBiController {
     }
 
     @PostMapping("/loai")
+    @PreAuthorize("hasAnyRole('ADMIN', 'QUAN_LY')")
     public ResponseEntity<LoaiTaiSan> createLoaiTaiSan(@RequestBody LoaiTaiSan loai) {
         return ResponseEntity.status(HttpStatus.CREATED).body(thietBiService.createLoaiTaiSan(loai));
     }
 
-    // Cập nhật loại tài sản
     @PutMapping("/loai/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'QUAN_LY')")
     public ResponseEntity<LoaiTaiSan> updateLoaiTaiSan(
             @PathVariable Long id,
             @RequestBody LoaiTaiSan loai) {
         return ResponseEntity.ok(thietBiService.updateLoaiTaiSan(id, loai));
     }
 
-    // Xóa loại tài sản
     @DeleteMapping("/loai/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'QUAN_LY')")
     public ResponseEntity<Void> deleteLoaiTaiSan(@PathVariable Long id) {
         thietBiService.deleteLoaiTaiSan(id);
         return ResponseEntity.noContent().build();

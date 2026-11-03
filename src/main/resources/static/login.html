@@ -39,7 +39,7 @@
 </head>
 <body class="login-body">
 
-    <div class="login-card animate-fade-in-up shadow-2xl">
+    <div class="login-card animate-fade-in-up shadow-2xl" style="max-width: 440px;">
         <div class="text-center mb-4">
             <div class="brand-icon mx-auto mb-3 shadow-lg" style="width: 56px; height: 56px; font-size: 1.85rem; border-radius: 16px;">
                 <i class="bi bi-buildings"></i>
@@ -60,7 +60,7 @@
                 <div class="input-group">
                     <span class="input-group-text bg-light text-muted"><i class="bi bi-person"></i></span>
                     <input type="text" class="form-control" id="identifier" name="identifier" 
-                           placeholder="Nhập email hoặc mã người dùng (VD: ND001)" required autofocus>
+                           placeholder="Nhập email hoặc mã người dùng (VD: admin@ktx.edu.vn)" required autofocus>
                 </div>
             </div>
 
@@ -76,7 +76,7 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="remember-me" checked>
                     <label class="form-check-label small text-muted" for="remember-me">
@@ -86,16 +86,33 @@
                 <a href="javascript:void(0)" onclick="App.toast('Vui lòng liên hệ quản trị viên ký túc xá để cấp lại mật khẩu!', 'info')" class="small text-decoration-none text-primary">Quên mật khẩu?</a>
             </div>
 
-            <button type="submit" class="btn btn-primary w-100 py-2 d-flex align-items-center justify-content-center gap-2" id="submit-btn">
+            <button type="submit" class="btn btn-primary w-100 py-2 d-flex align-items-center justify-content-center gap-2 shadow-sm" id="submit-btn">
                 <span id="btn-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                 <span id="btn-text"><i class="bi bi-box-arrow-in-right me-1"></i> Đăng nhập</span>
             </button>
         </form>
 
-        <div class="mt-4 pt-3 border-top text-center">
-            <p class="text-muted small mb-0">Hệ thống bài tập lớn Nhóm 12 &copy; 2026</p>
-            <div class="small text-secondary mt-1">
-                Tài khoản mẫu: <code>cuong@example.com</code> hoặc <code>ND001</code>
+        <!-- Test Accounts Box -->
+        <div class="mt-4 pt-3 border-top">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="fw-bold small text-dark"><i class="bi bi-shield-check text-primary me-1"></i> Tài khoản kiểm thử nhanh:</span>
+            </div>
+            <div class="d-grid gap-1.5 mb-2">
+                <button type="button" class="btn btn-xs btn-outline-danger text-start d-flex justify-content-between align-items-center py-1.5 px-2.5 rounded-2" onclick="quickFill('admin@ktx.edu.vn', 'Admin@123')">
+                    <span><strong>1. ADMIN:</strong> <code>admin@ktx.edu.vn</code></span>
+                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle">Admin@123</span>
+                </button>
+                <button type="button" class="btn btn-xs btn-outline-primary text-start d-flex justify-content-between align-items-center py-1.5 px-2.5 rounded-2" onclick="quickFill('quanly@ktx.edu.vn', 'QuanLy@123')">
+                    <span><strong>2. QUẢN LÝ:</strong> <code>quanly@ktx.edu.vn</code></span>
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle">QuanLy@123</span>
+                </button>
+                <button type="button" class="btn btn-xs btn-outline-success text-start d-flex justify-content-between align-items-center py-1.5 px-2.5 rounded-2" onclick="quickFill('sinhvien@ktx.edu.vn', 'SinhVien@123')">
+                    <span><strong>3. SINH VIÊN:</strong> <code>sinhvien@ktx.edu.vn</code></span>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle">SinhVien@123</span>
+                </button>
+            </div>
+            <div class="text-center text-muted" style="font-size: 0.72rem;">
+                Hệ thống Quản lý KTX Sinh viên &copy; 2026 - Nhóm 12
             </div>
         </div>
     </div>
@@ -104,6 +121,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/app.js"></script>
     <script>
+        function quickFill(user, pwd) {
+            document.getElementById('identifier').value = user;
+            document.getElementById('password').value = pwd;
+            App.toast('Đã điền tài khoản: ' + user, 'info');
+        }
+
         // Toggle password visibility
         const toggleBtn = document.getElementById('toggle-password');
         const passwordInput = document.getElementById('password');
@@ -150,11 +173,15 @@
             btnText.innerHTML = '<i class="bi bi-box-arrow-in-right me-1"></i> Đăng nhập';
 
             if (result.success && result.data) {
-                // Save user info and redirect to dashboard
+                // Save user info and redirect based on role
                 App.auth.setUser(result.data);
                 App.toast('Đăng nhập thành công! Chào mừng ' + (result.data.hoTen || result.data.maNguoiDung));
                 setTimeout(() => {
-                    window.location.href = '/index.html';
+                    if (result.data.roles && result.data.roles.includes('SINH_VIEN') && !result.data.roles.includes('ADMIN') && !result.data.roles.includes('QUAN_LY')) {
+                        window.location.href = '/hoa-don.html';
+                    } else {
+                        window.location.href = '/index.html';
+                    }
                 }, 600);
             } else {
                 // Check if backend unreachable or credentials invalid
@@ -166,12 +193,13 @@
                     alertMsg.textContent = result.error || 'Tài khoản hoặc mật khẩu không chính xác hoặc tài khoản đã bị khóa!';
                 } else if (result.status === 0) {
                     alertMsg.textContent = result.error + ' (Đang ở chế độ xem giao diện, bạn có thể đăng nhập demo)';
-                    // Provide convenient quick demo login if backend is not currently connected to MySQL
                     App.auth.setUser({
                         id: 1,
                         maNguoiDung: 'ADMIN01',
                         hoTen: 'Quản Trị Viên (Demo)',
-                        email: identifier
+                        email: identifier,
+                        roles: ['ADMIN'],
+                        token: 'DEMO_TOKEN'
                     });
                     App.toast('Đăng nhập ở chế độ Demo (khi MySQL chưa bật)', 'warning');
                     setTimeout(() => { window.location.href = '/index.html'; }, 1000);

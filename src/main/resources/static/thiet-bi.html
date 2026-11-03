@@ -1490,15 +1490,35 @@
         // ================= 9. CATALOG (TAB 2) =================
         async function loadCatalog() {
             const tbody = document.getElementById('catalog-tbody');
+            const mobileContainer = document.getElementById('catalog-mobile-cards');
             tbody.innerHTML = `<tr><td colspan="7" class="text-center py-5 text-muted"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Đang tải kho thiết bị...</td></tr>`;
+            if (mobileContainer) mobileContainer.innerHTML = `<div class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm text-primary me-2"></div> Đang tải...</div>`;
 
-            const res = await App.api('/api/thiet-bi');
-            if (res.success && Array.isArray(res.data)) {
-                allCatalog = res.data;
+            const q = (document.getElementById('catalog-search') ? document.getElementById('catalog-search').value : '').trim();
+            const p = window._catPage || 0;
+            const sz = window._catSize || 10;
+            const params = new URLSearchParams({ page: p, size: sz, sortBy: 'id', direction: 'asc' });
+            if (q) params.append('search', q);
+
+            const res = await App.api(`/api/thiet-bi?${params.toString()}`);
+            if (res.success) {
+                let items = [];
+                if (res.data && res.data.content) {
+                    items = res.data.content;
+                    App.renderPagination('catalog-pagination', res.data, (newPage, newSize) => {
+                        window._catPage = newPage;
+                        window._catSize = newSize;
+                        loadCatalog();
+                    });
+                } else if (Array.isArray(res.data)) {
+                    items = res.data;
+                }
+                allCatalog = items;
                 populateDeviceCatalogSelect();
-                filterCatalog();
+                renderCatalogTable(allCatalog);
             } else {
                 tbody.innerHTML = `<tr><td colspan="7" class="text-center py-5 text-danger"><i class="bi bi-exclamation-triangle me-1"></i> ${res.error || 'Lỗi khi tải kho'}</td></tr>`;
+                if (mobileContainer) mobileContainer.innerHTML = `<div class="text-center py-4 text-danger">${res.error || 'Lỗi tải kho'}</div>`;
             }
         }
 
@@ -1515,7 +1535,43 @@
 
         function renderCatalogTable(data) {
             const tbody = document.getElementById('catalog-tbody');
+            const mobileContainer = document.getElementById('catalog-mobile-cards');
             document.getElementById('catalog-count').textContent = `${data.length} thiết bị`;
+
+            if (mobileContainer) {
+                if (data.length === 0) {
+                    mobileContainer.innerHTML = '<div class="text-center py-4 text-muted">Không có thiết bị nào trong kho</div>';
+                } else {
+                    mobileContainer.innerHTML = data.map(item => {
+                        const cat = item.loaiTaiSan ? item.loaiTaiSan.tenLoai : 'Chưa phân loại';
+                        const giaTri = item.giaTri ? App.formatMoney(item.giaTri) : '0 ₫';
+                        return `
+                        <div class="card border rounded-3 p-3 mb-2 shadow-sm bg-white">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="badge bg-sky-50 text-sky-700 border border-sky-200 font-monospace">${item.maTaiSan || 'N/A'}</span>
+                                <span class="badge bg-light text-secondary border text-xs px-2 py-0.5">${cat}</span>
+                            </div>
+                            <div class="fw-bold text-slate-800 fs-6">${item.tenTaiSan}</div>
+                            <div class="d-flex justify-content-between align-items-center bg-slate-50 p-2 rounded-2 my-2">
+                                <small class="text-muted">Giá trị</small>
+                                <strong class="text-emerald-700">${giaTri}</strong>
+                            </div>
+                            <div class="small text-muted mb-2">
+                                <div><i class="bi bi-calendar-event me-1"></i>Nhập: ${item.ngayNhap || 'N/A'}</div>
+                                <div class="text-truncate"><i class="bi bi-info-circle me-1"></i>${item.moTa || '—'}</div>
+                            </div>
+                            <div class="d-flex gap-1.5 justify-content-end pt-1 border-top">
+                                <button class="btn btn-outline-primary btn-xs py-1 px-2.5 rounded-pill" onclick="openEditCatalogModal(${item.id})">
+                                    <i class="bi bi-pencil me-1"></i>Sửa
+                                </button>
+                                <button class="btn btn-outline-danger btn-xs py-1 px-2.5 rounded-pill" onclick="deleteCatalog(${item.id}, '${item.tenTaiSan}')">
+                                    <i class="bi bi-trash me-1"></i>Xóa
+                                </button>
+                            </div>
+                        </div>`;
+                    }).join('');
+                }
+            }
 
             if (data.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="7" class="text-center py-5 text-muted">

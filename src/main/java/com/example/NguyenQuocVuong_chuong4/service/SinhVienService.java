@@ -1,7 +1,10 @@
 package com.example.NguyenQuocVuong_chuong4.service;
 
+import com.example.NguyenQuocVuong_chuong4.dto.PageResponse;
 import com.example.NguyenQuocVuong_chuong4.model.SinhVien;
 import com.example.NguyenQuocVuong_chuong4.repository.SinhVienRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,6 +21,12 @@ public class SinhVienService {
 
     public List<SinhVien> getAll() {
         return repository.findAll();
+    }
+
+    public PageResponse<SinhVien> getPaginated(String search, Pageable pageable) {
+        String cleanSearch = (search != null && !search.isBlank()) ? search.trim() : null;
+        Page<SinhVien> page = repository.searchPage(cleanSearch, pageable);
+        return PageResponse.from(page);
     }
 
     public SinhVien getById(Long id) {

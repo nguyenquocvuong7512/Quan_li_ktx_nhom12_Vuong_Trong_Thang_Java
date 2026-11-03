@@ -364,7 +364,7 @@
         let detailModalInstance = null;
 
         document.addEventListener('DOMContentLoaded', () => {
-            App.initLayout('sinh-vien');
+            App.initLayout('sinh-vien', ['ADMIN', 'QUAN_LY']);
             studentModalInstance = new bootstrap.Modal(document.getElementById('student-modal'));
             detailModalInstance = new bootstrap.Modal(document.getElementById('student-detail-modal'));
             loadStudents();

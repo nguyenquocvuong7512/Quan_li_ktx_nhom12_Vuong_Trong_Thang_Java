@@ -242,7 +242,7 @@
         let detailModalInstance = null;
 
         document.addEventListener('DOMContentLoaded', () => {
-            App.initLayout('loai-phong');
+            App.initLayout('loai-phong', ['ADMIN', 'QUAN_LY']);
             detailModalInstance = new bootstrap.Modal(document.getElementById('type-detail-modal'));
             loadRoomTypes();
         });

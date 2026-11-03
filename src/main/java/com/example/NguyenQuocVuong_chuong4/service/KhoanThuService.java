@@ -5,6 +5,9 @@ import com.example.NguyenQuocVuong_chuong4.dto.GhiNhanThanhToanDTO;
 import com.example.NguyenQuocVuong_chuong4.dto.HoaDonRequestDTO;
 import com.example.NguyenQuocVuong_chuong4.dto.LapHoaDonHangLoatDTO;
 import com.example.NguyenQuocVuong_chuong4.dto.PhieuThuDTO;
+import com.example.NguyenQuocVuong_chuong4.dto.PageResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import com.example.NguyenQuocVuong_chuong4.model.HopDong;
 import com.example.NguyenQuocVuong_chuong4.model.KhoanThu;
 import com.example.NguyenQuocVuong_chuong4.model.Phong;
@@ -98,6 +101,16 @@ public class KhoanThuService {
         }
 
         return list;
+    }
+
+    public PageResponse<KhoanThu> getPaginated(String thang, String trangThai, Long sinhVienId, Long phongId, String search, Pageable pageable) {
+        capNhatTrangThaiQuaHan();
+        String cleanSearch = (search != null && !search.isBlank()) ? search.trim() : null;
+        String cleanThang = (thang != null && !thang.isBlank()) ? thang.trim() : null;
+        String cleanTrangThai = (trangThai != null && !trangThai.isBlank()) ? trangThai.trim() : null;
+
+        Page<KhoanThu> page = repository.filterKhoanThuWithSearchPage(cleanThang, cleanTrangThai, sinhVienId, phongId, cleanSearch, pageable);
+        return PageResponse.from(page);
     }
 
     public KhoanThu getById(Long id) {

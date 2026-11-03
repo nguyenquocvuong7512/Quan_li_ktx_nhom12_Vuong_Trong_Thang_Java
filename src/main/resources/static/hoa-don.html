@@ -387,7 +387,7 @@
                         </div>
                     </div>
 
-                    <div class="table-responsive">
+                    <div class="table-responsive d-none d-md-block">
                         <table class="table ktx-table align-middle mb-0">
                             <thead>
                                 <tr class="text-muted small uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">
@@ -409,6 +409,10 @@
                             </tbody>
                         </table>
                     </div>
+                    <!-- MOBILE CARD VIEW -->
+                    <div class="d-md-none p-2.5 bg-slate-50" id="invoice-mobile-cards"></div>
+                    <!-- PAGINATION -->
+                    <div class="p-3 border-top bg-white" id="invoice-pagination"></div>
                 </div>
             </div>
 
@@ -817,6 +821,7 @@
                                 <div class="mb-2.5">
                                     <label class="form-label small fw-semibold mb-1" style="font-size: 0.78rem;">Phương thức thanh toán <span class="text-danger">*</span></label>
                                     <select class="form-select form-select-sm" id="pay-method" onchange="handlePaymentMethodChange()" required>
+                                        <option value="vnpay">🔴 Cổng thanh toán VNPAY Sandbox (Thẻ ATM, QR, Thẻ quốc tế)</option>
                                         <option value="vietqr">⚡ Quét mã VietQR Online (MBBank 24/7)</option>
                                         <option value="momo">🟣 Ví MoMo Online (Napas 24/7 & App MoMo)</option>
                                         <option value="chuyen_khoan">🏦 Chuyển khoản ngân hàng</option>
@@ -934,6 +939,9 @@
                             </span>
                             <div class="d-flex gap-2">
                                 <button type="button" class="btn btn-sm btn-light border px-3" data-bs-dismiss="modal">Đóng</button>
+                                <button type="button" class="btn btn-sm btn-danger px-3.5 fw-semibold d-none" id="btn-vnpay-pay" onclick="payWithVnPay()">
+                                    <i class="bi bi-credit-card-2-front-fill me-1"></i> Chuyển Đến Cổng VNPAY Sandbox
+                                </button>
                                 <button type="submit" class="btn btn-sm btn-success px-3.5 fw-semibold" id="pay-submit-btn">
                                     <i class="bi bi-check-circle-fill me-1"></i> Xác Nhận Thu Tiền
                                 </button>
@@ -1157,6 +1165,12 @@
 
         document.addEventListener('DOMContentLoaded', async () => {
             App.initLayout('hoa-don');
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('vnpay_status') === 'success') {
+                App.toast('🎉 Thanh toán trực tuyến qua VNPAY Sandbox thành công! Giao dịch đã được đối soát tự động.', 'success');
+            } else if (urlParams.get('vnpay_status') === 'failed') {
+                App.toast('Giao dịch VNPAY Sandbox không thành công hoặc đã bị hủy.', 'warning');
+            }
 
             // Init bootstrap modals
             invoiceModal = new bootstrap.Modal(document.getElementById('invoice-modal'));
@@ -1267,11 +1281,26 @@
             if (trangThai) params.append('trangThai', trangThai);
             if (search) params.append('search', search);
 
-            const res = await App.api(`/api/hoa-don?${params.toString()}`);
-            if (res.success && Array.isArray(res.data)) {
-                allInvoices = res.data;
+            params.append('page', window._invPage || 0);
+            params.append('size', window._invSize || 10);
+            params.append('sortBy', 'id');
+            params.append('direction', 'desc');
 
-                // Client filter for building if chosen
+            const res = await App.api(`/api/hoa-don?${params.toString()}`);
+            if (res.success) {
+                let items = [];
+                if (res.data && res.data.content) {
+                    items = res.data.content;
+                    App.renderPagination('invoice-pagination', res.data, (p, sz) => {
+                        window._invPage = p;
+                        window._invSize = sz;
+                        loadInvoices();
+                    });
+                } else if (Array.isArray(res.data)) {
+                    items = res.data;
+                }
+                allInvoices = items;
+
                 const bId = document.getElementById('filter-building').value;
                 let filtered = allInvoices;
                 if (bId) {
@@ -1332,6 +1361,53 @@
 
                 const overdue = isOverdue(k.hanThanhToan, k.trangThai);
                 const hanText = k.hanThanhToan ? App.formatDate(k.hanThanhToan) : '-';
+
+            // Render Mobile Cards View
+            const mobileCardsContainer = document.getElementById('invoice-mobile-cards');
+            if (mobileCardsContainer) {
+                if (list.length === 0) {
+                    mobileCardsContainer.innerHTML = '<div class="text-center py-4 text-muted">Không có hóa đơn nào</div>';
+                } else {
+                    mobileCardsContainer.innerHTML = list.map(k => {
+                        const sv = k.sinhVien || {};
+                        const u = sv.nguoiDung || {};
+                        const p = k.phong || {};
+                        const tn = (p.tang && p.tang.toaNha) ? p.tang.toaNha.tenToa : '-';
+                        let statusBadge = '';
+                        if (k.trangThai === 'da_thanh_toan') {
+                            statusBadge = `<span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-0.5" style="font-size:0.7rem;"><i class="bi bi-check-circle-fill"></i> Đã trả</span>`;
+                        } else if (k.trangThai === 'qua_han') {
+                            statusBadge = `<span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-0.5" style="font-size:0.7rem;"><i class="bi bi-exclamation-octagon-fill"></i> Quá hạn</span>`;
+                        } else if (k.trangThai === 'thanh_toan_mot_phan') {
+                            statusBadge = `<span class="badge bg-warning-subtle text-warning border border-warning-subtle px-2 py-0.5" style="font-size:0.7rem;"><i class="bi bi-pie-chart-fill"></i> Nợ 1 phần</span>`;
+                        } else {
+                            statusBadge = `<span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-0.5" style="font-size:0.7rem;"><i class="bi bi-clock-fill"></i> Chưa trả</span>`;
+                        }
+                        const isPaid = k.trangThai === 'da_thanh_toan' && (k.conLai <= 0);
+                        return `
+                        <div class="card border rounded-3 p-3 mb-2 shadow-sm bg-white">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <span class="badge bg-light text-dark border font-monospace">${k.maHoaDon || ('HD-' + k.id)}</span>
+                                    <small class="text-muted ms-1"><i class="bi bi-calendar3"></i> ${k.thang || '-'}</small>
+                                </div>
+                                ${statusBadge}
+                            </div>
+                            <div class="fw-bold text-dark">${u.hoTen || 'Sinh viên'} <small class="text-muted">(${sv.maSinhVien || '-'})</small></div>
+                            <div class="small text-muted mb-2"><i class="bi bi-door-closed text-primary"></i> Phòng ${p.maPhong || '-'} (${tn})</div>
+                            <div class="d-flex justify-content-between align-items-center bg-light p-2 rounded-2 mb-2">
+                                <div><small class="text-muted d-block" style="font-size:0.7rem;">Tổng tiền</small><strong>${App.formatMoney(k.soTien)}</strong></div>
+                                <div class="text-end"><small class="text-muted d-block" style="font-size:0.7rem;">Còn nợ</small><strong class="${k.conLai > 0 ? 'text-danger' : 'text-success'}">${App.formatMoney(k.conLai)}</strong></div>
+                            </div>
+                            <div class="d-flex gap-1 justify-content-end pt-1">
+                                ${!isPaid ? `<button class="btn btn-xs btn-primary py-1 px-2.5 rounded-pill" onclick="openPaymentModal(${k.id})"><i class="bi bi-credit-card me-1"></i>Thanh toán</button>` : ''}
+                                <button class="btn btn-xs btn-outline-secondary py-1 px-2 rounded-pill" onclick="viewPrintReceipt(${k.id})" title="In phiếu thu"><i class="bi bi-printer"></i></button>
+                                <button class="btn btn-xs btn-outline-info py-1 px-2 rounded-pill" onclick="viewPaymentHistory(${k.id})" title="Lịch sử"><i class="bi bi-clock-history"></i></button>
+                            </div>
+                        </div>`;
+                    }).join('');
+                }
+            }
 
                 return `
                     <tr>
@@ -2059,6 +2135,20 @@
             const method = document.getElementById('pay-method').value;
             const vqrCol = document.getElementById('vietqr-col');
             const leftCol = document.getElementById('pay-left-col');
+            const btnVnpay = document.getElementById('btn-vnpay-pay');
+            const btnSubmit = document.getElementById('pay-submit-btn');
+
+            if (method === 'vnpay') {
+                if (btnVnpay) btnVnpay.classList.remove('d-none');
+                if (btnSubmit) btnSubmit.classList.add('d-none');
+                if (vqrCol) vqrCol.style.display = 'none';
+                if (leftCol) leftCol.className = 'col-12';
+                return;
+            } else {
+                if (btnVnpay) btnVnpay.classList.add('d-none');
+                if (btnSubmit) btnSubmit.classList.remove('d-none');
+            }
+
             const isOnline = (method === 'vietqr' || method === 'chuyen_khoan' || method === 'momo' || method === 'vi_dien_tu');
 
             if (vqrCol) {

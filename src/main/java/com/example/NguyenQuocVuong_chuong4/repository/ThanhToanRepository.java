@@ -12,4 +12,6 @@ public interface ThanhToanRepository extends JpaRepository<ThanhToan, Long> {
     List<ThanhToan> findByKhoanThuIdOrderByThoiGianDesc(Long khoanThuId);
 
     List<ThanhToan> findAllByOrderByThoiGianDesc();
+
+    boolean existsByMaGiaoDich(String maGiaoDich);
 }

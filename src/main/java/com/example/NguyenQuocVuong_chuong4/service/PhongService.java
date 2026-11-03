@@ -1,7 +1,10 @@
 package com.example.NguyenQuocVuong_chuong4.service;
 
+import com.example.NguyenQuocVuong_chuong4.dto.PageResponse;
 import com.example.NguyenQuocVuong_chuong4.model.Phong;
 import com.example.NguyenQuocVuong_chuong4.repository.PhongRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,6 +21,15 @@ public class PhongService {
 
     public List<Phong> getAll() {
         return repository.findAll();
+    }
+
+    public PageResponse<Phong> getPaginated(String search, String loaiPhong, String trangThai, Long tangId, Pageable pageable) {
+        String cleanSearch = (search != null && !search.isBlank()) ? search.trim() : null;
+        String cleanLoai = (loaiPhong != null && !loaiPhong.isBlank()) ? loaiPhong.trim() : null;
+        String cleanTrangThai = (trangThai != null && !trangThai.isBlank()) ? trangThai.trim() : null;
+
+        Page<Phong> page = repository.filterPhongPage(cleanSearch, cleanLoai, cleanTrangThai, tangId, pageable);
+        return PageResponse.from(page);
     }
 
     public Phong getById(Long id) {
