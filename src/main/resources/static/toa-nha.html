@@ -306,7 +306,7 @@
         let detailModalInstance = null;
 
         document.addEventListener('DOMContentLoaded', () => {
-            App.initLayout('toa-nha');
+            App.initLayout('toa-nha', ['ADMIN', 'QUAN_LY']);
             buildingModalInstance = new bootstrap.Modal(document.getElementById('building-modal'));
             detailModalInstance = new bootstrap.Modal(document.getElementById('building-detail-modal'));
             loadKhusAndBuildings();

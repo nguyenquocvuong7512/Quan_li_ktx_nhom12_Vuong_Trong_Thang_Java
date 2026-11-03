@@ -1,9 +1,12 @@
 package com.example.NguyenQuocVuong_chuong4.service;
 
+import com.example.NguyenQuocVuong_chuong4.dto.PageResponse;
 import com.example.NguyenQuocVuong_chuong4.model.HopDong;
 import com.example.NguyenQuocVuong_chuong4.model.Phong;
 import com.example.NguyenQuocVuong_chuong4.repository.HopDongRepository;
 import com.example.NguyenQuocVuong_chuong4.repository.PhongRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +31,12 @@ public class HopDongService {
 
     public List<HopDong> getByTrangThai(String trangThai) {
         return repository.findByTrangThai(trangThai);
+    }
+
+    public PageResponse<HopDong> getPaginated(String trangThai, Long sinhVienId, Long phongId, Pageable pageable) {
+        String cleanTrangThai = (trangThai != null && !trangThai.isBlank()) ? trangThai.trim() : null;
+        Page<HopDong> page = repository.filterHopDongPage(cleanTrangThai, sinhVienId, phongId, pageable);
+        return PageResponse.from(page);
     }
 
     public HopDong getById(Long id) {

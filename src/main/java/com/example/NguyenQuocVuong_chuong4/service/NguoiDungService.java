@@ -1,7 +1,10 @@
 package com.example.NguyenQuocVuong_chuong4.service;
 
+import com.example.NguyenQuocVuong_chuong4.dto.PageResponse;
 import com.example.NguyenQuocVuong_chuong4.model.NguoiDung;
 import com.example.NguyenQuocVuong_chuong4.repository.NguoiDungRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,12 @@ public class NguoiDungService {
 
     public List<NguoiDung> getAll() {
         return repository.findAll();
+    }
+
+    public PageResponse<NguoiDung> getPaginated(String search, Pageable pageable) {
+        String cleanSearch = (search != null && !search.isBlank()) ? search.trim() : null;
+        Page<NguoiDung> page = repository.searchPage(cleanSearch, pageable);
+        return PageResponse.from(page);
     }
 
     public NguoiDung getById(Long id) {

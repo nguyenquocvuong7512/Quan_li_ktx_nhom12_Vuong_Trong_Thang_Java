@@ -311,7 +311,7 @@
         let accountModalInstance = null;
 
         document.addEventListener('DOMContentLoaded', () => {
-            App.initLayout('tai-khoan');
+            App.initLayout('tai-khoan', ['ADMIN']);
             accountModalInstance = new bootstrap.Modal(document.getElementById('account-modal'));
             loadAccounts();
         });

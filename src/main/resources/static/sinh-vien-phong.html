@@ -358,7 +358,7 @@
         let roommatesModalInstance = null;
 
         document.addEventListener('DOMContentLoaded', () => {
-            App.initLayout('sinh-vien-phong');
+            App.initLayout('sinh-vien-phong', ['ADMIN', 'QUAN_LY']);
             transferModalInstance = new bootstrap.Modal(document.getElementById('transfer-modal'));
             roommatesModalInstance = new bootstrap.Modal(document.getElementById('roommates-modal'));
             loadAllocationsAndRooms();

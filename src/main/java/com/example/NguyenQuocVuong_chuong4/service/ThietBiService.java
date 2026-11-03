@@ -3,6 +3,9 @@ package com.example.NguyenQuocVuong_chuong4.service;
 import com.example.NguyenQuocVuong_chuong4.dto.BaoHongThietBiDTO;
 import com.example.NguyenQuocVuong_chuong4.dto.CapPhatThietBiDTO;
 import com.example.NguyenQuocVuong_chuong4.dto.ThietBiStatsDTO;
+import com.example.NguyenQuocVuong_chuong4.dto.PageResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import com.example.NguyenQuocVuong_chuong4.model.LichSuTaiSan;
 import com.example.NguyenQuocVuong_chuong4.model.LoaiTaiSan;
 import com.example.NguyenQuocVuong_chuong4.model.NguoiDung;
@@ -51,6 +54,13 @@ public class ThietBiService {
     // ================= 1. DANH MỤC THIẾT BỊ / TÀI SẢN =================
     public List<TaiSan> getAllTaiSan() {
         return taiSanRepository.findAll();
+    }
+
+    public PageResponse<TaiSan> getPaginatedTaiSan(String search, Long loaiTaiSanId, String trangThai, Pageable pageable) {
+        String cleanSearch = (search != null && !search.isBlank()) ? search.trim() : null;
+        String cleanTrangThai = (trangThai != null && !trangThai.isBlank()) ? trangThai.trim() : null;
+        Page<TaiSan> page = taiSanRepository.filterTaiSanPage(cleanSearch, loaiTaiSanId, cleanTrangThai, pageable);
+        return PageResponse.from(page);
     }
 
     public TaiSan getTaiSanById(Long id) {

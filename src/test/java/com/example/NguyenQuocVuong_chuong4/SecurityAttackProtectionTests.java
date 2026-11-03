@@ -9,14 +9,13 @@ import com.example.NguyenQuocVuong_chuong4.security.LoginAttemptService;
 import com.example.NguyenQuocVuong_chuong4.security.SecurityHeadersFilter;
 import com.example.NguyenQuocVuong_chuong4.security.XssProtectionUtil;
 import com.example.NguyenQuocVuong_chuong4.service.NguoiDungService;
-import jakarta.servlet.FilterChain;
+import org.springframework.mock.web.MockFilterChain;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -27,7 +26,6 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 /**
  * Bộ kiểm thử chứng minh khả năng phòng chống các cuộc tấn công mạng:
@@ -133,18 +131,16 @@ class SecurityAttackProtectionTests {
     @Test
     @DisplayName("Security 4: Kiểm tra các Security Headers bảo vệ Clickjacking & MIME-type Sniffing")
     void testSecurityHeadersFilter() throws ServletException, IOException {
-        HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-        HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
-        FilterChain chain = Mockito.mock(FilterChain.class);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        MockFilterChain chain = new MockFilterChain();
 
         securityHeadersFilter.doFilter(request, response, chain);
 
-        // Xác thực các header an ninh đã được gán vào phản hồi
-        verify(response).setHeader("X-Content-Type-Options", "nosniff");
-        verify(response).setHeader("X-Frame-Options", "SAMEORIGIN");
-        verify(response).setHeader("X-XSS-Protection", "1; mode=block");
-        verify(response).setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
-        verify(chain).doFilter(request, response);
+        assertEquals("nosniff", response.getHeader("X-Content-Type-Options"));
+        assertEquals("SAMEORIGIN", response.getHeader("X-Frame-Options"));
+        assertEquals("1; mode=block", response.getHeader("X-XSS-Protection"));
+        assertEquals("strict-origin-when-cross-origin", response.getHeader("Referrer-Policy"));
     }
 }
 

@@ -1,6 +1,8 @@
 package com.example.NguyenQuocVuong_chuong4.repository;
 
 import com.example.NguyenQuocVuong_chuong4.model.KhoanThu;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -31,9 +33,24 @@ public interface KhoanThuRepository extends JpaRepository<KhoanThu, Long> {
            "AND (:phongId IS NULL OR k.phong.id = :phongId) " +
            "ORDER BY k.id DESC")
     List<KhoanThu> filterKhoanThu(@Param("thang") String thang,
-                                 @Param("trangThai") String trangThai,
-                                 @Param("sinhVienId") Long sinhVienId,
-                                 @Param("phongId") Long phongId);
+                                  @Param("trangThai") String trangThai,
+                                  @Param("sinhVienId") Long sinhVienId,
+                                  @Param("phongId") Long phongId);
+
+    @Query("SELECT k FROM KhoanThu k WHERE (:thang IS NULL OR k.thang = :thang) " +
+           "AND (:trangThai IS NULL OR k.trangThai = :trangThai) " +
+           "AND (:sinhVienId IS NULL OR k.sinhVien.id = :sinhVienId) " +
+           "AND (:phongId IS NULL OR k.phong.id = :phongId) " +
+           "AND (:search IS NULL OR LOWER(k.maHoaDon) LIKE LOWER(CONCAT('%', :search, '%')) " +
+           "     OR LOWER(k.sinhVien.maSinhVien) LIKE LOWER(CONCAT('%', :search, '%')) " +
+           "     OR LOWER(k.sinhVien.nguoiDung.hoTen) LIKE LOWER(CONCAT('%', :search, '%')) " +
+           "     OR LOWER(k.phong.maPhong) LIKE LOWER(CONCAT('%', :search, '%')))")
+    Page<KhoanThu> filterKhoanThuWithSearchPage(@Param("thang") String thang,
+                                                @Param("trangThai") String trangThai,
+                                                @Param("sinhVienId") Long sinhVienId,
+                                                @Param("phongId") Long phongId,
+                                                @Param("search") String search,
+                                                Pageable pageable);
 
     @Query("SELECT k FROM KhoanThu k WHERE k.trangThai != 'da_thanh_toan' AND k.hanThanhToan < :today")
     List<KhoanThu> findOverdueInvoices(@Param("today") LocalDate today);
