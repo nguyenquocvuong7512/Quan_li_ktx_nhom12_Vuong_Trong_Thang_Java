@@ -77,6 +77,16 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/reset-attempts")
+    public ResponseEntity<Void> resetAttempts(@RequestParam(required = false) String identifier) {
+        if (identifier != null && !identifier.isBlank()) {
+            loginAttemptService.loginSucceeded(identifier);
+        } else {
+            loginAttemptService.resetAll();
+        }
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/me")
     public ResponseEntity<LoginResponse> getCurrentUser(@RequestHeader(value = "Authorization", required = false) String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {

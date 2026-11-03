@@ -124,6 +124,10 @@
         function quickFill(user, pwd) {
             document.getElementById('identifier').value = user;
             document.getElementById('password').value = pwd;
+            const alertBox = document.getElementById('login-alert');
+            if (alertBox) alertBox.classList.add('d-none');
+            // Mở khóa brute-force cho tài khoản test nếu trước đó bấm thử sai
+            fetch('/api/auth/reset-attempts?identifier=' + encodeURIComponent(user), { method: 'POST' }).catch(() => {});
             App.toast('Đã điền tài khoản: ' + user, 'info');
         }
 
