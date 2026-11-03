@@ -266,18 +266,18 @@ CREATE TABLE thanh_toan (
 -- Hash SinhVien@123: /4gN9RiQXa
 
 INSERT INTO nguoi_dung (id, ma_nguoi_dung, ho_ten, email, mat_khau, so_dien_thoai, gioi_tinh, ngay_sinh, trang_thai) VALUES
-(1, 'ADMIN01', 'Quan Tri Vien He Thong', 'admin@ktx.edu.vn', '', '0901000001', 'Nam', '1985-01-01', 'hoat_dong'),
-(2, 'QL001', 'Nguyen Van Quan Ly', 'quanly@ktx.edu.vn', '.a', '0901000002', 'Nam', '1990-05-15', 'hoat_dong'),
-(3, 'SV001', 'Nguyen Van An', 'sinhvien@ktx.edu.vn', '/4gN9RiQXa', '0901000003', 'Nam', '2004-03-12', 'hoat_dong'),
-(4, 'SV002', 'Tran Thi Binh', 'binh@example.com', '/4gN9RiQXa', '0901000004', 'Nu', '2004-08-25', 'hoat_dong'),
-(5, 'SV003', 'Le Quoc Cuong', 'cuong@example.com', '/4gN9RiQXa', '0901000005', 'Nam', '2003-11-20', 'hoat_dong'),
-(6, 'SV004', 'Pham Minh Dung', 'dung@example.com', '/4gN9RiQXa', '0901000006', 'Nam', '2004-01-10', 'hoat_dong'),
-(7, 'SV005', 'Hoang My Hanh', 'hanh@example.com', '/4gN9RiQXa', '0901000007', 'Nu', '2004-07-18', 'hoat_dong'),
-(8, 'SV006', 'Vo Thanh Long', 'long@example.com', '/4gN9RiQXa', '0901000008', 'Nam', '2003-09-05', 'hoat_dong'),
-(9, 'SV007', 'Do Thi Mai', 'mai@example.com', '/4gN9RiQXa', '0901000009', 'Nu', '2004-12-30', 'hoat_dong'),
-(10, 'SV008', 'Bui Tien Nam', 'nam@example.com', '/4gN9RiQXa', '0901000010', 'Nam', '2004-04-14', 'hoat_dong'),
-(11, 'SV009', 'Dang Thu Trang', 'trang@example.com', '/4gN9RiQXa', '0901000011', 'Nu', '2003-06-22', 'hoat_dong'),
-(12, 'QL002', 'Tran Thi Thu', 'thu.quanly@ktx.edu.vn', '.a', '0901000012', 'Nu', '1992-09-09', 'hoat_dong');
+(1, 'ADMIN01', 'Quan Tri Vien He Thong', 'admin@ktx.edu.vn', '$2a$10$PrKwSK8SErl9pdYuKOgltOr3nwweCmaZrpZCX5LiBv3LZpK4khizS', '0901000001', 'Nam', '1985-01-01', 'hoat_dong'),
+(2, 'QL001', 'Nguyen Van Quan Ly', 'quanly@ktx.edu.vn', '$2a$10$KeDGKK43mVLIAYNQh0Kihe7aWkX6Yl7XqskG2gnomn5fSDu7maO.a', '0901000002', 'Nam', '1990-05-15', 'hoat_dong'),
+(3, 'SV001', 'Nguyen Van An', 'sinhvien@ktx.edu.vn', '$2a$10$9qDKoxIst0uM8ZSIYby0beqPYLraOXp6RFwzR3bhhcy/4gN9RiQXa', '0901000003', 'Nam', '2004-03-12', 'hoat_dong'),
+(4, 'SV002', 'Tran Thi Binh', 'binh@example.com', '$2a$10$9qDKoxIst0uM8ZSIYby0beqPYLraOXp6RFwzR3bhhcy/4gN9RiQXa', '0901000004', 'Nu', '2004-08-25', 'hoat_dong'),
+(5, 'SV003', 'Le Quoc Cuong', 'cuong@example.com', '$2a$10$9qDKoxIst0uM8ZSIYby0beqPYLraOXp6RFwzR3bhhcy/4gN9RiQXa', '0901000005', 'Nam', '2003-11-20', 'hoat_dong'),
+(6, 'SV004', 'Pham Minh Dung', 'dung@example.com', '$2a$10$9qDKoxIst0uM8ZSIYby0beqPYLraOXp6RFwzR3bhhcy/4gN9RiQXa', '0901000006', 'Nam', '2004-01-10', 'hoat_dong'),
+(7, 'SV005', 'Hoang My Hanh', 'hanh@example.com', '$2a$10$9qDKoxIst0uM8ZSIYby0beqPYLraOXp6RFwzR3bhhcy/4gN9RiQXa', '0901000007', 'Nu', '2004-07-18', 'hoat_dong'),
+(8, 'SV006', 'Vo Thanh Long', 'long@example.com', '$2a$10$9qDKoxIst0uM8ZSIYby0beqPYLraOXp6RFwzR3bhhcy/4gN9RiQXa', '0901000008', 'Nam', '2003-09-05', 'hoat_dong'),
+(9, 'SV007', 'Do Thi Mai', 'mai@example.com', '$2a$10$9qDKoxIst0uM8ZSIYby0beqPYLraOXp6RFwzR3bhhcy/4gN9RiQXa', '0901000009', 'Nu', '2004-12-30', 'hoat_dong'),
+(10, 'SV008', 'Bui Tien Nam', 'nam@example.com', '$2a$10$9qDKoxIst0uM8ZSIYby0beqPYLraOXp6RFwzR3bhhcy/4gN9RiQXa', '0901000010', 'Nam', '2004-04-14', 'hoat_dong'),
+(11, 'SV009', 'Dang Thu Trang', 'trang@example.com', '$2a$10$9qDKoxIst0uM8ZSIYby0beqPYLraOXp6RFwzR3bhhcy/4gN9RiQXa', '0901000011', 'Nu', '2003-06-22', 'hoat_dong'),
+(12, 'QL002', 'Tran Thi Thu', 'thu.quanly@ktx.edu.vn', '$2a$10$KeDGKK43mVLIAYNQh0Kihe7aWkX6Yl7XqskG2gnomn5fSDu7maO.a', '0901000012', 'Nu', '1992-09-09', 'hoat_dong');
 
 -- 2. VAI TRO (3 vai tro chinh + alias)
 INSERT INTO vai_tro (id, ten_vai_tro, mo_ta) VALUES
